@@ -1,0 +1,10 @@
+input.vanadium-valid {
+    border-color: greenyellow;
+}
+
+input.vanadium-invalid {
+    border-color: pink;
+}
+.vanadium-advice {
+	display:none;
+}
