@@ -8,11 +8,12 @@ class Menu extends MX_Controller{
 		$this->load->model("user_model");
 	}
 	function index(){
+		$function = ($this->uri->segment(2)?$this->uri->segment(2):'index');
 		if($this->session->userdata('role_id') != '') {
-			if($this->menu_model->is_menu_item($this->uri->segment(1))) {
+			if($this->menu_model->is_menu_item($this->uri->segment(1),$function)) {
 				$data['current'] = $this->uri->segment(1).'/'.$this->uri->segment(2);
 			} else {
-				$module = $this->menu_model->get_parent($this->uri->segment(1));
+				$module = $this->menu_model->get_parent($this->uri->segment(1),$function);
 				$function = 'index';
 				$data['current'] = $module.'/'.$function;
 			}
@@ -24,10 +25,11 @@ class Menu extends MX_Controller{
 		$this->load->view("menu", $data);
 	}
 	function sub_menu(){
+		$function = ($this->uri->segment(2)?$this->uri->segment(2):'index');
 		if($this->session->userdata('role_id') != '') {
 		$data['current'] = $this->uri->segment(1).'/'.$this->uri->segment(2);
-			if(! $this->menu_model->is_menu_item($this->uri->segment(1))) {
-				$module = $this->menu_model->get_parent($this->uri->segment(1));
+			if(! $this->menu_model->is_menu_item($this->uri->segment(1),$function)) {
+				$module = $this->menu_model->get_parent($this->uri->segment(1),$function);
 				$function = '';
 			} else {
 				$module = $this->uri->segment(1);

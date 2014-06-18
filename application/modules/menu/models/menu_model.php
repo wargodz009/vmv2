@@ -25,9 +25,10 @@ class Menu_model extends CI_Model{
 		$this->db->join($this->permission,$this->permission.'.action_id = '.$this->action.'.action_id');
 		return $this->db->get($this->action)->result();
 	}
-	function is_menu_item($module) {
+	function is_menu_item($module,$function) {
 		$this->db->where('show_on_menu',1);
 		$this->db->where('module',$module);
+		$this->db->where('function',$function);
 		$Q = $this->db->get($this->action);
 		if($Q->num_rows()>0) {
 			return true;
@@ -35,9 +36,10 @@ class Menu_model extends CI_Model{
 			return false;
 		}
 	}
-	function get_parent($module) {
+	function get_parent($module,$function) {
 		$this->db->where('show_on_menu',0);
 		$this->db->where('module',$module);
+		$this->db->where('function',$function);
 		$Q = $this->db->get($this->action);
 		if($Q->num_rows()>0)  {
 			$parent_id = $Q->row()->parent;
