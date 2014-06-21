@@ -2,6 +2,7 @@
 
 class User_model extends CI_Model{
 	var $table = 'user';
+	var $msr_client = 'msr_client';
 	
 	function login($username,$password){
 		
@@ -30,7 +31,33 @@ class User_model extends CI_Model{
 			return false;
 		}
 	}
-	
+	function get_single($id,$in_email = false,$row = false) {
+		if($in_email === true) {
+			$this->db->where('email',$id);
+		} else {
+			$this->db->where('user_id',$id);
+		}
+		$q = $this->db->get($this->table);
+		if($row == true) {
+			return (@$q->row()->$row?$q->row()->$row:'Invalid user');
+		} else {
+			return $q->row();
+		}
+	}
+	function get_all_clients(){
+		$this->db->where('role_id',5);
+		return $this->db->get($this->table);
+	}
+	function is_owned($msr_id,$client_id){
+		$this->db->where('msr_id',$msr_id);
+		$this->db->where('client_id',$client_id);
+		$Q = $this->db->get($this->msr_client);
+		if($Q->num_rows() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
 
 ?>

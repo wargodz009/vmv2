@@ -11,6 +11,9 @@ class Supplier extends MX_Controller{
 		$crud->set_table('supplier'); 
 		$crud->unset_columns('datetime');
 		$crud->fields('name');
+		if(get_role() != 'administrator') {
+			$crud->unset_delete();
+		}
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}

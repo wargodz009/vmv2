@@ -12,6 +12,9 @@ class Item extends MX_Controller{
 		$crud->set_relation('item_type_id','item_type','name');
 		$crud->unset_columns('datetime');
 		$crud->fields('name','item_type_id','generic_name','description','price_standard','status');
+		if(get_role() != 'administrator') {
+			$crud->unset_delete();
+		}
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}
