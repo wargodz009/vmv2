@@ -1,41 +1,33 @@
-<div class="navbar navbar-fixed-top">
-	<div class="navbar-inner">
-		<div class="container">
-			<a class="brand" href="<?php echo base_url(); ?>"><?=$this->setting_model->get_setting('site_title');?></a>
-			<ul class="nav">
-				<?php foreach($items as $item): ?>
-				<?php $item->url = $item->module.'/'.$item->function; ?>
-				<li<?php echo ($current == $item->url)? ' class="active"':''; ?>>
-					<a href="<?php echo base_url($item->url); ?>"><?php echo ucfirst($item->name); ?></a>
-				</li>
-				<?php endforeach; ?>
-			</ul>
-			
-			<div class="pull-right">
-				<?php if($currentuser): ?>
-				<div class="dropdown">
-					<ul class="nav">
-						<li>
-							<a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="#">
-								Logged as <strong><?php echo $currentuser->email; ?></strong><b class="caret"></b>
-							</a>
-							<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-								<li><a href="<?php echo base_url('user'); ?>">View Profile</a></li>
-								<li><a href="<?php echo base_url('user/account'); ?>">Edit Account</a></li>
-								<li class="divider"></li>
-								<li><a href="<?php echo base_url('site/signout'); ?>">Logout</a></li>
-							</ul>
-						</li>
-					</ul>
-				</div>
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="<?php echo base_url(); ?>"><?=$this->setting_model->get_setting('site_title');?></a>
+    </div>
 
-				<?php else: ?>
-				<ul class="nav">
-					<li class="divider-vertical"></li>
-					<li><a href="<?php echo base_url('signin'); ?>">Sign in</a></li>
-				</ul>
-				<?php endif; ?>
-			</div>
-		</div>
-	</div>
-</div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <?php foreach($items as $item): ?>
+		<?php $item->url = $item->module.'/'.$item->function; ?>
+		<li class="<?php echo ($current == $item->url)? 'active':''; ?>">
+			<a href="<?php echo base_url($item->url); ?>"><?php echo ucfirst($item->name); ?></a>
+		</li>
+		<?php endforeach; ?>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <?php if($currentuser): ?>
+		<li><a href="<?php echo base_url('signout'); ?>">Sign out</a></li>
+		<?php else: ?>
+		<li><a href="<?php echo base_url('signin'); ?>">Sign in</a></li>
+		<?php endif; ?>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>

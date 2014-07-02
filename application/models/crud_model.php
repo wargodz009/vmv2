@@ -53,6 +53,11 @@ class crud_model extends CI_Model
 	 * @param $table
 	 * @param $sql_modifiers
 	 * @return Object
+	 * $sql_modifiers = array(
+	 *	'where',
+	 *	'district_id',
+	 *	$district_id,
+	 * );
 	 */
 	public function read($table, $sql_modifiers = array(),$name = false)
 	{

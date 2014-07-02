@@ -30,20 +30,19 @@ class Menu extends MX_Controller{
 		$data['current'] = $this->uri->segment(1).'/'.$this->uri->segment(2);
 			if(! $this->menu_model->is_menu_item($this->uri->segment(1),$function)) {
 				$module = $this->menu_model->get_parent($this->uri->segment(1),$function);
-				$function = '';
+				$function = 'index';
+				$param[2] = array('where','show_on_menu',1);
 			} else {
 				$module = $this->uri->segment(1);
 				$function = $this->uri->segment(2);
 			}
 			$param[0] = array('where','module',$module);
-			$param[1] = array('where','show_on_menu',1);
-			$param[2] = array('where','function',($function?$function:'index'));
+			$param[1] = array('where','function',$function);
 			$data['items'] = $this->menu_model->get_sub_menu($this->session->userdata('role_id'),$this->crud_model->read('action',$param,'action_id'));	
 		} else {
 			$data['items'] = $this->menu_model->menu_logged_out();	
 		}
 		$this->load->view("sub_menu", $data);
-		
 	}
 }
 
