@@ -21,10 +21,32 @@ class Batch extends MX_Controller{
 		if(get_role() != 'administrator') {
 			$crud->unset_delete();
 		}
-		$crud->unset_columns('count','sold','expire','buy','sell','user_id');
-		$crud->fields('batch_readable_id','access_type','item_id','user_id','supplier_id','count','recieve_date','expire_date','on_cavite_warehouse','lot_number','buy','sell');
+		$crud->add_fields('batch_readable_id','access_type','item_id','supplier_id','count','recieve_date','expire_date','lot_number','on_cavite_warehouse','buy','sell');
+		$crud->edit_fields('batch_readable_id','access_type','item_id','supplier_id','count','recieve_date','expire_date','lot_number','on_cavite_warehouse','buy','sell','status');
+		$crud->required_fields('batch_readable_id','access_type','item_id','supplier_id','count','recieve_date','expire_date','lot_number');
+		$crud->columns('batch_readable_id','access_type','item_id','supplier_id','count','sold_count','return_count','recieve_date','expire_date','on_cavite_warehouse','lot_number','buy','sell');
+
+		$crud->callback_column('count',array($this,'_callback_to_number'));
+		$crud->callback_column('sold_count',array($this,'_callback_to_number'));
+		$crud->callback_column('return_count',array($this,'_callback_to_number'));
+		$crud->callback_column('buy',array($this,'_callback_to_money'));
+		$crud->callback_column('sell',array($this,'_callback_to_money'));
+		$crud->callback_after_insert(array($this, 'log_user_after_insert'));
+    	$crud->callback_after_update(array($this, 'log_user_after_update'));
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
+	}
+	function log_user_after_insert($post_array,$primary_key){
+		logs('add_batch','success',$primary_key);
+	}
+	function log_user_after_update($post_array,$primary_key){
+		logs('edit_batch','success',$primary_key);
+	}
+	function _callback_to_money($value, $row){
+		return 'P '.number_format($value,2);
+	}
+	function _callback_to_number($value, $row){
+		return number_format($value);
 	}
 }
 

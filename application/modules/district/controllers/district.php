@@ -13,11 +13,11 @@ class District extends MX_Controller{
 			if(!empty($usersFromDistrict)) {
 				$this->template->load('index','list_user_per_district',$usersFromDistrict);
 			} else {
-				$this->session->set_flashdata('error','District has no user/employee yet!');
+				$this->session->set_flashdata('danger','District has no user/employee yet!');
 				redirect($_SERVER['HTTP_REFERER']);	
 			}
 		} else {
-			$this->session->set_flashdata('error','not a valid district!');
+			$this->session->set_flashdata('danger','not a valid district!');
 			redirect('/');
 		}
 	

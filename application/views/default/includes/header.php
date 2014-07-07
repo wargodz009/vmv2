@@ -8,6 +8,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="<?php echo base_url(); ?>theme/js/jquery-ui-1.10.2.custom.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/script.js"></script>
 
     <!-- styles -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -19,7 +20,7 @@
 	<!-- Validation plugin -->
     <link href="<?php echo base_url(); ?>theme/css/style.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>theme/css/vanadium.css" rel="stylesheet">
-	<script src="<?php echo base_url(); ?>theme/js/vanadium.js"></script> 
+    <script src="<?php echo base_url(); ?>theme/js/vanadium.js"></script>  
 	
 	<!-- tiny mce plugin -->
 	<script type="text/javascript" src="<?php echo base_url(); ?>theme/js/tinymce/tinymce.min.js"></script>

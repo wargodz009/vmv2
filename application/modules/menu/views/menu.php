@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="<?php echo base_url(); ?>"><?=$this->setting_model->get_setting('site_title');?></a>
+      <a class="navbar-brand" href="<?php echo base_url(); ?>"><?=$this->session->userdata('role_name');?></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -23,7 +23,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <?php if($currentuser): ?>
-		<li><a href="<?php echo base_url('signout'); ?>">Sign out</a></li>
+		<li><a class="confirm" href="<?php echo base_url('signout'); ?>">Sign out</a></li>
 		<?php else: ?>
 		<li><a href="<?php echo base_url('signin'); ?>">Sign in</a></li>
 		<?php endif; ?>

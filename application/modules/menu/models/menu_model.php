@@ -37,14 +37,14 @@ class Menu_model extends CI_Model{
 		}
 	}
 	function get_parent($module,$function) {
-		$this->db->where('show_on_menu',0);
+		$this->db->where('show_on_menu !=',1);
 		$this->db->where('module',$module);
 		$this->db->where('function',$function);
 		$Q = $this->db->get($this->action);
 		if($Q->num_rows()>0)  {
 			$parent_id = $Q->row()->parent;
 		} else {
-			return false;
+			return 'site';
 		}
 		$this->db->where('action_id',$parent_id);
 		$Q = $this->db->get($this->action);

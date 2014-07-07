@@ -10,28 +10,29 @@ class Msr_client extends MX_Controller{
 		$crud = new grocery_CRUD();
 		$crud->set_table('msr_view'); 
 		$crud->set_primary_key('user_id');
-		$crud->display_as('first_name','Client');
+		$crud->display_as('first_name','MSR');
 		$crud->display_as('role_id','Role');
 		$crud->display_as('district_id','District');
-		$crud->field_type('user_id','invisible');
-		$crud->field_type('first_name','invisible');
-		$crud->field_type('middle_name','invisible');
-		$crud->field_type('last_name','invisible');
-		$crud->field_type('area','invisible');
-		$crud->field_type('quota','invisible');
-		$crud->field_type('Role','invisible');
-		$crud->field_type('District','invisible');
-		$crud->field_type('status','invisible');
 		$crud->field_type('civil_status','invisible');
+		$crud->columns('first_name','role_id','district_id','email','area','quota','district_id','user');
+		$crud->edit_fields('district_id','user');
 		$crud->callback_column('user',array($this,'_callback_get_username'));
+		$crud->callback_column('quota',array($this,'_callback_to_number'));
 		$crud->callback_edit_field('user',array($this,'edit_field_callback_1'));
 		$crud->unset_delete(); 
 		$crud->unset_add(); 
 		$crud->set_relation('district_id', 'district', 'name');
 		$crud->set_relation('role_id', 'role', 'name');
 		$crud->set_relation_n_n('user', 'msr_client', 'user', 'msr_id', 'client_id', 'user_id',NULL,array('role_id'=>5));
+		$crud->callback_after_update(array($this, '_log_user_after_update'));
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
+	}
+	function _log_user_after_update($post_array,$primary_key){
+		logs('edit_msrclient','success',$primary_key);
+	}
+	function _callback_to_number($value, $row){
+		return number_format($value);
 	}
 	public function _callback_get_username($value, $row)
 	{

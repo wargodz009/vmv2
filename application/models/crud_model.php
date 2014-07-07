@@ -149,5 +149,15 @@ class crud_model extends CI_Model
 		}
 		return;
 	}
+	public function valid($table='',$field = '',$value)
+	{
+		$this->db->where($field,$value);
+		$Q = $this->db->get($table);
+		if($Q->num_rows()>0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }
