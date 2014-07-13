@@ -15,7 +15,7 @@ class Order_model extends CI_Model{
 	}
 	function add_return($data) {
 		$this->db->insert($this->order_return,$data);
-		return $this->db->insert_id();
+		return true;
 	}
 }
 

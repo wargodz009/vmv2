@@ -13,6 +13,7 @@ class Msr_client extends MX_Controller{
 		$crud->display_as('first_name','MSR');
 		$crud->display_as('role_id','Role');
 		$crud->display_as('district_id','District');
+		$crud->display_as('user','Clients');
 		$crud->field_type('civil_status','invisible');
 		$crud->columns('first_name','role_id','district_id','email','area','quota','district_id','user');
 		$crud->edit_fields('district_id','user');

@@ -18,11 +18,13 @@ class Batch extends MX_Controller{
 		$crud->field_type('recieve_date', 'date');
 		$crud->field_type('expire_date', 'date');
 		$crud->field_type('user_id', 'hidden', 1);
+		$crud->field_type('sold_count', 'hidden');
+		$crud->field_type('expire_count', 'hidden');
+		$crud->field_type('return_count', 'hidden');
+		$crud->field_type('status', 'hidden');
 		if(get_role() != 'administrator') {
 			$crud->unset_delete();
 		}
-		$crud->add_fields('batch_readable_id','access_type','item_id','supplier_id','count','recieve_date','expire_date','lot_number','on_cavite_warehouse','buy','sell');
-		$crud->edit_fields('batch_readable_id','access_type','item_id','supplier_id','count','recieve_date','expire_date','lot_number','on_cavite_warehouse','buy','sell','status');
 		$crud->required_fields('batch_readable_id','access_type','item_id','supplier_id','count','recieve_date','expire_date','lot_number');
 		$crud->columns('batch_readable_id','access_type','item_id','supplier_id','count','sold_count','return_count','recieve_date','expire_date','on_cavite_warehouse','lot_number','buy','sell','status');
 

@@ -1,5 +1,4 @@
 $(document).ready(function(){
-	//remove button to set returned
 	$("a.crud-action[href='#']").remove();
 	$("a.open_new_popup").click(function(e){
 		e.preventDefault();

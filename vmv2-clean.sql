@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 07, 2014 at 01:19 AM
+-- Generation Time: Jul 13, 2014 at 06:03 PM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.11
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `action` (
   `parent` int(11) DEFAULT NULL,
   `sort` int(10) DEFAULT '0',
   PRIMARY KEY (`action_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=36 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=45 ;
 
 --
 -- Dumping data for table `action`
@@ -68,9 +68,18 @@ INSERT INTO `action` (`action_id`, `name`, `module`, `function`, `show_on_menu`,
 (28, 'order_item', 'order', 'item', 0, 21, 1),
 (29, 'payment', 'payment', 'index', 1, NULL, 1),
 (30, 'all payments', 'payment', 'all', 0, 29, 0),
-(32, 'maintenance', 'setting', 'maintenance', 0, 6, 3),
+(32, 'maintenance', 'setting', 'maintenance', 0, 6, 4),
 (34, 'manage payment', 'payment', 'manage', 2, 29, 0),
-(35, 'reset database', 'setting', 'reset', 2, 6, 0);
+(35, 'reset database', 'setting', 'reset', 2, 6, 0),
+(36, 'logs', 'setting', 'logs', 0, 6, 3),
+(37, 'report type', 'report', 'type', 0, 5, 0),
+(38, 'view report', 'report', 'view', 0, 5, 2),
+(39, 'generate report', 'report', 'generate', 0, 5, 1),
+(40, 'set approved', 'order', 'set_approved', 2, 21, 0),
+(41, 'set returned', 'order', 'set_returned', 2, 21, 0),
+(42, 'set cancelled', 'order', 'set_cancelled', 2, 21, 0),
+(43, 'set completed', 'order', 'set_complete', 2, 21, 0),
+(44, 'print so', 'payment', 'reciept', 2, 29, 0);
 
 -- --------------------------------------------------------
 
@@ -86,13 +95,13 @@ CREATE TABLE IF NOT EXISTS `batch` (
   `supplier_id` int(10) NOT NULL,
   `count` int(10) NOT NULL DEFAULT '0',
   `access_type` enum('ordered','recieved','transfered') NOT NULL DEFAULT 'ordered',
-  `sold` int(10) NOT NULL DEFAULT '0',
-  `expire` int(10) NOT NULL DEFAULT '0',
-  `return` int(10) NOT NULL DEFAULT '0',
+  `sold_count` int(10) NOT NULL DEFAULT '0',
+  `expire_count` int(10) NOT NULL DEFAULT '0',
+  `return_count` int(10) NOT NULL DEFAULT '0',
   `buy` int(10) NOT NULL DEFAULT '0',
   `sell` int(10) NOT NULL DEFAULT '0',
   `lot_number` varchar(50) NOT NULL,
-  `on_cavite_warehouse` enum('Y','N') DEFAULT 'N',
+  `on_cavite_warehouse` enum('Y','N') NOT NULL DEFAULT 'N',
   `recieve_date` date DEFAULT NULL,
   `expire_date` date DEFAULT NULL,
   `status` enum('enabled','disabled') NOT NULL DEFAULT 'enabled',
@@ -177,6 +186,27 @@ INSERT INTO `item_type` (`item_type_id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `logs`
+--
+
+CREATE TABLE IF NOT EXISTS `logs` (
+  `log_id` int(250) NOT NULL AUTO_INCREMENT,
+  `ip_address` varchar(50) NOT NULL,
+  `useragent` varchar(50) NOT NULL,
+  `user_id` varchar(50) DEFAULT NULL,
+  `role_id` int(10) DEFAULT NULL,
+  `action` varchar(50) DEFAULT NULL,
+  `result` varchar(50) DEFAULT NULL,
+  `target` varchar(50) DEFAULT NULL,
+  `url` varchar(50) NOT NULL,
+  `sql` varchar(50) DEFAULT NULL,
+  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `msr_client`
 --
 
@@ -223,7 +253,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `discount_type` enum('percentage','php') DEFAULT 'percentage',
   `form_number` varchar(50) NOT NULL,
   `payment_type` varchar(50) DEFAULT '30_days',
-  `return_id` int(10) DEFAULT NULL,
+  `return_id` tinyint(10) DEFAULT '0',
   `cancel_date` date DEFAULT NULL,
   `approved_pre` int(10) DEFAULT '0',
   `approved_post` int(10) DEFAULT '0',
@@ -242,6 +272,7 @@ CREATE TABLE IF NOT EXISTS `order_item` (
   `batch_id` int(250) NOT NULL,
   `order_id` int(250) NOT NULL,
   `quantity` int(250) NOT NULL DEFAULT '0',
+  `custom_price` int(10) DEFAULT NULL,
   `add_type` enum('paid','free') NOT NULL DEFAULT 'paid',
   PRIMARY KEY (`order_item_id`),
   KEY `FK_order_item_batch` (`batch_id`),
@@ -256,13 +287,13 @@ CREATE TABLE IF NOT EXISTS `order_item` (
 
 CREATE TABLE IF NOT EXISTS `order_return` (
   `return_id` int(10) NOT NULL AUTO_INCREMENT,
-  `order_id` int(10) NOT NULL,
+  `order_item_id` int(10) NOT NULL,
   `quantity` int(10) NOT NULL DEFAULT '0',
   `reason` varchar(50) NOT NULL,
   `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`return_id`),
-  KEY `FK__order` (`order_id`)
+  KEY `FK_order_return_order_item` (`order_item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -315,7 +346,7 @@ CREATE TABLE IF NOT EXISTS `permission` (
   PRIMARY KEY (`permission_id`),
   KEY `FK__role` (`role_id`),
   KEY `FK__action` (`action_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=78 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=92 ;
 
 --
 -- Dumping data for table `permission`
@@ -382,7 +413,84 @@ INSERT INTO `permission` (`permission_id`, `role_id`, `action_id`) VALUES
 (73, 1, 32),
 (75, 1, 34),
 (76, 2, 34),
-(77, 1, 35);
+(77, 1, 35),
+(78, 1, 36),
+(79, 1, 39),
+(80, 1, 37),
+(81, 1, 38),
+(82, 2, 39),
+(83, 2, 38),
+(84, 4, 39),
+(85, 4, 38),
+(86, 1, 40),
+(87, 1, 41),
+(88, 1, 42),
+(89, 2, 42),
+(90, 1, 43),
+(91, 1, 44);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `report_type`
+--
+
+CREATE TABLE IF NOT EXISTS `report_type` (
+  `report_type_id` int(250) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`report_type_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+
+--
+-- Dumping data for table `report_type`
+--
+
+INSERT INTO `report_type` (`report_type_id`, `name`) VALUES
+(1, 'Inventory Report'),
+(2, 'Items Report'),
+(3, 'Supplier List'),
+(4, 'Item List'),
+(5, 'Inventory Items'),
+(6, 'Order Report'),
+(7, 'Collection Updates'),
+(8, 'sales update');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `report_user`
+--
+
+CREATE TABLE IF NOT EXISTS `report_user` (
+  `report_role_id` int(250) NOT NULL AUTO_INCREMENT,
+  `role_id` int(250) DEFAULT '0',
+  `report_type_id` int(250) DEFAULT '0',
+  PRIMARY KEY (`report_role_id`),
+  KEY `FK_report_user_role` (`role_id`),
+  KEY `FK_report_user_report_type` (`report_type_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+
+--
+-- Dumping data for table `report_user`
+--
+
+INSERT INTO `report_user` (`report_role_id`, `role_id`, `report_type_id`) VALUES
+(1, 1, 1),
+(2, 3, 1),
+(3, 1, 2),
+(4, 3, 2),
+(5, 1, 3),
+(6, 3, 3),
+(7, 1, 4),
+(8, 3, 4),
+(9, 1, 5),
+(10, 3, 5),
+(11, 2, 6),
+(12, 1, 6),
+(13, 2, 7),
+(14, 1, 7),
+(15, 2, 8),
+(16, 1, 8);
 
 -- --------------------------------------------------------
 
@@ -425,7 +533,7 @@ CREATE TABLE IF NOT EXISTS `setting` (
   `type` enum('radio','text','select','hidden','checkbox') DEFAULT NULL,
   `options` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`setting_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `setting`
@@ -439,7 +547,8 @@ INSERT INTO `setting` (`setting_id`, `name`, `readable_name`, `value`, `default_
 (5, 'site_title', 'Site Title', '.::VintelMed::.', NULL, 'default', NULL, NULL, NULL),
 (6, 'site_open_time', 'open_time', '6:00', '6:00', NULL, NULL, 'text', NULL),
 (7, 'site_close_time', 'close_time', '11:59 PM', '11:59 PM', NULL, NULL, 'text', NULL),
-(8, 'site_open_day', 'Operation days', 'mon,tue,wed,thu,fri', NULL, NULL, NULL, 'select', 'mon,tue,wed,thu,fri,sat,sun');
+(8, 'site_open_day', 'Operation days', 'mon,tue,wed,thu,fri', NULL, NULL, NULL, 'select', 'mon,tue,wed,thu,fri,sat,sun'),
+(9, 'critical_count', 'Critical count', '1000', '1000', NULL, NULL, 'text', NULL);
 
 -- --------------------------------------------------------
 
@@ -468,6 +577,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `last_name` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
+  `address` varchar(50) DEFAULT NULL,
   `area` varchar(50) NOT NULL,
   `quota` int(11) NOT NULL,
   `role_id` int(11) NOT NULL,
@@ -477,21 +587,26 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`user_id`),
   KEY `FK_user_role` (`role_id`),
   KEY `FK_user_district` (`district_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `first_name`, `middle_name`, `last_name`, `password`, `email`, `area`, `quota`, `role_id`, `district_id`, `status`, `civil_status`) VALUES
-(1, 'admin', 'admin', 'admin', 'admin', 'admin@email.com', 'area 1', 100000, 1, 1, 'active', 'single'),
-(7, 'client1', 'client1', 'client1', 'client1', 'client1@email.com', 'area 2', 1000000, 5, 2, 'active', 'single'),
-(8, 'client2', 'client2', 'client2', 'client2', 'client2@email.com', 'area 2', 0, 5, 2, 'active', 'single'),
-(9, 'msr1', 'msr1', 'msr1', 'msr1', 'msr1@email.com', 'area 3', 0, 6, 3, 'active', 'single'),
-(10, 'msr2', 'msr2', 'msr2', 'msr2', 'msr2@email.com', 'area 2', 0, 6, 3, 'active', 'single'),
-(14, 'warehouseman', 'warehouseman', 'warehouseman', 'warehouseman', 'warehouseman@email.com', 'area 1', 0, 3, 2, 'active', 'single'),
-(15, 'accountant', 'accountant', 'accountant', 'accountant', 'accountant@email.com', 'sample area', 100000, 2, 2, 'active', 'single'),
-(16, 'samaguita hospital', '', '', '', 'smapaguitahospitalname', 'pampangga', 0, 5, 2, 'active', '');
+INSERT INTO `user` (`user_id`, `first_name`, `middle_name`, `last_name`, `password`, `email`, `address`, `area`, `quota`, `role_id`, `district_id`, `status`, `civil_status`) VALUES
+(1, 'admin', 'admin', 'admin', 'admin', 'admin@email.com', 'address line here', 'area 1', 100000, 1, 1, 'active', 'single'),
+(7, 'client1', 'client1', 'client1', 'client1', 'client1@email.com', 'address line here', 'area 2', 1000000, 5, 2, 'active', 'single'),
+(8, 'client2', 'client2', 'client2', 'client2', 'client2@email.com', 'address line here', 'area 2', 0, 5, 2, 'active', 'single'),
+(14, 'warehouseman', 'warehouseman', 'warehouseman', 'warehouseman', 'warehouseman@email.com', 'address line here', 'area 1', 0, 3, 2, 'active', 'single'),
+(15, 'accountant', 'accountant', 'accountant', 'accountant', 'accountant@email.com', 'address line here', 'sample area', 100000, 2, 2, 'active', 'single'),
+(16, 'samaguita hospital', '', '', '', 'smapaguitahospitalname', 'address line here', 'pampangga', 0, 5, 2, 'active', ''),
+(17, 'msrone', 'mdlenameone', 'lasnmeone', 'msrone', 'msr@email.com', 'address line here', 'sampaloc', 1000000, 6, 2, 'active', 'single'),
+(18, 'msrtwo', 'msrtwomnme', 'msrtwolnme', 'msrtwo', 'msrtwo@email.com', 'address line here', 'manila', 1000000, 6, 3, 'active', 'single'),
+(19, 'msrthree', 'msrthremnme', 'msrthrelnme', 'msrthree', 'msrthree@email.com', 'address line here', 'quezon city', 1500000, 6, 1, 'active', 'single'),
+(20, 'hrname', 'hrmnmae', 'hrlname', 'hr', 'hr@email.com', 'address line here', 'taguig', 0, 4, 2, 'active', 'single'),
+(21, 'clientonefnmae', 'clientonemname', 'clientonelname', 'client1', 'client1@email.com', 'address line here', 'sampaloc', 0, 5, 2, 'active', 'single'),
+(22, 'clienttwofname', 'clienttwomname', 'clienttwolname', 'client2', 'client2@email.com', 'address line here', 'manila', 0, 5, 3, 'active', 'single'),
+(23, 'clientthreefname', 'clientthreemname', 'clientthreelname', 'client3', 'client3@email.com', 'address line here', 'quezon city', 0, 5, 1, 'active', 'single');
 
 -- --------------------------------------------------------
 
@@ -537,14 +652,14 @@ ALTER TABLE `orders`
 -- Constraints for table `order_item`
 --
 ALTER TABLE `order_item`
-  ADD CONSTRAINT `FK_order_item_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
-  ADD CONSTRAINT `FK_order_item_batch` FOREIGN KEY (`batch_id`) REFERENCES `batch` (`batch_id`);
+  ADD CONSTRAINT `FK_order_item_batch` FOREIGN KEY (`batch_id`) REFERENCES `batch` (`batch_id`),
+  ADD CONSTRAINT `FK_order_item_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`);
 
 --
 -- Constraints for table `order_return`
 --
 ALTER TABLE `order_return`
-  ADD CONSTRAINT `FK__order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`);
+  ADD CONSTRAINT `FK_order_return_order_item` FOREIGN KEY (`order_item_id`) REFERENCES `order_item` (`order_item_id`);
 
 --
 -- Constraints for table `payment`
@@ -565,6 +680,13 @@ ALTER TABLE `payment_item`
 ALTER TABLE `permission`
   ADD CONSTRAINT `FK__action` FOREIGN KEY (`action_id`) REFERENCES `action` (`action_id`),
   ADD CONSTRAINT `FK__role` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`);
+
+--
+-- Constraints for table `report_user`
+--
+ALTER TABLE `report_user`
+  ADD CONSTRAINT `FK_report_user_report_type` FOREIGN KEY (`report_type_id`) REFERENCES `report_type` (`report_type_id`),
+  ADD CONSTRAINT `FK_report_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`);
 
 --
 -- Constraints for table `user`
