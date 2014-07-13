@@ -1,7 +1,7 @@
 <?php
 
 class Batch_model extends CI_Model{
-var $table = 'item_batch';
+var $table = 'batch';
 var $items = 'items';
 var $suppliers = 'suppliers';
 	function increment($item_batch_id,$quantity){
@@ -22,6 +22,15 @@ var $suppliers = 'suppliers';
 			return true;
 		} else {
 			return false;
+		}
+	}
+	function get_single($batch_id,$row = false) {
+		$this->db->where('batch_id',$batch_id);
+		$q = $this->db->get($this->table);
+		if($row == true) {
+			return (@$q->row()->$row?$q->row()->$row:false);
+		} else {
+			return $q->row();
 		}
 	}
 }

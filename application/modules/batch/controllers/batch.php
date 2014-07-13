@@ -24,8 +24,9 @@ class Batch extends MX_Controller{
 		$crud->add_fields('batch_readable_id','access_type','item_id','supplier_id','count','recieve_date','expire_date','lot_number','on_cavite_warehouse','buy','sell');
 		$crud->edit_fields('batch_readable_id','access_type','item_id','supplier_id','count','recieve_date','expire_date','lot_number','on_cavite_warehouse','buy','sell','status');
 		$crud->required_fields('batch_readable_id','access_type','item_id','supplier_id','count','recieve_date','expire_date','lot_number');
-		$crud->columns('batch_readable_id','access_type','item_id','supplier_id','count','sold_count','return_count','recieve_date','expire_date','on_cavite_warehouse','lot_number','buy','sell');
+		$crud->columns('batch_readable_id','access_type','item_id','supplier_id','count','sold_count','return_count','recieve_date','expire_date','on_cavite_warehouse','lot_number','buy','sell','status');
 
+		$crud->callback_column('status',array($this,'_callback_to_status'));
 		$crud->callback_column('count',array($this,'_callback_to_number'));
 		$crud->callback_column('sold_count',array($this,'_callback_to_number'));
 		$crud->callback_column('return_count',array($this,'_callback_to_number'));
@@ -33,6 +34,7 @@ class Batch extends MX_Controller{
 		$crud->callback_column('sell',array($this,'_callback_to_money'));
 		$crud->callback_after_insert(array($this, 'log_user_after_insert'));
     	$crud->callback_after_update(array($this, 'log_user_after_update'));
+    	$crud->order_by('batch_id','desc');
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}
@@ -47,6 +49,14 @@ class Batch extends MX_Controller{
 	}
 	function _callback_to_number($value, $row){
 		return number_format($value);
+	}
+	function _callback_to_status($value, $row){
+		if($row->count > $row->sold_count) {
+			if($this->setting_model->get_setting('critical_count') <= (str_replace(',','',$row->count) - str_replace(',','',$row->sold_count))) {
+				return '<img src="'.base_url().'assets/images/warning-icon-green.png" alt="">';
+			}
+		}
+		return '<img src="'.base_url().'assets/images/warning-icon.png" alt="">';
 	}
 }
 

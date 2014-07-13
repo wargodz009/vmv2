@@ -1,8 +1,8 @@
 <?php
 
 class Order_model extends CI_Model{
-	var $table = 'order';
-	var $return = 'order_return';
+	var $table = 'orders';
+	var $order_return = 'order_return';
 	
 	function get_single($order_id,$row = false) {
 		$this->db->where('order_id',$order_id);
@@ -14,7 +14,7 @@ class Order_model extends CI_Model{
 		}
 	}
 	function add_return($data) {
-		$this->db->insert($this->return,$data);
+		$this->db->insert($this->order_return,$data);
 		return $this->db->insert_id();
 	}
 }

@@ -14,13 +14,22 @@ class Payment extends MX_Controller{
 		$crud->set_table('payment'); 
 		$crud->set_relation('order_id','orders','form_number'); 
 		$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
+		$crud->add_action('Print SO Form', base_url().'assets/images/print.png','','open_new_popup',array($this,'_callback_print_paid'));
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}
 	function _callback_manage_paid($primary_key,$row){
 		$items = $this->crud_model->read('order_item',array(array('where','order_id',$row->order_id)));
-		if(count($items) > 1 ) {
+		if(count($items) > 0 ) {
 			return base_url().'payment/manage/'.$row->order_id.'/'.$primary_key;
+		} else {
+			return '#';
+		}
+	}
+	function _callback_print_paid($primary_key,$row){
+		$items = $this->crud_model->read('orders',array(array('where','order_id',$row->order_id),array('where','approved_post',1)));
+		if($items) {
+			return base_url().'payment/reciept/'.$row->order_id.'/'.$primary_key;
 		} else {
 			return '#';
 		}
@@ -43,6 +52,13 @@ class Payment extends MX_Controller{
 			$data['payment_details'] = $this->crud_model->read('payment',array(array('where','payment_id',$payment_id)));
 			$this->template->load('index','manage_paid_items',$data);
 		}
+	}
+	function reciept($order_id,$payment_id) {
+		$data['order_info'] = $this->crud_model->read('orders',array(array('where','order_id',$order_id)));
+		$data['paid_items'] = $this->crud_model->read('order_item',array(array('where','order_id',$order_id),array('where','add_type','paid')));
+		$data['free_items'] = $this->crud_model->read('order_item',array(array('where','order_id',$order_id),array('where','add_type','free')));
+		$data['payment_details'] = $this->crud_model->read('payment',array(array('where','payment_id',$payment_id)));
+		$this->load->view('print_paid_items',$data);
 	}
 }
 

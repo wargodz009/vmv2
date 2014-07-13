@@ -19,6 +19,7 @@ class Order extends MX_Controller{
 		$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_name'));
 		$crud->callback_after_insert(array($this, '_log_user_after_insert'));
 		$crud->callback_after_update(array($this, '_log_user_after_update'));
+		$crud->add_action('Set as Completed', base_url().'assets/images/complete.gif','','',array($this,'_callback_complete_order'));
 		$crud->add_action('Set Returned', base_url().'assets/images/returned.png','','',array($this,'_callback_filter_order'));
 		$crud->add_action('Cancel Order', base_url().'assets/images/cancel.png','','',array($this,'_callback_filter_cancel'));
 		if($this->session->userdata('role_id') == 1) {
@@ -29,8 +30,19 @@ class Order extends MX_Controller{
 	}
 	function _callback_filter_approve($primary_key,$row){
 		if($row->cancel_date == null) {
-			if($row->approved_pre == 0) {
+			if($row->approved_pre == 0 && $row->approved_post == 0 ) {
 				return base_url().'order/set_approved/'.$primary_key;
+			}
+		}
+		return '#';
+	}
+	function _callback_complete_order($primary_key,$row){
+		if($row->cancel_date == null) {
+			if($row->approved_pre != 0 && $row->approved_post == 0) {
+				if($this->crud_model->read('payment',array(array('where','order_id',$row->order_id)))) {
+
+				}
+				return base_url().'order/set_complete/'.$primary_key;
 			}
 		}
 		return '#';
@@ -46,7 +58,7 @@ class Order extends MX_Controller{
 		return '#';
 	}
 	function _callback_filter_order($primary_key,$row){
-		if($row->approved_pre == 0 && $row->approved_post == 0) {
+		if($row->approved_pre != 0 && $row->approved_post != 0) {
 			if($row->return_id == null) {
 				return base_url().'order/set_returned/'.$primary_key;
 			} else {
@@ -127,6 +139,19 @@ class Order extends MX_Controller{
 			$this->crud_model->update('orders',$update,array(array('where','order_id',$order_id)));
 			$order_details = $this->crud_model->read('orders',array(array('where','order_id',$order_id)));
 			$this->session->set_flashdata('success','Order Approved!');
+			redirect('order/all');
+		} else {
+			$this->session->set_flashdata('danger','not a valid order!');
+			redirect('/');
+		}
+	}
+	function set_complete($order_id) {
+		$data['order_id'] = $order_id;
+		if($this->crud_model->valid('orders','order_id',$order_id)) {
+			$update['approved_post'] = 1;
+			$this->crud_model->update('orders',$update,array(array('where','order_id',$order_id)));
+			$order_details = $this->crud_model->read('orders',array(array('where','order_id',$order_id)));
+			$this->session->set_flashdata('success','Order Completed!');
 			redirect('order/all');
 		} else {
 			$this->session->set_flashdata('danger','not a valid order!');
