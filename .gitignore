@@ -35,7 +35,6 @@ application/libraries/grocery_crud_extended.php
 application/logs/
 assets/uploads/images/
 application/models/index.html
-application/third_party/
 application/views/index.html
 application/views/welcome_message.php
 application/views/errors/*
