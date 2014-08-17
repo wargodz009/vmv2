@@ -13,8 +13,9 @@ class Payment extends MX_Controller{
 		$crud = new grocery_CRUD();
 		$crud->set_table('payment'); 
 		$crud->set_relation('order_id','orders','form_number'); 
+		$crud->unset_add_fields('status');
 		$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
-		$crud->add_action('Print SO Form', base_url().'assets/images/print.png','','open_new_popup',array($this,'_callback_print_paid'));
+		
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}
@@ -22,14 +23,6 @@ class Payment extends MX_Controller{
 		$items = $this->crud_model->read('order_item',array(array('where','order_id',$row->order_id)));
 		if(count($items) > 0 ) {
 			return base_url().'payment/manage/'.$row->order_id.'/'.$primary_key;
-		} else {
-			return '#';
-		}
-	}
-	function _callback_print_paid($primary_key,$row){
-		$items = $this->crud_model->read('orders',array(array('where','order_id',$row->order_id),array('where','approved_post',1)));
-		if($items) {
-			return base_url().'payment/reciept/'.$row->order_id.'/'.$primary_key;
 		} else {
 			return '#';
 		}
@@ -59,6 +52,40 @@ class Payment extends MX_Controller{
 		$data['free_items'] = $this->crud_model->read('order_item',array(array('where','order_id',$order_id),array('where','add_type','free')));
 		$data['payment_details'] = $this->crud_model->read('payment',array(array('where','payment_id',$payment_id)));
 		$this->load->view('print_paid_items',$data);
+		/*
+		//to pdf
+		$filename = 'reciept_'.date('mdY_his').'.pdf';
+		$pdfFilePath = FCPATH."/downloads/reports/$filename";
+		$this->load->library('pdf');
+		$pdf = $this->pdf->load();
+		$pdf->WriteHTML($this->load->view('print_paid_items',$data,true)); // write the HTML into the PDF
+		$pdf->Output($pdfFilePath, 'F'); // save to file because we can
+		
+		//to download
+		$this->load->helper('download');
+		$data = file_get_contents($pdfFilePath); // Read the file's contents
+		$name = $filename;
+		force_download($name, $data);
+		*/
+	}
+	function to_pdf(){
+		// As PDF creation takes a bit of memory, we're saving the created file in /downloads/reports/
+		$pdfFilePath = FCPATH."/downloads/reports/$filename.pdf";
+		$data['page_title'] = 'Hello world'; // pass data to the view
+		 
+		if (file_exists($pdfFilePath) == FALSE)
+		{
+			ini_set('memory_limit','32M'); // boost the memory limit if it's low <img src="http://davidsimpson.me/wp-includes/images/smilies/icon_wink.gif" alt=";)" class="wp-smiley">
+			$html = $this->load->view('pdf_report', $data, true); // render the view into HTML
+			 
+			$this->load->library('pdf');
+			$pdf = $this->pdf->load();
+			$pdf->SetFooter($_SERVER['HTTP_HOST'].'|{PAGENO}|'.date(DATE_RFC822)); // Add a footer for good measure <img src="http://davidsimpson.me/wp-includes/images/smilies/icon_wink.gif" alt=";)" class="wp-smiley">
+			$pdf->WriteHTML($html); // write the HTML into the PDF
+			$pdf->Output($pdfFilePath, 'F'); // save to file because we can
+		}
+		 
+		redirect("/downloads/reports/$filename.pdf");
 	}
 }
 

@@ -15,6 +15,8 @@ class Batch extends MX_Controller{
 		$crud->display_as('supplier_id', 'Supplier');
 		$crud->display_as('item_id', 'Item');
 		$crud->display_as('on_cavite_warehouse', 'cvte whse');
+		$crud->display_as('buy', 'Buy Price');
+		$crud->display_as('sell', 'Sell Price');
 		$crud->field_type('recieve_date', 'date');
 		$crud->field_type('expire_date', 'date');
 		$crud->field_type('user_id', 'hidden', 1);

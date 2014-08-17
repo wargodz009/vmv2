@@ -11,21 +11,19 @@ class Item extends MX_Controller{
 		$crud->set_table('item'); 
 		$crud->set_relation('item_type_id','item_type','name');
 
-		$crud->add_fields('name','item_type_id','generic_name','description','price_standard');
-		$crud->edit_fields('name','item_type_id','generic_name','description','price_standard','status');
+		$crud->add_fields('name','item_type_id','generic_name','description');
+		$crud->edit_fields('name','item_type_id','generic_name','description','status');
 		
-		$crud->columns('name','item_type_id','generic_name','description','price_standard','status');
+		$crud->columns('name','item_type_id','generic_name','description','status');
 		
 		$crud->display_as('item_type_id','Item Type');
-		$crud->display_as('price_standard','Standard Pricing');
 		
 		if(get_role() != 'administrator') {
 			$crud->unset_delete();
 		}
 		
 		$crud->required_fields('name','item_type_id','generic_name','description');
-		
-		$crud->callback_column('price_standard',array($this,'_callback_to_money'));
+
 		$crud->callback_after_insert(array($this, '_log_user_after_insert'));
 		$crud->callback_after_update(array($this, '_log_user_after_update'));
 		$crud->callback_after_delete(array($this, '_log_user_after_delete'));
@@ -41,9 +39,6 @@ class Item extends MX_Controller{
 	}
 	function _log_user_after_delete($post_array,$primary_key){
 		logs('delete_item','success',$primary_key);
-	}
-	function _callback_to_money($value, $row){
-		return 'P '.number_format($value,2);
 	}
 }
 

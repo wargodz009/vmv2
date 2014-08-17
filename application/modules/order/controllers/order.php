@@ -23,12 +23,21 @@ class Order extends MX_Controller{
 		$crud->callback_after_update(array($this, '_log_user_after_update'));
 		$crud->add_action('Set Returned', base_url().'assets/images/returned.png','','',array($this,'_callback_filter_order'));
 		$crud->add_action('Cancel Order', base_url().'assets/images/cancel.png','','',array($this,'_callback_filter_cancel'));
+		$crud->add_action('Print SO Form', base_url().'assets/images/print.png','','open_new_popup',array($this,'_callback_print_paid'));
 		if($this->session->userdata('role_id') == 1) {
 			$crud->add_action('Approve Order', base_url().'assets/images/approve.gif','','',array($this,'_callback_filter_approve'));
 			$crud->add_action('Set as Completed', base_url().'assets/images/complete.gif','','',array($this,'_callback_complete_order'));
 		}
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
+	}
+	function _callback_print_paid($primary_key,$row){
+		$items = $this->crud_model->read('orders',array(array('where','order_id',$row->order_id),array('where','approved_post',1)));
+		if($items) {
+			return base_url().'payment/reciept/'.$row->order_id.'/'.$primary_key;
+		} else {
+			return '#';
+		}
 	}
 	function _callback_filter_approve($primary_key,$row){
 		if($row->cancel_date == null) {
@@ -95,7 +104,7 @@ class Order extends MX_Controller{
 	    $return_str =  '<select id="field-user" name="msr_client_id" size="8" class="chosen-multiple-select" data-placeholder="Select User" style="width:512px">';
 	    $all = $this->user_model->get_all_msr_client();
 	    foreach($all->result() as $row) {
-	    	$return_str .= '<option value="'.$row->msr_client_id.'">'.get_name($row->msr_id).' -> '.get_name($row->client_id).'</option>';
+	    	$return_str .= '<option value="'.$row->msr_client_id.'" '.($value==$row->msr_client_id?'Selected=true':'').'>'.get_name($row->msr_id).' -> '.get_name($row->client_id).'</option>';
     	}
 	    return $return_str.'</select><div class="clear"></div>';
 	}
