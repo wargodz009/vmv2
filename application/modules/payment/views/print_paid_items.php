@@ -202,10 +202,10 @@ body { font: 12pt Georgia, "Times New Roman", Times, serif; line-height: 1.3; }
 		</div>
 	</div>
 	<div class="clear"></div>
-	<div class="noPrint center block">
+	<!--div class="noPrint center block">
 		<input class="inline-block" type="button" id='printThis' value="PRINT" onClick="window.print();"/>
 		<input class="inline-block" type="button" id='downloadThis' value="DOWNLOAD" onClick=""/>
 		<span class="center red block">**please set margin as none on printing options</span>
-	</div>
+	</div-->
 </body>
 </html>

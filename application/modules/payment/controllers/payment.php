@@ -51,22 +51,9 @@ class Payment extends MX_Controller{
 		$data['paid_items'] = $this->crud_model->read('order_item',array(array('where','order_id',$order_id),array('where','add_type','paid')));
 		$data['free_items'] = $this->crud_model->read('order_item',array(array('where','order_id',$order_id),array('where','add_type','free')));
 		$data['payment_details'] = $this->crud_model->read('payment',array(array('where','payment_id',$payment_id)));
-		$this->load->view('print_paid_items',$data);
-		/*
-		//to pdf
-		$filename = 'reciept_'.date('mdY_his').'.pdf';
-		$pdfFilePath = FCPATH."/downloads/reports/$filename";
-		$this->load->library('pdf');
-		$pdf = $this->pdf->load();
-		$pdf->WriteHTML($this->load->view('print_paid_items',$data,true)); // write the HTML into the PDF
-		$pdf->Output($pdfFilePath, 'F'); // save to file because we can
-		
-		//to download
-		$this->load->helper('download');
-		$data = file_get_contents($pdfFilePath); // Read the file's contents
-		$name = $filename;
-		force_download($name, $data);
-		*/
+		$data = $this->load->view('print_paid_items',$data,true);
+		$this->load->helper(array('dompdf', 'file'));
+		pdf_create($data, 'reciept'.date('dmY_his').'pdf');
 	}
 	function to_pdf(){
 		// As PDF creation takes a bit of memory, we're saving the created file in /downloads/reports/

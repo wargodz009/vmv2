@@ -4,7 +4,7 @@ $(document).ready(function(){
 		e.preventDefault();
 		window.open($(this).attr('href'),null,"height=535,width=880,status=no,toolbar=no,menubar=no,location=no");
 	});
-	$("div.item_holder").click(function(e){
+	$("div.item_holder").dbclick(function(e){
 		e.preventDefault();
 		$(this).html('');
 	});

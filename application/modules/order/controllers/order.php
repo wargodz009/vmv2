@@ -23,7 +23,7 @@ class Order extends MX_Controller{
 		$crud->callback_after_update(array($this, '_log_user_after_update'));
 		$crud->add_action('Set Returned', base_url().'assets/images/returned.png','','',array($this,'_callback_filter_order'));
 		$crud->add_action('Cancel Order', base_url().'assets/images/cancel.png','','',array($this,'_callback_filter_cancel'));
-		$crud->add_action('Print SO Form', base_url().'assets/images/print.png','','open_new_popup',array($this,'_callback_print_paid'));
+		$crud->add_action('Print SO Form', base_url().'assets/images/print.png','','',array($this,'_callback_print_paid'));
 		if($this->session->userdata('role_id') == 1) {
 			$crud->add_action('Approve Order', base_url().'assets/images/approve.gif','','',array($this,'_callback_filter_approve'));
 			$crud->add_action('Set as Completed', base_url().'assets/images/complete.gif','','',array($this,'_callback_complete_order'));
