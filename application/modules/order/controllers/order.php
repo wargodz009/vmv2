@@ -9,9 +9,24 @@ class Order extends MX_Controller{
 		$this->load->model('order/order_model');
 	}
 	function index(){
+		
 		$this->template->load('index','index');
 	}
 	function all(){
+		if($this->session->userdata('role_id') == 1) {
+			$info = '';
+			$new = $this->order_model->get_new();
+			if($new > 0) $info = 'You have <b>'.$new.'</b> new order(s) to approve.<br />';
+			$done = $this->order_model->get_done();
+			if($done > 0 && $new > 0) {
+				$info .= 'You have <b>'.$done.'</b> new order(s) to complete. ';
+			} else {
+				$info = 'You have <b>'.$done.'</b> new order(s) to complete. ';
+			}
+			if($info) {
+				$this->session->set_userdata('info',$info);
+			} 
+		}
 		$crud = new grocery_CRUD();
 		$crud->set_table('orders'); 
 		$crud->fields('form_number','msr_client_id','discount','discount_type'); 
@@ -28,6 +43,8 @@ class Order extends MX_Controller{
 			$crud->add_action('Approve Order', base_url().'assets/images/approve.gif','','',array($this,'_callback_filter_approve'));
 			$crud->add_action('Set as Completed', base_url().'assets/images/complete.gif','','',array($this,'_callback_complete_order'));
 		}
+		$crud->order_by('approved_pre','asc');
+		$crud->order_by('approved_post','asc');
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}

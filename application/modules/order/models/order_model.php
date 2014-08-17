@@ -17,6 +17,15 @@ class Order_model extends CI_Model{
 		$this->db->insert($this->order_return,$data);
 		return true;
 	}
+	function get_new(){
+		$this->db->where('approved_pre',0);
+		return $this->db->count_all_results($this->table);
+	}
+	function get_done(){
+		$this->db->where('approved_pre',1);
+		$this->db->where('approved_post',0);
+		return $this->db->count_all_results($this->table);
+	}
 }
 
 ?>
