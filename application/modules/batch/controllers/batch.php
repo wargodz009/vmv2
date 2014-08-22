@@ -15,8 +15,8 @@ class Batch extends MX_Controller{
 		$crud->display_as('supplier_id', 'Supplier');
 		$crud->display_as('item_id', 'Item');
 		$crud->display_as('on_cavite_warehouse', 'cvte whse');
-		$crud->display_as('buy', 'Buy Price');
-		$crud->display_as('sell', 'Sell Price');
+		$crud->display_as('buy', 'Cost');
+		$crud->display_as('sell', 'Catalog Price');
 		$crud->field_type('recieve_date', 'date');
 		$crud->field_type('expire_date', 'date');
 		$crud->field_type('user_id', 'hidden', 1);
@@ -55,10 +55,10 @@ class Batch extends MX_Controller{
 		return number_format($value);
 	}
 	function _callback_to_status($value, $row){
-		if($row->count > $row->sold_count) {
-			if($this->setting_model->get_setting('critical_count') <= (str_replace(',','',$row->count) - str_replace(',','',$row->sold_count))) {
-				return '<img src="'.base_url().'assets/images/warning-icon-green.png" alt="">';
-			}
+		$percent = $row->sold_count / $row->count;
+		$percentage = number_format( $percent * 100 );
+		if($percentage < $this->setting_model->get_setting('critical_limit')) {
+			return '<img src="'.base_url().'assets/images/warning-icon-green.png" alt="">';
 		}
 		return '<img src="'.base_url().'assets/images/warning-icon.png" alt="">';
 	}

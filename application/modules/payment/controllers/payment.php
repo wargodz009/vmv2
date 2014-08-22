@@ -13,6 +13,7 @@ class Payment extends MX_Controller{
 		$crud = new grocery_CRUD();
 		$crud->set_table('payment'); 
 		$crud->set_relation('order_id','orders','form_number'); 
+		$crud->required_fields('amount','order_id','datetime');
 		$crud->unset_add_fields('status');
 		$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
 		

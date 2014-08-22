@@ -6,7 +6,7 @@ var $table = 'setting';
 		$this->db->where('name',$name);
 		$q = $this->db->get($this->table);
 		$row = $q->row();
-		return $row->value;
+		return (isset($row->value)?$row->value:false);
 	}
 	function get_all_settings(){
 		$this->db->where('type !=','hidden');

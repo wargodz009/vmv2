@@ -62,9 +62,9 @@ class User extends MX_Controller{
 		$crud->where('user.role_id','5'); 
 		$crud->display_as('district_id','District');
 		$crud->display_as('first_name','Name/Hospital');
-		$crud->columns('first_name','middle_name','last_name','district_id','area');
-		$crud->add_fields('first_name','middle_name','last_name','email','area','quota','role_id','district_id','civil_status');
-		$crud->edit_fields('first_name','middle_name','last_name','email','area','quota','role_id','district_id','civil_status');
+		$crud->columns('first_name','middle_name','last_name','district_id','contact_person','contact_number','area','note');
+		$crud->add_fields('first_name','middle_name','last_name','email','area','contact_person','contact_number','quota','role_id','district_id','civil_status');
+		$crud->edit_fields('first_name','middle_name','last_name','email','area','quota','contact_person','contact_number','role_id','district_id','civil_status','note');
 		$crud->required_fields('first_name','email','password','area','role_id','district_id');
 		$crud->set_relation('district_id','district','name');
 		$crud->set_relation('role_id','role','name');
