@@ -1,1 +1,1 @@
-admin dashboard
+client dashboard

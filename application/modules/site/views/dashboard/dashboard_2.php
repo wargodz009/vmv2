@@ -1,1 +1,1 @@
-admin dashboard
+accountant dashboard
