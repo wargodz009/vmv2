@@ -1,6 +1,6 @@
 <?php
 
-class Order_model extends CI_Model{
+class Sales_model extends CI_Model{
 	var $table = 'orders';
 	var $order_return = 'order_return';
 	

@@ -1,6 +1,6 @@
 <?php
 
-class Payment extends MX_Controller{
+class Collection extends MX_Controller{
 	
 	function __construct(){
 		parent::__construct();
@@ -20,10 +20,25 @@ class Payment extends MX_Controller{
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}
+	function dashboard(){
+		$crud = new grocery_CRUD();
+		$crud->set_table('payment'); 
+		$crud->set_subject('COLLECTION'); 
+		$crud->unset_operations();
+		$crud->display_as('check_full_amount', 'Full amount');
+		$crud->display_as('order_id', 'SO #');
+		$crud->display_as('payment_type', 'type');
+		$crud->display_as('check_number', 'check #');
+		$crud->set_relation('order_id','orders','form_number'); 
+		$crud->order_by('datetime','desc');
+		$crud->columns('amount','order_id','payment_type','bank','check_number','check_full_amount');
+		$output = $crud->render();
+		return $this->load->view('grocery_crud',$output,true);
+	}
 	function _callback_manage_paid($primary_key,$row){
 		$items = $this->crud_model->read('order_item',array(array('where','order_id',$row->order_id)));
 		if(count($items) > 0 ) {
-			return base_url().'payment/manage/'.$row->order_id.'/'.$primary_key;
+			return base_url().'collection/manage/'.$row->order_id.'/'.$primary_key;
 		} else {
 			return '#';
 		}
@@ -40,7 +55,7 @@ class Payment extends MX_Controller{
 				$this->crud_model->create('payment_item',$data);
 			}
 			$this->session->set_flashdata('success','Payment Details Saved!');
-			redirect('payment/all');
+			redirect('collection/all');
 		} else {
 			$data['items'] = $this->crud_model->read('order_item',array(array('where','order_id',$order_id)));
 			$data['payment_details'] = $this->crud_model->read('payment',array(array('where','payment_id',$payment_id)));

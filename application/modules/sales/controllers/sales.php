@@ -1,12 +1,12 @@
 <?php
 
-class Order extends MX_Controller{
+class Sales extends MX_Controller{
 	
 	function __construct(){
 		parent::__construct();
 		$this->load->library('grocery_CRUD');
 		$this->load->model('batch/batch_model');
-		$this->load->model('order/order_model');
+		$this->load->model('sales/sales_model');
 	}
 	function index(){
 		
@@ -15,13 +15,15 @@ class Order extends MX_Controller{
 	function all(){
 		if($this->session->userdata('role_id') == 1) {
 			$info = '';
-			$new = $this->order_model->get_new();
+			$new = $this->sales_model->get_new();
 			if($new > 0) $info = 'You have <b>'.$new.'</b> new order(s) to approve.<br />';
-			$done = $this->order_model->get_done();
+			$done = $this->sales_model->get_done();
 			if($done > 0 && $new > 0) {
 				$info .= 'You have <b>'.$done.'</b> new order(s) to complete. ';
 			} else {
-				$info = 'You have <b>'.$done.'</b> new order(s) to complete. ';
+				if($done > 0) {
+					$info = 'You have <b>'.$done.'</b> new order(s) to complete. ';	
+				}
 			}
 			if($info) {
 				$this->session->set_userdata('info',$info);
@@ -48,6 +50,19 @@ class Order extends MX_Controller{
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}
+	function dashboard(){
+		$crud = new grocery_CRUD();
+		$crud->set_table('orders'); 
+		$crud->set_subject('SALES'); 
+		$crud->unset_operations();
+		$crud->fields('form_number','msr_client_id','discount','discount_type'); 
+		$crud->columns('msr_client_id','discount','discount_type','form_number'); 
+		$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_name'));
+		$crud->set_relation('msr_client_id','msr_client','msr_id'); 
+		$crud->order_by('order_date','desc');
+		$output = $crud->render();
+		$this->load->view('grocery_crud',$output);
+	}
 	function _callback_print_paid($primary_key,$row){
 		$items = $this->crud_model->read('orders',array(array('where','order_id',$row->order_id),array('where','approved_post',1)));
 		if($items) {
@@ -59,7 +74,7 @@ class Order extends MX_Controller{
 	function _callback_filter_approve($primary_key,$row){
 		if($row->cancel_date == null) {
 			if($row->approved_pre == 0 && $row->approved_post == 0 ) {
-				return base_url().'order/set_approved/'.$primary_key;
+				return base_url().'sales/set_approved/'.$primary_key;
 			}
 		}
 		return '#';
@@ -70,7 +85,7 @@ class Order extends MX_Controller{
 				if($this->crud_model->read('payment',array(array('where','order_id',$row->order_id)))) {
 
 				}
-				return base_url().'order/set_complete/'.$primary_key;
+				return base_url().'sales/set_complete/'.$primary_key;
 			}
 		}
 		return '#';
@@ -80,7 +95,7 @@ class Order extends MX_Controller{
 			if($row->cancel_date != null) {
 				return '#';
 			} else {
-				return base_url().'order/set_cancelled/'.$primary_key;
+				return base_url().'sales/set_cancelled/'.$primary_key;
 			}
 		} 
 		return '#';
@@ -88,7 +103,7 @@ class Order extends MX_Controller{
 	function _callback_filter_order($primary_key,$row){
 		if($row->approved_pre != 0 && $row->approved_post != 0) {
 			if($row->return_id == 0) {
-				return base_url().'order/set_returned/'.$primary_key;
+				return base_url().'sales/set_returned/'.$primary_key;
 			} else {
 				return '#';
 			}
@@ -140,7 +155,7 @@ class Order extends MX_Controller{
 						'quantity'=>$item['quantity'],
 						'reason'=>$item['reason']
 					);
-					$this->order_model->add_return($data);
+					$this->sales_model->add_return($data);
 					$this->batch_model->increment_return($item['batch_id'],$item['quantity']);
 				}
 			}
@@ -195,7 +210,7 @@ class Order extends MX_Controller{
 				}
 			}
 			$this->session->set_flashdata('success','Order Completed!');
-			redirect('order/all');
+			redirect('sales/all');
 		} else {
 			$this->session->set_flashdata('danger','not a valid order!');
 			redirect('/');
