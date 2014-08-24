@@ -45,7 +45,7 @@ if($success_message !== null){?>
 	<div id="hidden-operations" class="hidden-operations"></div>
 	<div class="mDiv">
 		<div class="ftitle">
-			&nbsp;
+			<?php if(strtolower($subject) != 'record'): echo $subject; else: echo '&nbsp;'; endif; ?>
 		</div>
 		<div title="<?php echo $this->l('minimize_maximize');?>" class="ptogtitle">
 			<span></span>

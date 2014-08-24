@@ -4,7 +4,7 @@ $(document).ready(function(){
 		e.preventDefault();
 		window.open($(this).attr('href'),null,"height=535,width=880,status=no,toolbar=no,menubar=no,location=no");
 	});
-	$("div.item_holder").dbclick(function(e){
+	$("div.item_holder").dblclick(function(e){
 		e.preventDefault();
 		$(this).html('');
 	});
@@ -14,5 +14,9 @@ $(document).ready(function(){
 		if(confirm(question)){
 			window.location.assign($(this).prop('href'));
 		}
+	});
+	$('#inner-content-div').slimScroll({
+		alwaysVisible : true,
+		height: '250px'
 	});
 });

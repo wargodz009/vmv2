@@ -37,8 +37,8 @@ class Batch extends MX_Controller{
 		$crud->callback_column('buy',array($this,'_callback_to_money'));
 		$crud->callback_column('sell',array($this,'_callback_to_money'));
 		$crud->callback_after_insert(array($this, 'log_user_after_insert'));
-    	$crud->callback_after_update(array($this, 'log_user_after_update'));
-    	$crud->order_by('batch_id','desc');
+    		$crud->callback_after_update(array($this, 'log_user_after_update'));
+    		$crud->order_by('batch_id','desc');
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}
