@@ -63,6 +63,13 @@ class Sales extends MX_Controller{
 		$output = $crud->render();
 		$this->load->view('grocery_crud',$output);
 	}
+	function dashboard_advance($month = '',$year ='',$area=''){
+		$data['month'] = ($month != ''?$month:date('m'));
+		$data['year'] = ($year != ''?$year:date('Y'));
+		$data['area'] = ($area != ''?$area:1);
+		$this->load->view('dashboard_advance',$data);
+
+	}
 	function _callback_print_paid($primary_key,$row){
 		$items = $this->crud_model->read('orders',array(array('where','order_id',$row->order_id),array('where','approved_post',1)));
 		if($items) {
