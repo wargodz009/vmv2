@@ -8,9 +8,12 @@ class Sales extends MX_Controller{
 		$this->load->model('batch/batch_model');
 		$this->load->model('sales/sales_model');
 	}
-	function index(){
-		
-		$this->template->load('index','index');
+	function index($month = '00',$year ='00',$district = '00'){
+		$data['month'] = ($month != '00'?$month:date('m'));
+		$data['year'] = ($year != '00'?$year:date('Y'));
+		$data['district'] = ($district != ''?$district:'00');
+		$data['area_list'] = $this->crud_model->read('district');
+		$this->template->load('index','index',$data);
 	}
 	function all(){
 		if($this->session->userdata('role_id') == 1) {
@@ -63,12 +66,45 @@ class Sales extends MX_Controller{
 		$output = $crud->render();
 		$this->load->view('grocery_crud',$output);
 	}
-	function dashboard_advance($month = '',$year ='',$area=''){
-		$data['month'] = ($month != ''?$month:date('m'));
-		$data['year'] = ($year != ''?$year:date('Y'));
-		$data['area'] = ($area != ''?$area:1);
+	function dashboard_advance($month = '00',$year ='00',$district = '00'){
+		$data['sales'] = $this->user_model->get_all_msr();
 		$this->load->view('dashboard_advance',$data);
 
+	}
+	function get_sales($msr_id,$month,$year){
+		$all_msr_ids = $this->crud_model->read('msr_client',array(array('where','msr_id',$msr_id)));
+		//all orders	
+		if(!empty($all_msr_ids)) {
+			$ids = array();
+			foreach ($all_msr_ids as $key) {
+				$ids[] = $key->msr_client_id;
+			}
+			$orders = $this->sales_model->get_sales($ids,$month,$year);
+			//orders
+			if(!empty($orders)) {
+				$total = 0;
+				foreach ($orders as $order) {
+					//items
+					$order_item = $this->sales_model->get_items($order->order_id);
+					if(!empty($order_item)) {
+						foreach ($order_item as $item) {
+							if($item->add_type == 'paid') {
+								$total += $item->quantity * $item->custom_price;
+							}
+						}
+					}
+				}
+				if($order->discount_type == 'percentage') {
+					return $total - ($total * ($order->discount / 100));
+				} else {
+					return $total - $order->discount;
+				}
+			} else {
+				return 0;
+			}
+		} else {
+			return 0;
+		}
 	}
 	function _callback_print_paid($primary_key,$row){
 		$items = $this->crud_model->read('orders',array(array('where','order_id',$row->order_id),array('where','approved_post',1)));

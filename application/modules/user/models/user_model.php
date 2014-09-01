@@ -59,6 +59,10 @@ class User_model extends CI_Model{
 	function get_all_msr_client(){
 		return $this->db->get($this->msr_client);
 	}
+	function get_msr_client_id($msr_id){
+		$this->db->where('msr_id',$msr_id);
+		return $this->db->get($this->msr_client)->row()->msr_client_id;
+	}
 	function is_owned($msr_id,$client_id){
 		$this->db->where('msr_id',$msr_id);
 		$this->db->where('client_id',$client_id);

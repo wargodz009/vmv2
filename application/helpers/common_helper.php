@@ -86,6 +86,11 @@ function get_msr_client($msr_client_id,$what = 'msr_id'){
 	$CI->load->model('user/user_model');
 	return $CI->user_model->get_msr_client($msr_client_id,$what);
 }
+function get_msr_client_id($msr_id){
+	$CI =& get_instance();
+	$CI->load->model('user/user_model');
+	return $CI->user_model->get_msr_client_id($msr_id);
+}
 function get_address($user_id){
 	$CI =& get_instance();
 	$CI->load->model('user/user_model');
