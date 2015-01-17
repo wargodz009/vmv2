@@ -75,8 +75,3 @@
 		});
 	});
 </script>
-<style>
-thead tr >td {
-	font-weight: bold;
-}
-</style>

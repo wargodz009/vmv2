@@ -11,6 +11,14 @@ class Site extends MX_Controller{
 	function not_found() {
 		$this->template->load('index','custom_404');
 	}
+	function test() {
+		$this->load->view('test_print');
+	}
+	function to_pdf() {
+		$data = $this->load->view('test_print','',true);
+		$this->load->helper(array('dompdf', 'file'));
+		pdf_create($data, 'reciept'.date('dmY_his').'pdf');
+	}
 	function login() {
 		$this->load->model('user/user_model');
 		if($this->input->post('user_email') != '') {

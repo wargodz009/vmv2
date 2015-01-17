@@ -4,7 +4,7 @@ class login_hook  {
 	function is_logged_in() {
 		$LH =& get_instance();
 		if (ENVIRONMENT == 'development') {
-			$LH->output->enable_profiler(TRUE);
+			//$LH->output->enable_profiler(TRUE);
 		}
 		$module = ($LH->uri->segment(1)?$LH->uri->segment(1):'site');
 		$function = ($LH->uri->segment(2)?$LH->uri->segment(2):'index');

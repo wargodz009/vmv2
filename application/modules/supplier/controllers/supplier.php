@@ -31,6 +31,15 @@ class Supplier extends MX_Controller{
 	function _log_user_after_delete($post_array,$primary_key){
 		logs('delete_supplier','success',$primary_key);
 	}
+	function dashboard(){
+		$crud = new grocery_CRUD();
+		$crud->set_table('supplier'); 
+		$crud->set_subject('SUPPIERS'); 
+		$crud->unset_operations();
+		$crud->columns('name','status'); 
+		$output = $crud->render();
+		$this->load->view('grocery_crud',$output);
+	}
 }
 
 ?>

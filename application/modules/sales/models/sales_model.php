@@ -35,11 +35,13 @@ class Sales_model extends CI_Model{
 		}
 		return $this->db->get($this->table)->result();
 	}
-	function get_sales($ids,$month,$year) {
+	function get_sales($ids,$month ='',$year = '') {
 		$this->db->order_by('order_date','DESC');
 		$this->db->where_in('msr_client_id',$ids);
-		$this->db->where('MONTH(order_date)',$month);
-		$this->db->where('YEAR(order_date)',$year);
+		if($month != '' && $year != '') {
+			$this->db->where('MONTH(order_date)',$month);
+			$this->db->where('YEAR(order_date)',$year);
+		} 
 		$res =$this->db->get($this->table);
 		return $res->result();
 	}

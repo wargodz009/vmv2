@@ -40,6 +40,16 @@ class Item extends MX_Controller{
 	function _log_user_after_delete($post_array,$primary_key){
 		logs('delete_item','success',$primary_key);
 	}
+	function dashboard(){
+		$crud = new grocery_CRUD();
+		$crud->set_table('item'); 
+		$crud->set_subject('ITEMS'); 
+		$crud->unset_operations();
+		$crud->columns('name','item_type_id','generic_name','description'); 
+		$crud->set_relation('item_type_id','item_type','name'); 
+		$output = $crud->render();
+		$this->load->view('grocery_crud',$output);
+	}
 }
 
 ?>

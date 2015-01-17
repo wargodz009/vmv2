@@ -109,7 +109,7 @@ class Sales extends MX_Controller{
 	function _callback_print_paid($primary_key,$row){
 		$items = $this->crud_model->read('orders',array(array('where','order_id',$row->order_id),array('where','approved_post',1)));
 		if($items) {
-			return base_url().'payment/reciept/'.$row->order_id.'/'.$primary_key;
+			return base_url().'collection/reciept/'.$row->order_id.'/'.$primary_key;
 		} else {
 			return '#';
 		}
@@ -203,7 +203,7 @@ class Sales extends MX_Controller{
 				}
 			}
 			$this->session->set_flashdata('success','Order Returned!');
-			redirect('order/all');
+			redirect('sales/all');
 		} else {
 			$data['order_id'] = $order_id;
 			if($this->crud_model->valid('orders','order_id',$order_id)) {
@@ -222,7 +222,7 @@ class Sales extends MX_Controller{
 			$update['cancel_date'] = date('Y-m-d');
 			$this->crud_model->update('orders',$update,array(array('where','order_id',$order_id)));
 			$this->session->set_flashdata('success','Order Cancelled!');
-			redirect('order/all');
+			redirect('sales/all');
 		} else {
 			$this->session->set_flashdata('danger','not a valid order!');
 			redirect('/');
@@ -235,7 +235,7 @@ class Sales extends MX_Controller{
 			$this->crud_model->update('orders',$update,array(array('where','order_id',$order_id)));
 			$order_details = $this->crud_model->read('orders',array(array('where','order_id',$order_id)));
 			$this->session->set_flashdata('success','Order Approved!');
-			redirect('order/all');
+			redirect('sales/all');
 		} else {
 			$this->session->set_flashdata('danger','not a valid order!');
 			redirect('/');

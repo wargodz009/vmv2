@@ -5,20 +5,36 @@ class Collection extends MX_Controller{
 	function __construct(){
 		parent::__construct();
 		$this->load->library('grocery_CRUD');
+		$this->load->model('collection/collection_model');
 	}
-	function index(){
-		$this->template->load('index','index');
+	function index($month = '00',$year ='00',$district = '00'){
+		$data['month'] = ($month != '00'?$month:date('m'));
+		$data['year'] = ($year != '00'?$year:date('Y'));
+		$data['district'] = ($district != ''?$district:'00');
+		$data['area_list'] = $this->crud_model->read('district');
+		$data['collection'] = $this->collection_model->get_all($data['month'],$data['year'] );
+		$this->template->load('index','index',$data);
 	}
 	function all(){
 		$crud = new grocery_CRUD();
 		$crud->set_table('payment'); 
 		$crud->set_relation('order_id','orders','form_number'); 
 		$crud->required_fields('amount','order_id','datetime');
+		$crud->display_as('order_id', 'SO #');
+		$crud->callback_column('amount',array($this,'_callback_to_php'));
+		$crud->callback_column('check_full_amount',array($this,'_callback_to_php'));
 		$crud->unset_add_fields('status');
 		$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
 		
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
+	}
+	function _callback_to_php($var,$row){
+		if($var != '' || !empty($var)) {
+			return 'P '.number_format($var);
+		} else {
+			return 'P 0.00';
+		}
 	}
 	function dashboard(){
 		$crud = new grocery_CRUD();
@@ -67,28 +83,10 @@ class Collection extends MX_Controller{
 		$data['paid_items'] = $this->crud_model->read('order_item',array(array('where','order_id',$order_id),array('where','add_type','paid')));
 		$data['free_items'] = $this->crud_model->read('order_item',array(array('where','order_id',$order_id),array('where','add_type','free')));
 		$data['payment_details'] = $this->crud_model->read('payment',array(array('where','payment_id',$payment_id)));
-		$data = $this->load->view('print_paid_items',$data,true);
-		$this->load->helper(array('dompdf', 'file'));
-		pdf_create($data, 'reciept'.date('dmY_his').'pdf');
-	}
-	function to_pdf(){
-		// As PDF creation takes a bit of memory, we're saving the created file in /downloads/reports/
-		$pdfFilePath = FCPATH."/downloads/reports/$filename.pdf";
-		$data['page_title'] = 'Hello world'; // pass data to the view
-		 
-		if (file_exists($pdfFilePath) == FALSE)
-		{
-			ini_set('memory_limit','32M'); // boost the memory limit if it's low <img src="http://davidsimpson.me/wp-includes/images/smilies/icon_wink.gif" alt=";)" class="wp-smiley">
-			$html = $this->load->view('pdf_report', $data, true); // render the view into HTML
-			 
-			$this->load->library('pdf');
-			$pdf = $this->pdf->load();
-			$pdf->SetFooter($_SERVER['HTTP_HOST'].'|{PAGENO}|'.date(DATE_RFC822)); // Add a footer for good measure <img src="http://davidsimpson.me/wp-includes/images/smilies/icon_wink.gif" alt=";)" class="wp-smiley">
-			$pdf->WriteHTML($html); // write the HTML into the PDF
-			$pdf->Output($pdfFilePath, 'F'); // save to file because we can
-		}
-		 
-		redirect("/downloads/reports/$filename.pdf");
+		$this->load->view('print_paid_items',$data);
+		//$data = $this->load->view('print_paid_items',$data,true);
+		//$this->load->helper(array('dompdf', 'file'));
+		//pdf_create($data, 'reciept'.date('dmY_his').'pdf');
 	}
 }
 

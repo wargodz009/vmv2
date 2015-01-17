@@ -1,5 +1,5 @@
 <?php
-$this->load->model('order/order_model');
+$this->load->model('sales/sales_model');
 $this->load->model('batch/batch_model');
 ?>
 <html>
@@ -43,48 +43,7 @@ $this->load->model('batch/batch_model');
 #printThis { width:100px;margin:0 auto; }
 body { font: 12pt Georgia, "Times New Roman", Times, serif; line-height: 1.3; }
 .noPrint { width:825px; }
-@media print {
-.strong { font-weight:bold;}
-.center { text-align:center;}
-.clear { clear:both; }
-.red { color: #ff0000; } 
-.block { display: block; } 
-#si { width:825px;}
-#top-space { height:100px; width:100% }
-#name-date { height:45px; width:100%;margin-top:10px; }
-.name { float:right;width:540px;text-align:left;margin-top:22px; }
-.datetime { float:right; width:130px;margin-top:15px; }
-#location-si_num { height:35px; width:100%; }
-.location { float:right;width:540px;text-align:left;margin-top:2px; }
-.si_num { float:right; width:130px;margin-top: -1px; }
-#medrep{ height:35px; width:100%; }
-.medrep_name { margin-left:245px;width:235px; margin-top:10px;}
-#mid-space { height: 20px; width:100% }
-.small-space { height:17px; width:100% }
-#items_p1 { width:100%;height:15px;}
-#items_p2 { width:100%;height:18px;}
-#items_end { width:100%;height:22px;}
-.description { width:270px;display:inline-block;margin-left:60px; }
-.spacer_1 { width:49px;display:inline-block;}
-.lot_num { width:60px;display:inline-block;}
-.expiry { width:69px;display:inline-block;}
-.qty { width:55px;display:inline-block;}
-.price { width:64px;display:inline-block;}
-.total { width:110px;display:inline-block;}
-.end_text { width:260px;display:inline-block;}
-#discount { width:100%;height:22px;}
-.discount_text { width:135px;float:right; }
-.discount_val { width:65px;float:right; }
-.discount_result { width:110px;float:right; }
-#total { width:100%;}
-.total_text { width:110px;margin:right:20px;float:right;margin-top: 15px;}
-#printThis { width:100px;margin:0 auto; }
-body { font: 12pt Georgia, "Times New Roman", Times, serif; line-height: 1.3; }
-.noPrint { width:825px;display:none; }
-}
 </style>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/script.js"></script>
 </head>
 <body>
 	<?php
@@ -110,7 +69,7 @@ body { font: 12pt Georgia, "Times New Roman", Times, serif; line-height: 1.3; }
 			<?php foreach($paid_items as $item) : ?>
 				<?php
 					$batch = $this->batch_model->get_single($item->batch_id);
-					$order = $this->order_model->get_single($item->order_id);
+					$order = $this->sales_model->get_single($item->order_id);
 					$price = ($item->custom_price != null?$item->custom_price:$batch->sell);
 				?>
 			<div class="item_holder">
@@ -150,7 +109,7 @@ body { font: 12pt Georgia, "Times New Roman", Times, serif; line-height: 1.3; }
 			<?php foreach($free_items as $item) : ?>
 				<?php
 					$batch = $this->batch_model->get_single($item->batch_id);
-					$order = $this->order_model->get_single($item->order_id);
+					$order = $this->sales_model->get_single($item->order_id);
 					$price = ($item->custom_price != null?$item->custom_price:$batch->sell);
 				?>
 			<div class="item_holder">	

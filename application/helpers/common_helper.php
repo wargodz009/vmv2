@@ -141,3 +141,9 @@ function get_paid_amount($payment_id,$order_item_id){
 	$Q = $CI->db->get('payment_item')->row();
 	return @$Q->amount;
 }
+function get_district_name($district_id){
+	$CI =& get_instance();
+	$CI->db->where('district_id',$district_id);
+	$Q = $CI->db->get('district')->row();
+	return @$Q->name;
+}
