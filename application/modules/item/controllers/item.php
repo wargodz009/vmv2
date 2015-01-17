@@ -14,9 +14,10 @@ class Item extends MX_Controller{
 		$crud->add_fields('name','item_type_id','generic_name','description');
 		$crud->edit_fields('name','item_type_id','generic_name','description','status');
 		
-		$crud->columns('name','item_type_id','generic_name','description','status');
+		$crud->columns('name','generic_name','item_type_id','description','status');
 		
-		$crud->display_as('item_type_id','Item Type');
+		$crud->display_as('name','Product Name');
+		$crud->display_as('item_type_id','Type');
 		
 		if(get_role() != 'administrator') {
 			$crud->unset_delete();
