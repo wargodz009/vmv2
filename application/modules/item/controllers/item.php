@@ -54,6 +54,10 @@ class Item extends MX_Controller{
 		$output = $crud->render();
 		$this->load->view('grocery_crud',$output);
 	}
+	function history($item_id){
+		$history['data'] = $item_id;
+		$this->template->load('index','list_item_history',$history);
+	}
 }
 
 ?>
