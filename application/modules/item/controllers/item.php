@@ -9,7 +9,8 @@ class Item extends MX_Controller{
 	function index(){
 		$crud = new grocery_CRUD();
 		$crud->set_table('item'); 
-		$crud->set_relation('item_type_id','item_type','name');
+		$crud->callback_column('name',array($this,'_callback_to_link'));
+		$crud->set_relation('item_type_id','item_type','{name}');
 
 		$crud->add_fields('name','item_type_id','generic_name','description');
 		$crud->edit_fields('name','item_type_id','generic_name','description','status');
@@ -24,11 +25,10 @@ class Item extends MX_Controller{
 		}
 		
 		$crud->required_fields('name','item_type_id','generic_name','description');
-
+		$crud->callback_column('name',array($this,'_callback_to_link'));
 		$crud->callback_after_insert(array($this, '_log_user_after_insert'));
 		$crud->callback_after_update(array($this, '_log_user_after_update'));
 		$crud->callback_after_delete(array($this, '_log_user_after_delete'));
-		
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}
@@ -40,6 +40,9 @@ class Item extends MX_Controller{
 	}
 	function _log_user_after_delete($post_array,$primary_key){
 		logs('delete_item','success',$primary_key);
+	}
+	function _callback_to_link($value, $row){
+		return '<a href="'.base_url().'item/history/'.$row->item_id.'">'.$value.'</a>';
 	}
 	function dashboard(){
 		$crud = new grocery_CRUD();
