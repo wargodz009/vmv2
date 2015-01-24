@@ -9,7 +9,8 @@
     <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
     <script src="<?php echo base_url(); ?>theme/js/jquery-ui-1.10.2.custom.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/script.js"></script>
-
+    <script src="<?php echo base_url(); ?>assets/js/jquery.battatech.excelexport.min.js"></script>
+	
     <!-- styles -->
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-theme.min.css">
@@ -21,6 +22,7 @@
     <!-- Validation plugin -->
     <link href="<?php echo base_url(); ?>theme/css/vanadium.css" rel="stylesheet">
     <script src="<?php echo base_url(); ?>theme/js/vanadium.js"></script>  
+
     <!-- slim scroller-->
     <script src="<?php echo base_url(); ?>theme/js/jquery.slimscroll.js"></script>  
 	
@@ -30,6 +32,14 @@
     tinyMCE.init({
     		mode : "specific_textareas",
     		editor_selector : "wysiwyg"
+    });
+	$(document).ready(function () {
+        $("#btnExport").click(function () {
+            $("#tblExport").battatech_excelexport({
+                containerid: "tblExport"
+               , datatype: 'table'
+            });
+        });
     });
     </script>
   </head>

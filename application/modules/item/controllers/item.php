@@ -66,7 +66,7 @@ class Item extends MX_Controller{
 				foreach($history['batches'] as $batch) {
 					$history['batch_ids'][] = $batch->batch_id;
 					$history['orders'][] = array(
-						'type'=>'supplier',
+						'type'=>get_supplier_name($batch->supplier_id,"name"),
 						'ref'=>'',
 						'batch'=>$batch->batch_readable_id,
 						'date'=>pretty_date($batch->recieve_date),
@@ -79,7 +79,7 @@ class Item extends MX_Controller{
 					if(!empty($items)) {
 						foreach($items as $item) {
 							$history['orders'][] = array(
-								'type'=>'client',
+								'type'=>get_name(get_id_from_msr_id($this->crud_model->read('orders',array(array('where','order_id',$item->order_id)),'msr_client_id'))),
 								'ref'=>$this->crud_model->read('orders',array(array('where','order_id',$item->order_id)),'form_number'),
 								'batch'=>$batch->batch_readable_id,
 								'date'=>pretty_date($this->crud_model->read('orders',array(array('where','order_id',$item->order_id)),'order_date')),

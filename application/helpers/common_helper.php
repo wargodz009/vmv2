@@ -76,6 +76,22 @@ function get_name($user_id){
 		return 'Unknown user:'.$user_id;
 	}
 }
+function get_supplier_name($id) {
+	$CI =& get_instance();
+	$CI->db->where('supplier_id',$id);
+	$q = $CI->db->get('supplier');
+	return $q->row()->name;
+}
+function get_id_from_msr_id($msr_client_id){
+	$CI =& get_instance();
+	$CI->db->where('msr_client_id',$msr_client_id);
+	$q = $CI->db->get('msr_client');
+	if($q) {
+		return $q->row()->msr_id;
+	} else {
+		return 'Unknown user:'.$q;
+	}
+}
 function get_form_number($order_id){
 	$CI =& get_instance();
 	$CI->load->model('order/order_model');
