@@ -184,7 +184,7 @@ if (ENVIRONMENT == 'production') {
     $config['log_threshold'] = 1;
 }
 else {
-    $config['log_threshold'] = 4;
+    $config['log_threshold'] = 0;
 } 
 
 /*

@@ -55,7 +55,43 @@ class Item extends MX_Controller{
 		$this->load->view('grocery_crud',$output);
 	}
 	function history($item_id){
-		$history['data'] = $item_id;
+		$history['info'] = get_item_name($item_id);
+		$history['data'] = array();
+		if(! is_valid_item($item_id)) {
+			$history['data'] = 'Ivalid ITEM';
+		} else {
+			//get all batches
+			$history['batches'] = $this->crud_model->read('batch',array(array('where','item_id',$item_id)));
+			if(!empty($history['batches'])) {
+				foreach($history['batches'] as $batch) {
+					$history['batch_ids'][] = $batch->batch_id;
+					$history['orders'][] = array(
+						'type'=>'supplier',
+						'ref'=>'',
+						'batch'=>$batch->batch_readable_id,
+						'date'=>pretty_date($batch->recieve_date),
+						'qty'=>$batch->count,
+						'transtype'=>'in',
+						'inventory_count'=>$batch->count
+					);
+					//get all order items
+					$items = $this->crud_model->read('order_item',array(array('where','batch_id',$batch->batch_id)));
+					if(!empty($items)) {
+						foreach($items as $item) {
+							$history['orders'][] = array(
+								'type'=>'client',
+								'ref'=>$this->crud_model->read('orders',array(array('where','order_id',$item->order_id)),'form_number'),
+								'batch'=>$batch->batch_readable_id,
+								'date'=>pretty_date($this->crud_model->read('orders',array(array('where','order_id',$item->order_id)),'order_date')),
+								'qty'=>$item->quantity,
+								'transtype'=>'out',
+								'inventory_count'=>$batch->count - $item->quantity
+							);
+						}
+					}
+				}
+			}
+		}
 		$this->template->load('index','list_item_history',$history);
 	}
 }

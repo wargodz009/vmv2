@@ -109,6 +109,13 @@ function get_item_name($item_id,$include_desc = false){
 		return $Q->row()->name.' ('.$Q->row()->description.')';
 	}
 }
+function is_valid_item($item_id){
+	$CI =& get_instance();
+	$CI->db->where('item_id',$item_id);
+	$Q = $CI->db->get('item');
+	if($Q->row()) { return true; }
+	else { return false;}	
+}
 function get_item_desc($item_id){
 	$CI =& get_instance();
 	$CI->db->where('item_id',$item_id);
@@ -146,4 +153,7 @@ function get_district_name($district_id){
 	$CI->db->where('district_id',$district_id);
 	$Q = $CI->db->get('district')->row();
 	return @$Q->name;
+}
+function pretty_date($datetime){
+	return date("M d, Y",strtotime($datetime));
 }
