@@ -144,6 +144,12 @@ function get_item_id_from_batch($batch_id){
 	$Q = $CI->db->get('batch')->row();
 	return $Q->item_id;
 }
+function get_item_id_from_order($order_id){
+	$CI =& get_instance();
+	$CI->db->where('order_item_id',$order_id);
+	$Q = $CI->db->get('orders')->row();
+	return $Q->item_id;
+}
 function get_batch_id_from_order($order_id){
 	$CI =& get_instance();
 	$CI->db->where('order_id',$order_id);
@@ -156,6 +162,12 @@ function get_order_item_id($order_id,$batch_id){
 	$CI->db->where('batch_id',$batch_id);
 	$Q = $CI->db->get('order_item')->row();
 	return $Q->order_item_id;
+}
+function get_order_items($order_id){
+	$CI =& get_instance();
+	$CI->db->where('order_id',$order_id);
+	$Q = $CI->db->get('order_item');
+	return $Q->result();
 }
 function get_paid_amount($payment_id,$order_item_id){
 	$CI =& get_instance();

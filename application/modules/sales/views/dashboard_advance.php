@@ -47,7 +47,7 @@
 ?>
 		<tr>
 			<td><?=$this->crud_model->read('district',array(array('where','district_id',$msr->district_id)),'name');?></td>
-			<td><?=$msr->last_name.', '.$msr->first_name;?></td>
+			<td><a href="<?=base_url();?>sales/all_sales/<?=$msr->user_id;?>"><?=$msr->last_name.', '.$msr->first_name;?></a></td>
 			<td>P <?php echo number_format(modules::run('sales/get_sales',$msr->user_id,$month,$year)); ?></td>
 			<td>P <?=number_format($msr->quota);?></td>
 			<!--td><?php //echo modules::run('sales/get_sales',get_msr_client_id($msr->user_id),$month,$year); ?></td-->

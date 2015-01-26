@@ -106,6 +106,25 @@ class Sales extends MX_Controller{
 			return 0;
 		}
 	}
+	function all_sales($msr_id){
+		$data['msr_id'] = $msr_id;
+		$data['orders'] = array();
+		$all_msr_ids = $this->crud_model->read('msr_client',array(array('where','msr_id',$msr_id)));
+		//all orders	
+		if(!empty($all_msr_ids)) {
+			$ids = array();
+			foreach ($all_msr_ids as $key) {
+				$ids[] = $key->msr_client_id;
+			}
+			$orders = $this->sales_model->get_sales($ids);
+			//orders
+			if(!empty($orders)) {
+				$data['orders'] =  $orders;
+			}
+		}
+		$data['msr_name'] = get_name($msr_id); 
+		$this->template->load('index','sales_history_per_person',$data);
+	}
 	function _callback_print_paid($primary_key,$row){
 		$items = $this->crud_model->read('orders',array(array('where','order_id',$row->order_id),array('where','approved_post',1)));
 		if($items) {
