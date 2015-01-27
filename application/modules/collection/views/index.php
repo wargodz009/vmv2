@@ -37,13 +37,22 @@ $this->load->model('sales/sales_model');
 <table class="table table-hover">
 <thead>
 	<td>Area</td>
-	<td>Client Name</td>
-	<td>Collection</td>
-	<td>Balance</td>
-	<td>Aging of Balance</td>
+	<td>MSR Name</td>
+	<td>Total Collection</td>
+	<td>Aging of A/R</td>
+	<td>Collection %</td>
+	<td>Shortage</td>
+	<td>Total PDC Collected</td>
+	<td>Coll PDC %</td>
 </thead>
 <tbody>
 <?php 
+	$st_collection = 0;
+	$st_aging = 0;
+	$st_col_percent = 0;
+	$st_shortage = 0;
+	$st_pdc = 0;
+	$st_col_pdc = 0;
 	if(isset($collection) && !empty($collection)) {
 		foreach ($collection as $payment) {
 			$info = $this->crud_model->read('orders',array(array('where','order_id',$payment->order_id)));
@@ -66,19 +75,60 @@ $this->load->model('sales/sales_model');
 			$balance = $total - $collection[0]->amount;
 		?>
 		<tr>
+			<!-- Area -->
 			<td><?=get_district_name($user[0]->district_id);?></td>
+			<!-- MSR name -->
 			<td><?=get_name(get_msr_client($info[0]->msr_client_id));?></td>
-			<td>P <?=number_format($payment->amount);?></td>
-			<td>P <?=number_format($balance);?></td>
+			<!-- Total Collection -->
+			<td><?=number_format($payment->amount); $st_collection = $st_collection + $payment->amount;?></td>
+			<!-- Aging of A/R -->
+			<td><?=number_format($balance); $st_aging = $st_aging + $balance;?></td>
+			<!-- Collection -->
 			<td><?php
-			$date1=date_create($info[0]->order_date);
-			$date2=date_create(date("Y-m-d"));
-			$diff = date_diff($date1,$date2);
-			echo $diff->format("%R%a days");
+			echo number_format((($payment->amount * 100) / $balance),2) . '%'; $st_col_percent = $st_col_percent + number_format((($payment->amount * 100) / $balance),2);
 			?></td>		
+			<!-- shortage -->
+			<td><?=($balance - $payment->amount); $st_shortage = $st_shortage + ($balance - $payment->amount); ?></td>
+			<?php if($payment->payment_type == 'check') { ?> 
+			<!-- total pdc collected -->
+			<td><?php 
+				$paid_items = $this->crud_model->read('payment_item',array(array('where','payment_id',$payment->payment_id)));
+				$total_paid_pdc = 0;
+				$total_unpaid_pdc = 0;
+				if(!empty($paid_items)) {
+					foreach($paid_items as $pi ){
+						if($payment->status == 1) {
+							$total_paid_pdc = $total_paid_pdc + $pi->amount;
+						} else {
+							$total_unpaid_pdc = $total_unpaid_pdc + $pi->amount;
+						}
+					}
+				}
+				echo number_format($total_paid_pdc);
+				$st_pdc = $st_pdc + number_format($total_paid_pdc);
+				$total_pdc = $total_paid_pdc + $total_unpaid_pdc;
+			?></td>
+			<!-- coll pdc -->
+			<td><?= number_format((($total_paid_pdc * 100) / $total_pdc),2) . '%'; $st_col_pdc = $st_col_pdc + (($total_paid_pdc * 100) / $total_pdc); ?></td>
+			<?php } else { ?> 
+			<!-- total pdc collected -->
+			<td></td>
+			<!-- coll pdc -->
+			<td></td>
+			<?php } ?>
 		</tr>
 		<?php
 		}
+		echo '<thead><tr>
+		<td></td>
+		<td>Sub Total - </td>
+		<td>'.$st_collection.'</td>
+		<td>'.$st_aging.'</td>
+		<td>'.$st_col_percent.'%</td>		
+		<td>'.$st_shortage.'</td>		
+		<td>'.$st_pdc.'</td>		
+		<td>'.$st_col_pdc.'%</td>		
+	</tr></thead>';
 	} else {
 		?>
 		<tr>
@@ -86,6 +136,9 @@ $this->load->model('sales/sales_model');
 			<td></td>
 			<td></td>
 			<td></td>
+			<td></td>		
+			<td></td>		
+			<td></td>		
 			<td></td>		
 		</tr>
 		<?php
