@@ -1,6 +1,4 @@
 <h2>History per AREA</h2>
-<br>
-AREA NAME: <?=$area;?> <hr />
 <button id="btnExport" class="btn btn-default pull-right">btnExport</button> <br /><br />
 <?php
 //$this->load->library('table');
@@ -9,7 +7,12 @@ AREA NAME: <?=$area;?> <hr />
 //$this->table->set_template($tmpl);
 //echo $this->table->generate($order);
 echo '<table id="tblExport" class="table table-hover table-striped">';
-echo '<thead><tr>';
+echo '<thead>';
+echo '<tr>
+	<td colspan=6><strong>AREA: </strong>'.$area.'</td>
+	<td colspan=5></td>
+</tr>';
+echo '<tr>';
 echo '<td>DR/SI DATE</td>';
 echo '<td>CLIENTS</td>';
 echo '<td>DI/SI #</td>';
@@ -19,6 +22,7 @@ echo '<td>Qty.</td>';
 echo '<td>Price</td>';
 echo '<td>Free Goods</td>';
 echo '<td>Disc.</td>';
+echo '<td>TOTAL disc.</td>';
 echo '<td>TOTAL Amt.</td>';
 echo '</tr></thead><tbody>';
 if(!empty($orders)) {
@@ -46,7 +50,7 @@ if(!empty($orders)) {
 				echo '<td>'.$item->custom_price.'</td>';
 				echo '<td>'.($item->add_type == 'paid'?'No':'Yes').'</td>';
 				echo '<td>'.$pre.$order->discount.' '.$post.'</td>';
-				echo '<td>'.$total_discount.'</td>';
+				echo '<td>('.$total_discount.')</td>';
 				echo '<td>'.$total.'</td>';
 				echo '</tr>';
 			}

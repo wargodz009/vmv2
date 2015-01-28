@@ -1,6 +1,4 @@
-<h2>History per MSR</h2>
-<br>
-MSR NAME: <?=$msr_name;?> <hr />
+<h2 class="">History per MSR</h2>
 <button id="btnExport" class="btn btn-default pull-right">btnExport</button> <br /><br />
 <?php
 //$this->load->library('table');
@@ -9,7 +7,13 @@ MSR NAME: <?=$msr_name;?> <hr />
 //$this->table->set_template($tmpl);
 //echo $this->table->generate($order);
 echo '<table id="tblExport" class="table table-hover table-striped">';
-echo '<thead><tr>';
+
+echo '<thead>';
+echo '<tr>
+	<td colspan=5><strong>MSR NAME: </strong>'.$msr_name.'</td>
+	<td colspan=6><strong>AREA: </strong>'.$msr_district.'</td>
+</tr>';
+echo '<tr>';
 echo '<td>DR/SI DATE</td>';
 echo '<td>CLIENTS</td>';
 echo '<td>DI/SI #</td>';

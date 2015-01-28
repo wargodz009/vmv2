@@ -123,6 +123,7 @@ class Sales extends MX_Controller{
 			}
 		}
 		$data['msr_name'] = get_name($msr_id); 
+		$data['msr_district'] = get_district_name(get_district_id($msr_id)); 
 		$this->template->load('index','sales_history_per_person',$data);
 	}
 	function area($district_id){

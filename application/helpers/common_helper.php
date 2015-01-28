@@ -76,6 +76,16 @@ function get_name($user_id){
 		return 'Unknown user:'.$user_id;
 	}
 }
+function get_district_id($user_id){
+	$CI =& get_instance();
+	$CI->load->model('user/user_model');
+	$user = $CI->user_model->get_single($user_id);
+	if($user) {
+		return $user->district_id;
+	} else {
+		return 1;
+	}
+}
 function get_supplier_name($id) {
 	$CI =& get_instance();
 	$CI->db->where('supplier_id',$id);
