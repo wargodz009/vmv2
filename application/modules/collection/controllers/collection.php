@@ -30,7 +30,9 @@ class Collection extends MX_Controller{
 						$order_ids[] = $order_id->order_id;
 					}
 				}
-				$data['paid_items'] = $this->crud_model->read('payment',array(array('where_in','order_id',$order_ids)));
+				$data['msr_name'] = get_name(get_msr_client($msr_client_id));
+				$data['all_orders'] = $all_orders;
+				//$data['paid_items'] = $this->crud_model->read('payment',array(array('where_in','order_id',$order_ids)));
 				$this->template->load('index','per_msr',$data);
 			}
 		} else {
