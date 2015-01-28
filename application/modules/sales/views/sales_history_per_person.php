@@ -19,6 +19,7 @@ echo '<td>Qty.</td>';
 echo '<td>Price</td>';
 echo '<td>Free Goods</td>';
 echo '<td>Disc.</td>';
+echo '<td>TOTAL disc.</td>';
 echo '<td>TOTAL Amt.</td>';
 echo '</tr></thead><tbody>';
 if(!empty($orders)) {
@@ -46,7 +47,7 @@ if(!empty($orders)) {
 				echo '<td>'.$item->custom_price.'</td>';
 				echo '<td>'.($item->add_type == 'paid'?'No':'Yes').'</td>';
 				echo '<td>'.$pre.$order->discount.' '.$post.'</td>';
-				echo '<td>'.$total_discount.'</td>';
+				echo '<td>('.$total_discount.')</td>';
 				echo '<td>'.$total.'</td>';
 				echo '</tr>';
 			}

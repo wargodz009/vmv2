@@ -15,6 +15,29 @@ class Collection extends MX_Controller{
 		$data['collection'] = $this->collection_model->get_all($data['month'],$data['year'] );
 		$this->template->load('index','index',$data);
 	}
+	function per_msr($msr_client_id){
+		if(isset($msr_client_id) && is_numeric(get_id_from_msr_id($msr_client_id))) {
+		$all_msr_client_ids = get_all_msr_client_id(get_id_from_msr_id($msr_client_id));
+		$ids = array();
+			if(!empty($all_msr_client_ids)) {
+				foreach($all_msr_client_ids as $msr_id) {
+					$ids[] = $msr_id->msr_client_id;
+				}
+				$all_orders = $this->crud_model->read('orders',array(array('where_in','msr_client_id',$ids),array('where','approved_pre',1),array('where','approved_post',1)));
+				$order_ids = array();
+				if(!empty($all_orders)) {
+					foreach($all_orders as $order_id) {
+						$order_ids[] = $order_id->order_id;
+					}
+				}
+				$data['paid_items'] = $this->crud_model->read('payment',array(array('where_in','order_id',$order_ids)));
+				$this->template->load('index','per_msr',$data);
+			}
+		} else {
+			$this->session->set_flashdata('info','Invalid MSR');
+			redirect(base_url());
+		}
+	}
 	function all(){
 		$crud = new grocery_CRUD();
 		$crud->set_table('payment'); 

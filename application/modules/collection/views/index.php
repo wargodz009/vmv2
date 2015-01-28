@@ -78,7 +78,7 @@ $this->load->model('sales/sales_model');
 			<!-- Area -->
 			<td><?=get_district_name($user[0]->district_id);?></td>
 			<!-- MSR name -->
-			<td><?=get_name(get_msr_client($info[0]->msr_client_id));?></td>
+			<td><a href='<?=base_url();?>collection/per_msr/<?=$info[0]->msr_client_id;?>'><?=get_name(get_msr_client($info[0]->msr_client_id));?></a></td>
 			<!-- Total Collection -->
 			<td><?=number_format($payment->amount); $st_collection = $st_collection + $payment->amount;?></td>
 			<!-- Aging of A/R -->
