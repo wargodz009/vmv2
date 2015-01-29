@@ -171,12 +171,35 @@ function get_batch_id_from_order($order_id){
 	$Q = $CI->db->get('order_item')->row();
 	return $Q->batch_id;
 }
+function get_order_id($msr_client_ids){
+	$CI =& get_instance();
+	$CI->db->where_in('msr_client_id',$msr_client_ids);
+	return $CI->db->get('orders')->result();
+}
 function get_order_item_id($order_id,$batch_id){
 	$CI =& get_instance();
 	$CI->db->where('order_id',$order_id);
 	$CI->db->where('batch_id',$batch_id);
 	$Q = $CI->db->get('order_item')->row();
 	return $Q->order_item_id;
+}
+function get_payment_id_from_payment_orders($order_id){
+	$CI =& get_instance();
+	if(is_array($order_id)) {
+		$CI->db->where_in('orderid',$order_id);
+	} else {
+		$CI->db->where('orderid',$order_id);
+	}
+	return $CI->db->get('payment_orders')->result();
+}
+function get_order_id_from_payment_orders($payment_id){
+	$CI =& get_instance();
+	if(is_array($payment_id)) {
+		$CI->db->where_in('paymentid',$payment_id);
+	} else {
+		$CI->db->where('paymentid',$payment_id);
+	}
+	return $CI->db->get('payment_orders')->result();
 }
 function get_order_items($order_id){
 	$CI =& get_instance();

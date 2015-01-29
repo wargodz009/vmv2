@@ -173,7 +173,7 @@ class Sales extends MX_Controller{
 	function _callback_complete_order($primary_key,$row){
 		if($row->cancel_date == null) {
 			if($row->approved_pre != 0 && $row->approved_post == 0) {
-				if($this->crud_model->read('payment',array(array('where','order_id',$row->order_id)))) {
+				if($this->crud_model->read('payment_orders',array(array('where','orderid',$row->order_id)))) {
 
 				}
 				return base_url().'sales/set_complete/'.$primary_key;

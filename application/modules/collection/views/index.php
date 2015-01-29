@@ -1,5 +1,6 @@
 <?php
 $this->load->model('sales/sales_model');
+$this->load->model('collection/collection_model');
 ?>
 <nav class="navbar navbar-right">
 	<div class="btn-group form-inline">
@@ -58,42 +59,104 @@ $this->load->model('sales/sales_model');
 	<td>Coll PDC %</td>
 </thead>
 <tbody>
-<?php 
-	$st_collection = 0;
-	$st_aging = 0;
-	$st_col_percent = 0;
-	$st_shortage = 0;
-	$st_pdc = 0;
-	$st_col_pdc = 0;
-	$total = 0;
-	if(isset($collection) && !empty($collection)) {
-		foreach ($collection as $payment) {
-			$order_ids = get_payment_info($payment->payment_id,true);
-			$info = $this->crud_model->read('orders',array(array('where_in','order_id',$order_ids)));
-			$user = $this->crud_model->read('user',array(array('where','user_id',get_msr_client($info[0]->msr_client_id))));
+	<?php 
+	if(!empty($all_msr)) {
+		foreach($all_msr as $msr) {
+			$mid = array();
+			$oid = array();
+			$fids = array();
+			$total = 0;
+			$pdc_total = 0;
+			$total_all = 0;
+			$balance = 0;
+			$filtered_order_ids = array();
 			
-			if(count($order_ids)>1) {
-				var_dump($order_ids);
-			} else {
-				echo 'lessthan 1<br />';
+			$all_msr_client_id = get_all_msr_client_id($msr->user_id);
+			foreach($all_msr_client_id as $mid) {
+				$mids[] = $mid->msr_client_id;
 			}
-			var_dump(count($order_ids));
+			//all order ids
+			$all_order_ids = get_order_id($mids);
+			foreach($all_order_ids as $id) {
+				$oid[] = $id->order_id;
+			}
+			//all payment ids
+			$all_payment_ids = get_payment_id_from_payment_orders($oid);
+			foreach($all_payment_ids as $ids) {
+				$aid[] = $ids->paymentid;
+			}
+			//filtered payment ids
+			$filtered_collections = $this->collection_model->get_all($month,$year,$day_from,$day_to,$aid);
+			//filtered order ids
+			foreach($filtered_collections as $fc) {
+				$fids[] = $fc->payment_id;
+			}
+			
+			//sum all post dated checks collected
+			if(!empty($fids)) {
+				$pdc = $this->crud_model->read('payment',array(array('where_in','payment_id',$fids),array('where','status','Not Collected yet')));
+				if(!empty($pdc)) {
+					foreach($pdc as $all_pdc) {
+						$pdc_total += $all_pdc->check_full_amount;
+					}
+				}
+			}
+			
+			if(!empty($fids)) {
+				$filtered_order_ids = get_order_id_from_payment_orders($fids);
+			}
+			
+			
+			//get all paid
+			if(!empty($filtered_order_ids)){
+				foreach($filtered_order_ids as $foid) {
+					if(!empty($foid)) {
+						$order = $this->crud_model->read('order_item',array(array('where','order_id',$foid->orderid)));
+						foreach($order as $o) {
+							$total += ($o->quantity * $o->custom_price);
+						}
+					}
+				}
+			}
+			//get all paid and unpaid
+			if(!empty($all_order_ids)){
+				foreach($all_order_ids as $foid) {
+					if(!empty($foid)) {
+						$order = $this->crud_model->read('order_item',array(array('where','order_id',$foid->order_id)));
+						foreach($order as $o) {
+							$total_all += ($o->quantity * $o->custom_price);
+						}
+					}
+				}
+			}
+			$total_collections = 0;
+			
+			$balance = $total_all - $total;
+			echo '<tr>
+				<td>'.get_district_name($msr->district_id).'</td>
+				<td><a href="'.base_url()."collection/per_msr/".$msr->user_id.'">'.get_name($msr->user_id).'</a></td>
+				<td>'.$total.'</td>
+				<td>'.$total_all.'</td>
+				<td>'.number_format((($total * 100) / $balance),2) . '%</td>		
+				<td>'.($balance - $total).'</td>		
+				<td>'.$pdc_total.'</td>		
+				<td>'.@number_format((($total * 100) / ($pdc_total + $total_all)),2) . '%</td>		
+			</tr>';
 		}
 	} else {
-		?>
-		<tr>
-			<td>No Items Yet!</td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>		
-			<td></td>		
-			<td></td>		
-			<td></td>		
-		</tr>
-		<?php
-	}
-?>
+	?>
+	<tr>
+		<td>No Items Yet!</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>		
+		<td></td>		
+		<td></td>		
+		<td></td>		
+	</tr>
+	<?php 
+	} ?>
 </tbody>
 </table>
 <script>

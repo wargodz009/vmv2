@@ -14,7 +14,11 @@ class Collection extends MX_Controller{
 		$data['day_to'] = $day_to;
 		$data['district'] = ($district != ''?$district:'00');
 		$data['area_list'] = $this->crud_model->read('district');
-		$data['collection'] = $this->collection_model->get_all($data['month'],$data['year'],$day_from,$day_to);
+		if($district == '00') {
+			$data['all_msr'] = $this->crud_model->read('user',array(array('where','role_id',6)));
+		} else {
+			$data['all_msr'] = $this->crud_model->read('user',array(array('where','role_id',6),array('where','district_id',$district)));
+		}
 		$this->template->load('index','index',$data);
 	}
 	function per_msr($msr_client_id){
@@ -49,6 +53,7 @@ class Collection extends MX_Controller{
 		$crud->unset_delete(); 
 		$crud->set_relation_n_n('orders', 'payment_orders', 'orders', 'paymentid', 'orderid', 'form_number');
 		$crud->unset_add_fields('status');
+		//$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}
@@ -62,27 +67,25 @@ class Collection extends MX_Controller{
 	}
 	function dashboard(){
 		$crud = new grocery_CRUD();
-		$crud->set_table('payment'); 
-		$crud->set_subject('COLLECTION'); 
 		$crud->unset_operations();
-		$crud->display_as('check_full_amount', 'Full amount');
-		$crud->display_as('order_id', 'SO #');
-		$crud->display_as('payment_type', 'type');
-		$crud->display_as('check_number', 'check #');
-		$crud->set_relation('order_id','orders','form_number'); 
-		$crud->order_by('datetime','desc');
-		$crud->columns('amount','order_id','payment_type','bank','check_number','check_full_amount');
+		$crud->columns('bank','check_number','amount','orders');
+		$crud->display_as('orders','DR/SI applied'); 
+		$crud->set_subject('COLLECTION'); 
+		$crud->set_table('payment'); 
+		$crud->unset_delete(); 
+		$crud->set_relation_n_n('orders', 'payment_orders', 'orders', 'paymentid', 'orderid', 'form_number');
+		//$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
 		$output = $crud->render();
 		return $this->load->view('grocery_crud',$output,true);
 	}
-	/*function _callback_manage_paid($primary_key,$row){
-		$items = $this->crud_model->read('order_item',array(array('where','order_id',$row->order_id)));
+	function _callback_manage_paid($primary_key,$row){
+		$items = $this->crud_model->read('payment_orders',array(array('where','paymentid',$row->payment_id)));
 		if(count($items) > 0 ) {
-			return base_url().'collection/manage/'.$row->order_id.'/'.$primary_key;
+			return base_url().'collection/manage/'.$row->payment_id.'/'.$primary_key;
 		} else {
 			return '#';
 		}
-	}*/
+	}
 	function manage($order_id,$payment_id) {
 		if(!empty($_POST)) {
 			$this->crud_model->delete('payment_item',array(array('where','payment_id',$this->input->post('payment_id'))));
