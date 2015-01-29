@@ -191,6 +191,20 @@ function get_paid_amount($payment_id,$order_item_id){
 	$Q = $CI->db->get('payment_item')->row();
 	return @$Q->amount;
 }
+function get_payment_info($paymentid,$orderids = false){
+	$CI =& get_instance();
+	$CI->db->where('paymentid',$paymentid);
+	$Q = $CI->db->get('payment_orders')->result();
+	if($orderids == false ) {
+		return $Q;
+	} else {
+		$arr = array();
+		foreach($Q as $orders) {
+			$arr[] = $orders->orderid;
+		}
+		return $arr;
+	}
+}
 function get_district_name($district_id){
 	$CI =& get_instance();
 	$CI->db->where('district_id',$district_id);

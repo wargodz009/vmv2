@@ -7,12 +7,14 @@ class Collection extends MX_Controller{
 		$this->load->library('grocery_CRUD');
 		$this->load->model('collection/collection_model');
 	}
-	function index($month = '00',$year ='00',$district = '00'){
+	function index($month = '00',$year ='00',$district = '00',$day_from = '1',$day_to='31'){
 		$data['month'] = ($month != '00'?$month:date('m'));
 		$data['year'] = ($year != '00'?$year:date('Y'));
+		$data['day_from'] = $day_from;
+		$data['day_to'] = $day_to;
 		$data['district'] = ($district != ''?$district:'00');
 		$data['area_list'] = $this->crud_model->read('district');
-		$data['collection'] = $this->collection_model->get_all($data['month'],$data['year'] );
+		$data['collection'] = $this->collection_model->get_all($data['month'],$data['year'],$day_from,$day_to);
 		$this->template->load('index','index',$data);
 	}
 	function per_msr($msr_client_id){
@@ -39,20 +41,6 @@ class Collection extends MX_Controller{
 			$this->session->set_flashdata('info','Invalid MSR');
 			redirect(base_url());
 		}
-	}
-	function all_backup(){
-		$crud = new grocery_CRUD();
-		$crud->set_table('payment'); 
-		//$crud->set_relation_n_n('payment_order_id', 'payment_orders', 'orders', 'orderid', 'paymentid', 'form_number');
-		$crud->set_relation_n_n('payment_order_id', 'payment_orders', 'orders', 'orderid', 'paymentid', 'form_number');
-		$crud->required_fields('amount','payment_order_id','datetime');
-		$crud->callback_column('amount',array($this,'_callback_to_php'));
-		$crud->callback_column('check_full_amount',array($this,'_callback_to_php'));
-		$crud->unset_add_fields('status');
-		//$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
-		
-		$output = $crud->render();
-		$this->template->load('index','grocery_crud',$output);
 	}
 	function all(){
 		$crud = new grocery_CRUD();
