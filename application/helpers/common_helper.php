@@ -96,10 +96,16 @@ function get_id_from_msr_id($msr_client_id){
 	$CI =& get_instance();
 	$CI->db->where('msr_client_id',$msr_client_id);
 	$q = $CI->db->get('msr_client');
-	if($q) {
+	if($q->row()) {
 		return $q->row()->msr_id;
 	} else {
-		return 'Unknown user:'.$q;
+		$CI->db->where('role_id',6);
+		$q = $CI->db->get('user');
+		if($q->row()) {
+			return $q->row()->user_id;
+		} else {
+			return 'Unknown id: '.$msr_client_id;
+		}
 	}
 }
 function get_form_number($order_id){
@@ -201,11 +207,25 @@ function get_order_id_from_payment_orders($payment_id){
 	}
 	return $CI->db->get('payment_orders')->result();
 }
-function get_order_items($order_id){
+function get_order_info($order_id,$what = ''){
+	$CI =& get_instance();
+	$CI->db->where('order_id',$order_id);
+	$Q = $CI->db->get('orders');
+	if($what != '') {
+		return $Q->row()->$what;
+	} else {
+		return $Q->result();
+	}
+}
+function get_order_items($order_id,$what = ''){
 	$CI =& get_instance();
 	$CI->db->where('order_id',$order_id);
 	$Q = $CI->db->get('order_item');
-	return $Q->result();
+	if($what != '') {
+		return $Q->row()->$what;
+	} else {
+		return $Q->result();
+	}
 }
 function get_paid_amount($payment_id,$order_item_id){
 	$CI =& get_instance();

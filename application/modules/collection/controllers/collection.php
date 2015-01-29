@@ -21,10 +21,17 @@ class Collection extends MX_Controller{
 		}
 		$this->template->load('index','index',$data);
 	}
-	function per_msr($msr_client_id){
+	function per_msr($msr_client_id,$month = '00',$year ='00',$district = '00',$day_from = '1',$day_to='31'){
 		if(isset($msr_client_id) && is_numeric(get_id_from_msr_id($msr_client_id))) {
-		$all_msr_client_ids = get_all_msr_client_id(get_id_from_msr_id($msr_client_id));
-		$ids = array();
+			$all_msr_client_ids = get_all_msr_client_id($msr_client_id);
+			$data['msr_client_id'] = $msr_client_id;
+			$data['month'] = ($month != '00'?$month:date('m'));
+			$data['year'] = ($year != '00'?$year:date('Y'));
+			$data['day_from'] = $day_from;
+			$data['day_to'] = $day_to;
+			$data['district'] = ($district != ''?$district:'00');
+			$data['area_list'] = $this->crud_model->read('district');
+			$ids = array();
 			if(!empty($all_msr_client_ids)) {
 				foreach($all_msr_client_ids as $msr_id) {
 					$ids[] = $msr_id->msr_client_id;
@@ -36,9 +43,9 @@ class Collection extends MX_Controller{
 						$order_ids[] = $order_id->order_id;
 					}
 				}
-				$data['msr_name'] = get_name(get_msr_client($msr_client_id));
-				$data['all_orders'] = $all_orders;
-				//$data['paid_items'] = $this->crud_model->read('payment',array(array('where_in','order_id',$order_ids)));
+
+				$data['msr_name'] = get_name(get_id_from_msr_id($msr_client_id));
+				$data['all_orders'] = $order_ids;
 				$this->template->load('index','per_msr',$data);
 			}
 		} else {
