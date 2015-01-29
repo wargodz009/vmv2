@@ -40,20 +40,31 @@ class Collection extends MX_Controller{
 			redirect(base_url());
 		}
 	}
-	function all(){
+	function all_backup(){
 		$crud = new grocery_CRUD();
 		$crud->set_table('payment'); 
-		$crud->set_relation('order_id','orders','form_number'); 
-		$crud->required_fields('amount','order_id','datetime');
-		$crud->display_as('order_id', 'SO #');
+		//$crud->set_relation_n_n('payment_order_id', 'payment_orders', 'orders', 'orderid', 'paymentid', 'form_number');
+		$crud->set_relation_n_n('payment_order_id', 'payment_orders', 'orders', 'orderid', 'paymentid', 'form_number');
+		$crud->required_fields('amount','payment_order_id','datetime');
 		$crud->callback_column('amount',array($this,'_callback_to_php'));
 		$crud->callback_column('check_full_amount',array($this,'_callback_to_php'));
 		$crud->unset_add_fields('status');
-		$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
+		//$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
 		
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}
+	function all(){
+		$crud = new grocery_CRUD();
+		$crud->set_subject('COLLECTION'); 
+		$crud->set_table('payment'); 
+		$crud->unset_delete(); 
+		$crud->set_relation_n_n('orders', 'payment_orders', 'orders', 'paymentid', 'orderid', 'form_number');
+		$crud->unset_add_fields('status');
+		$output = $crud->render();
+		$this->template->load('index','grocery_crud',$output);
+	}
+	
 	function _callback_to_php($var,$row){
 		if($var != '' || !empty($var)) {
 			return 'P '.number_format($var);
@@ -76,14 +87,14 @@ class Collection extends MX_Controller{
 		$output = $crud->render();
 		return $this->load->view('grocery_crud',$output,true);
 	}
-	function _callback_manage_paid($primary_key,$row){
+	/*function _callback_manage_paid($primary_key,$row){
 		$items = $this->crud_model->read('order_item',array(array('where','order_id',$row->order_id)));
 		if(count($items) > 0 ) {
 			return base_url().'collection/manage/'.$row->order_id.'/'.$primary_key;
 		} else {
 			return '#';
 		}
-	}
+	}*/
 	function manage($order_id,$payment_id) {
 		if(!empty($_POST)) {
 			$this->crud_model->delete('payment_item',array(array('where','payment_id',$this->input->post('payment_id'))));
