@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 30, 2014 at 05:26 PM
+-- Generation Time: Jan 30, 2015 at 07:39 PM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.11
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `action` (
   `parent` int(11) DEFAULT NULL,
   `sort` int(10) DEFAULT '0',
   PRIMARY KEY (`action_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=45 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=53 ;
 
 --
 -- Dumping data for table `action`
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `action` (
 INSERT INTO `action` (`action_id`, `name`, `module`, `function`, `show_on_menu`, `parent`, `sort`) VALUES
 (1, 'home', 'site', 'index', 2, NULL, 0),
 (2, 'inventory', 'inventory', 'index', 1, NULL, 2),
-(3, 'client', 'client', 'index', 1, NULL, 4),
+(3, 'client', 'client', 'index', 2, NULL, 0),
 (4, 'employee', 'employee', 'index', 1, NULL, 3),
 (5, 'report', 'report', 'index', 1, NULL, 5),
 (6, 'setting', 'setting', 'index', 1, NULL, 6),
@@ -61,7 +61,7 @@ INSERT INTO `action` (`action_id`, `name`, `module`, `function`, `show_on_menu`,
 (17, 'role', 'role', 'index', 0, 6, 1),
 (18, 'not_found', 'site', 'not_found', 2, NULL, 0),
 (19, 'employees', 'user', 'employee', 0, 4, 0),
-(20, 'clients', 'user', 'client', 0, 3, 0),
+(20, 'clients', 'user', 'client', 1, NULL, 4),
 (21, 'sales', 'sales', 'index', 1, NULL, 0),
 (22, 'All', 'sales', 'all', 0, 21, 0),
 (27, 'district info', 'district', 'info', 2, 4, 0),
@@ -79,7 +79,15 @@ INSERT INTO `action` (`action_id`, `name`, `module`, `function`, `show_on_menu`,
 (41, 'set returned', 'sales', 'set_returned', 2, 21, 0),
 (42, 'set cancelled', 'sales', 'set_cancelled', 2, 21, 0),
 (43, 'set completed', 'sales', 'set_complete', 2, 21, 0),
-(44, 'print so', 'collection', 'reciept', 2, 29, 0);
+(44, 'print so', 'collection', 'reciept', 2, 29, 0),
+(45, 'test', 'site', 'test', 2, NULL, 0),
+(46, 'to_pdf', 'site', 'to_pdf', 2, NULL, 0),
+(47, 'history', 'item', 'history', 2, 2, 0),
+(48, 'all sales', 'sales', 'all_sales', 2, 21, 0),
+(49, 'sales_area', 'sales', 'area', 2, 21, 0),
+(50, 'collection_per_msr', 'collection', 'per_msr', 2, 29, 0),
+(51, 'add sales', 'sales', 'create', 0, 21, 0),
+(52, 'save sales', 'sales', 'save', 2, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -109,15 +117,7 @@ CREATE TABLE IF NOT EXISTS `batch` (
   KEY `FK__item` (`item_id`),
   KEY `FK__supplier` (`supplier_id`),
   KEY `FK__user` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `batch`
---
-
-INSERT INTO `batch` (`batch_id`, `batch_readable_id`, `item_id`, `user_id`, `supplier_id`, `count`, `access_type`, `sold_count`, `expire_count`, `return_count`, `buy`, `sell`, `lot_number`, `on_cavite_warehouse`, `recieve_date`, `expire_date`, `status`) VALUES
-(1, 'b-0001', 1, 1, 2, 10000, 'recieved', 0, 0, 0, 1, 2, 'lot-0001', 'N', '2014-08-17', '2017-08-23', ''),
-(2, 'b-00002', 2, 1, 1, 10000, 'recieved', 0, 0, 10000, 2, 4, 'lot-0002', 'N', '2014-08-17', '2018-08-29', '');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -168,15 +168,7 @@ CREATE TABLE IF NOT EXISTS `item` (
   `datetime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`item_id`),
   KEY `FK_item_item_type` (`item_type_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `item`
---
-
-INSERT INTO `item` (`item_id`, `name`, `item_type_id`, `generic_name`, `description`, `status`, `datetime`) VALUES
-(1, 'biogesic', 2, 'paracetamol', '50mg', 'enabled', '2014-08-17 13:42:26'),
-(2, 'neozep', 2, 'paracetamol', '50mg', 'enabled', '2014-08-17 13:42:47');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -221,61 +213,7 @@ CREATE TABLE IF NOT EXISTS `logs` (
   `sql` varchar(50) DEFAULT NULL,
   `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=49 ;
-
---
--- Dumping data for table `logs`
---
-
-INSERT INTO `logs` (`log_id`, `ip_address`, `useragent`, `user_id`, `role_id`, `action`, `result`, `target`, `url`, `sql`, `datetime`) VALUES
-(1, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''1''', '2014-08-16 18:04:45'),
-(2, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''1''', '2014-08-17 12:54:24'),
-(3, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'add_item', 'success', '1', 'http://localhost/vmv2/index.php/item/index/insert', 'INSERT INTO `item` (`name`, `item_type_id`, `gener', '2014-08-17 13:42:26'),
-(4, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'add_item', 'success', '2', 'http://localhost/vmv2/index.php/item/index/insert', 'INSERT INTO `item` (`name`, `item_type_id`, `gener', '2014-08-17 13:42:47'),
-(5, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'add_supplier', 'success', '1', 'http://localhost/vmv2/index.php/supplier/index/ins', 'INSERT INTO `supplier` (`name`) VALUES (''jayar'')', '2014-08-17 13:44:42'),
-(6, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'add_supplier', 'success', '2', 'http://localhost/vmv2/index.php/supplier/index/ins', 'INSERT INTO `supplier` (`name`) VALUES (''anne'')', '2014-08-17 13:44:48'),
-(7, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'add_batch', 'success', '1', 'http://localhost/vmv2/index.php/batch/index/insert', 'INSERT INTO `batch` (`batch_readable_id`, `item_id', '2014-08-17 13:47:05'),
-(8, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'add_batch', 'success', '2', 'http://localhost/vmv2/index.php/batch/index/insert', 'INSERT INTO `batch` (`batch_readable_id`, `item_id', '2014-08-17 13:47:42'),
-(9, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'edit_msrclient', 'success', '19', 'http://localhost/vmv2/index.php/msr_client/index/u', 'INSERT INTO `msr_client` (`msr_id`, `client_id`) V', '2014-08-17 13:49:44'),
-(10, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'edit_msrclient', 'success', '17', 'http://localhost/vmv2/index.php/msr_client/index/u', 'INSERT INTO `msr_client` (`msr_id`, `client_id`) V', '2014-08-17 13:49:58'),
-(11, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'edit_msrclient', 'success', '18', 'http://localhost/vmv2/index.php/msr_client/index/u', 'INSERT INTO `msr_client` (`msr_id`, `client_id`) V', '2014-08-17 13:50:12'),
-(12, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'add_order', 'success', '1', 'http://localhost/vmv2/index.php/order/all/insert', 'INSERT INTO `orders` (`form_number`, `msr_client_i', '2014-08-17 13:50:41'),
-(13, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'add_order_details', 'success', '1', 'http://localhost/vmv2/index.php/order/item/insert', 'INSERT INTO `order_item` (`batch_id`, `order_id`, ', '2014-08-17 13:53:26'),
-(14, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'add_order', 'success', '2', 'http://localhost/vmv2/index.php/order/all/insert', 'INSERT INTO `orders` (`form_number`, `msr_client_i', '2014-08-17 14:10:21'),
-(15, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'add_order_details', 'success', '2', 'http://localhost/vmv2/index.php/order/item/insert', 'INSERT INTO `order_item` (`batch_id`, `order_id`, ', '2014-08-17 14:11:16'),
-(16, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'add_order', 'success', '3', 'http://localhost/vmv2/index.php/order/all/insert', 'INSERT INTO `orders` (`form_number`, `msr_client_i', '2014-08-17 16:18:34'),
-(17, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'add_order', 'success', '4', 'http://localhost/vmv2/index.php/order/all/insert', 'INSERT INTO `orders` (`form_number`, `msr_client_i', '2014-08-17 16:51:44'),
-(18, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''1''', '2014-08-22 14:27:27'),
-(19, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'add_batch', 'success', '3', 'http://localhost/vmv2/index.php/batch/index/insert', 'INSERT INTO `batch` (`batch_readable_id`, `item_id', '2014-08-22 14:58:12'),
-(20, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'edit_user', 'success', '23', 'http://localhost/vmv2/index.php/user/client/update', 'UPDATE `user` SET `first_name` = ''clientthreefname', '2014-08-22 15:17:30'),
-(21, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'edit_user', 'success', '16', 'http://localhost/vmv2/index.php/user/client/update', 'UPDATE `user` SET `first_name` = ''samaguita hospit', '2014-08-22 15:21:43'),
-(22, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''1''', '2014-08-23 14:21:00'),
-(23, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''1''', '2014-08-24 08:26:02'),
-(24, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'logout', 'success', 'logout_form', 'http://localhost/vmv2/index.php/signout', '0', '2014-08-24 09:28:08'),
-(25, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''1''', '2014-08-24 09:28:11'),
-(26, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'logout', 'success', 'logout_form', 'http://localhost/vmv2/index.php/signout', '0', '2014-08-24 09:29:54'),
-(27, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '14', 3, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''3''', '2014-08-24 09:29:59'),
-(28, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '14', 3, 'logout', 'success', 'logout_form', 'http://localhost/vmv2/index.php/signout', '0', '2014-08-24 09:30:03'),
-(29, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '15', 2, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''2''', '2014-08-24 09:30:06'),
-(30, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '15', 2, 'logout', 'success', 'logout_form', 'http://localhost/vmv2/index.php/signout', '0', '2014-08-24 09:30:09'),
-(31, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '0', 0, 'login', 'fail', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`user`)\nWHERE `email` =  ''hr@email.', '2014-08-24 09:30:22'),
-(32, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''1''', '2014-08-24 09:30:27'),
-(33, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'logout', 'success', 'logout_form', 'http://localhost/vmv2/index.php/signout', '0', '2014-08-24 09:30:45'),
-(34, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '20', 4, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''4''', '2014-08-24 09:30:56'),
-(35, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '20', 4, 'logout', 'success', 'logout_form', 'http://localhost/vmv2/index.php/signout', '0', '2014-08-24 09:33:44'),
-(36, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''1''', '2014-08-24 09:34:12'),
-(37, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''1''', '2014-08-24 13:42:39'),
-(38, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'logout', 'success', 'logout_form', 'http://localhost/vmv2/index.php/signout', '0', '2014-08-24 13:48:48'),
-(39, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '14', 3, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''3''', '2014-08-24 13:48:52'),
-(40, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '14', 3, 'logout', 'success', 'logout_form', 'http://localhost/vmv2/index.php/signout', '0', '2014-08-24 15:05:40'),
-(41, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''1''', '2014-08-24 15:05:45'),
-(42, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''1''', '2014-08-30 14:08:35'),
-(43, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'logout', 'success', 'logout_form', 'http://localhost/vmv2/index.php/signout', '0', '2014-08-30 14:13:13'),
-(44, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '14', 3, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''3''', '2014-08-30 14:13:17'),
-(45, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '14', 3, 'logout', 'success', 'logout_form', 'http://localhost/vmv2/index.php/signout', '0', '2014-08-30 14:14:39'),
-(46, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '15', 2, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''2''', '2014-08-30 14:14:43'),
-(47, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '15', 2, 'logout', 'success', 'logout_form', 'http://localhost/vmv2/index.php/signout', '0', '2014-08-30 14:15:26'),
-(48, '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '1', 1, 'login', 'success', 'login_form', 'http://localhost/vmv2/index.php/signin', 'SELECT *\nFROM (`role`)\nWHERE `role_id` =  ''1''', '2014-08-30 14:15:30');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -291,22 +229,7 @@ CREATE TABLE IF NOT EXISTS `msr_client` (
   PRIMARY KEY (`msr_client_id`),
   KEY `FK__2` (`client_id`),
   KEY `FK__1` (`msr_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
-
---
--- Dumping data for table `msr_client`
---
-
-INSERT INTO `msr_client` (`msr_client_id`, `msr_client_custom_id`, `msr_id`, `client_id`) VALUES
-(1, NULL, 19, 7),
-(2, NULL, 19, 16),
-(3, NULL, 19, 22),
-(4, NULL, 17, 16),
-(5, NULL, 17, 21),
-(6, NULL, 17, 22),
-(7, NULL, 18, 21),
-(8, NULL, 18, 22),
-(9, NULL, 18, 23);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -335,29 +258,32 @@ CREATE TABLE IF NOT EXISTS `msr_view` (
 
 CREATE TABLE IF NOT EXISTS `orders` (
   `order_id` int(10) NOT NULL AUTO_INCREMENT,
+  `sales_type` varchar(50) NOT NULL DEFAULT '0',
   `msr_client_id` int(10) NOT NULL,
   `order_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `discount` int(10) DEFAULT NULL,
   `discount_type` enum('percentage','php') DEFAULT 'percentage',
-  `form_number` varchar(50) NOT NULL,
+  `form_number` varchar(50) NOT NULL COMMENT 'so number',
+  `si_no` varchar(50) NOT NULL COMMENT 'dr or si no',
   `payment_type` varchar(50) DEFAULT '30_days',
   `return_id` tinyint(10) DEFAULT '0',
   `cancel_date` date DEFAULT NULL,
   `approved_pre` int(10) DEFAULT '0',
   `approved_post` int(10) DEFAULT '0',
+  `client_name` varchar(50) DEFAULT '0',
+  `client_address` varchar(50) DEFAULT '0',
+  `product_id` varchar(50) DEFAULT '0',
+  `generic_name` varchar(50) DEFAULT '0',
+  `product_batch` varchar(50) DEFAULT '0',
+  `quantity` varchar(50) DEFAULT '0',
+  `price` varchar(50) DEFAULT '0',
+  `subtotal` varchar(50) DEFAULT '0',
+  `vat_sales` varchar(50) DEFAULT '0',
+  `12_vat` varchar(50) DEFAULT '0',
+  `total_amount` varchar(50) DEFAULT '0',
   PRIMARY KEY (`order_id`),
   KEY `FK_order_msr_client` (`msr_client_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
-
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`order_id`, `msr_client_id`, `order_date`, `discount`, `discount_type`, `form_number`, `payment_type`, `return_id`, `cancel_date`, `approved_pre`, `approved_post`) VALUES
-(1, 2, '2014-08-17 13:50:41', 10, 'percentage', 'so-0001', '30_days', 1, NULL, 1, 1),
-(2, 4, '2014-08-17 14:10:21', 50, 'percentage', 'so-0002', '30_days', 0, NULL, 1, 1),
-(3, 8, '2014-08-17 16:18:34', 0, 'percentage', 'so-00003', '30_days', 0, NULL, 1, 1),
-(4, 2, '2014-08-17 16:51:44', 10, 'percentage', 'so-0004', '30_days', 0, NULL, 1, 1);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -375,15 +301,7 @@ CREATE TABLE IF NOT EXISTS `order_item` (
   PRIMARY KEY (`order_item_id`),
   KEY `FK_order_item_batch` (`batch_id`),
   KEY `FK_order_item_order` (`order_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `order_item`
---
-
-INSERT INTO `order_item` (`order_item_id`, `batch_id`, `order_id`, `quantity`, `custom_price`, `add_type`) VALUES
-(1, 2, 1, 10000, 3, 'paid'),
-(2, 2, 2, 1000, 2, 'paid');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -400,14 +318,7 @@ CREATE TABLE IF NOT EXISTS `order_return` (
   `status` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`return_id`),
   KEY `FK_order_return_order_item` (`order_item_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `order_return`
---
-
-INSERT INTO `order_return` (`return_id`, `order_item_id`, `quantity`, `reason`, `datetime`, `status`) VALUES
-(1, 1, 10000, 'expired', '2014-08-22 16:24:33', 0);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -418,23 +329,15 @@ INSERT INTO `order_return` (`return_id`, `order_item_id`, `quantity`, `reason`, 
 CREATE TABLE IF NOT EXISTS `payment` (
   `payment_id` int(10) NOT NULL AUTO_INCREMENT,
   `amount` int(10) NOT NULL DEFAULT '0',
-  `order_id` int(10) NOT NULL,
   `payment_type` enum('cash','check') NOT NULL DEFAULT 'check',
   `bank` varchar(50) NOT NULL,
   `check_number` varchar(50) NOT NULL,
   `check_full_amount` varchar(50) NOT NULL,
   `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` smallint(6) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`payment_id`),
-  KEY `FK_payment_order` (`order_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `payment`
---
-
-INSERT INTO `payment` (`payment_id`, `amount`, `order_id`, `payment_type`, `bank`, `check_number`, `check_full_amount`, `datetime`, `status`) VALUES
-(1, 3000, 1, 'check', 'pnb', '120910219', '3000', '2014-08-17 02:07:19', 0);
+  `datetime_collected` date NOT NULL DEFAULT '0000-00-00',
+  `status` enum('Collected','Not Collected yet','Not Paid') NOT NULL DEFAULT 'Not Paid' COMMENT '0-not collected yet; 1 - collected; 2 - not paid',
+  PRIMARY KEY (`payment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -451,14 +354,36 @@ CREATE TABLE IF NOT EXISTS `payment_item` (
   PRIMARY KEY (`payment_item_id`),
   KEY `FK_payment_item_payment` (`payment_id`),
   KEY `FK_payment_item_order_item` (`order_item_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `payment_item`
+-- Table structure for table `payment_orders`
 --
 
-INSERT INTO `payment_item` (`payment_item_id`, `payment_id`, `order_item_id`, `amount`, `datetime`) VALUES
-(1, 1, 1, 3000, '2014-08-17 17:03:24');
+CREATE TABLE IF NOT EXISTS `payment_orders` (
+  `payment_order_id` int(11) NOT NULL AUTO_INCREMENT,
+  `paymentid` int(11) DEFAULT NULL,
+  `orderid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`payment_order_id`),
+  KEY `FK_payment_orders_payment` (`paymentid`),
+  KEY `FK_payment_orders_orders` (`orderid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=29 ;
+
+--
+-- Dumping data for table `payment_orders`
+--
+
+INSERT INTO `payment_orders` (`payment_order_id`, `paymentid`, `orderid`) VALUES
+(20, 1, 3),
+(21, 1, 1),
+(22, 1, 2),
+(23, 2, 4),
+(25, 3, 6),
+(26, 4, 7),
+(27, 5, 3),
+(28, 5, 2);
 
 -- --------------------------------------------------------
 
@@ -473,7 +398,7 @@ CREATE TABLE IF NOT EXISTS `permission` (
   PRIMARY KEY (`permission_id`),
   KEY `FK__role` (`role_id`),
   KEY `FK__action` (`action_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=92 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=107 ;
 
 --
 -- Dumping data for table `permission`
@@ -554,7 +479,22 @@ INSERT INTO `permission` (`permission_id`, `role_id`, `action_id`) VALUES
 (88, 1, 42),
 (89, 2, 42),
 (90, 1, 43),
-(91, 1, 44);
+(91, 1, 44),
+(92, 1, 45),
+(93, 1, 46),
+(94, 1, 47),
+(95, 2, 47),
+(96, 3, 47),
+(97, 1, 48),
+(98, 2, 48),
+(99, 1, 49),
+(100, 2, 49),
+(101, 1, 50),
+(102, 2, 50),
+(103, 1, 51),
+(104, 2, 51),
+(105, 1, 52),
+(106, 2, 52);
 
 -- --------------------------------------------------------
 
@@ -689,15 +629,7 @@ CREATE TABLE IF NOT EXISTS `supplier` (
   `status` enum('enabled','disabled') DEFAULT 'enabled',
   `datetime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`supplier_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `supplier`
---
-
-INSERT INTO `supplier` (`supplier_id`, `name`, `status`, `datetime`) VALUES
-(1, 'jayar', 'enabled', '2014-08-17 13:44:42'),
-(2, 'anne', 'enabled', '2014-08-17 13:44:48');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -732,19 +664,10 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`user_id`, `first_name`, `middle_name`, `last_name`, `password`, `email`, `address`, `contact_person`, `contact_number`, `area`, `quota`, `role_id`, `district_id`, `status`, `civil_status`, `note`) VALUES
-(1, 'admin', 'admin', 'admin', 'admin', 'admin@email.com', 'address line here', NULL, NULL, 'area 1', 100000, 1, 1, 'active', 'single', NULL),
-(7, 'client1', 'client1', 'client1', 'client1', 'client1@email.com', 'address line here', NULL, NULL, 'area 2', 1000000, 5, 2, 'active', 'single', NULL),
-(8, 'client2', 'client2', 'client2', 'client2', 'client2@email.com', 'address line here', NULL, NULL, 'area 2', 0, 5, 2, 'active', 'single', NULL),
-(14, 'warehouseman', 'warehouseman', 'warehouseman', 'warehouseman', 'warehouseman@email.com', 'address line here', NULL, NULL, 'area 1', 0, 3, 2, 'active', 'single', NULL),
-(15, 'accountant', 'accountant', 'accountant', 'accountant', 'accountant@email.com', 'address line here', NULL, NULL, 'sample area', 100000, 2, 2, 'active', 'single', NULL),
-(16, 'samaguita hospital', '', '', '', 'smapaguitahospitalname', 'address line here', 'jayar', '0908', 'pampangga', 0, 5, 2, 'active', '', NULL),
-(17, 'msrone', 'mdlenameone', 'lasnmeone', 'msrone', 'msr@email.com', 'address line here', NULL, NULL, 'sampaloc', 1000000, 6, 2, 'active', 'single', NULL),
-(18, 'msrtwo', 'msrtwomnme', 'msrtwolnme', 'msrtwo', 'msrtwo@email.com', 'address line here', NULL, NULL, 'manila', 1000000, 6, 3, 'active', 'single', NULL),
-(19, 'msrthree', 'msrthremnme', 'msrthrelnme', 'msrthree', 'msrthree@email.com', 'address line here', NULL, NULL, 'quezon city', 1500000, 6, 1, 'active', 'single', NULL),
-(20, 'hrname', 'hrmnmae', 'hrlname', 'hr', 'hr@email.com', 'address line here', NULL, NULL, 'taguig', 0, 4, 2, 'active', 'single', NULL),
-(21, 'clientonefnmae', 'clientonemname', 'clientonelname', 'client1', 'client1@email.com', 'address line here', NULL, NULL, 'sampaloc', 0, 5, 2, 'active', 'single', NULL),
-(22, 'clienttwofname', 'clienttwomname', 'clienttwolname', 'client2', 'client2@email.com', 'address line here', NULL, NULL, 'manila', 0, 5, 3, 'active', 'single', NULL),
-(23, 'clientthreefname', 'clientthreemname', 'clientthreelname', 'client3', 'client3@email.com', 'address line here', NULL, NULL, 'quezon city', 0, 5, 1, 'active', 'single', 'dasdasddasd');
+(1, 'admin', 'admin', 'admin', 'admin', 'admin@email.com', 'dsadasd', NULL, NULL, 'area 1', 100000, 1, 1, 'active', 'single', NULL),
+(14, 'warehouseman', 'warehouseman', 'warehouseman', 'warehouseman', 'warehouseman@email.com', 'fdggdfgdf', NULL, NULL, 'area 1', 0, 3, 2, 'active', 'single', NULL),
+(15, 'accountant', 'accountant', 'accountant', 'accountant', 'accountant@email.com', 'cxvxvxcvx', NULL, NULL, 'sample area', 100000, 2, 2, 'active', 'single', NULL),
+(20, 'hrname', 'hrmnmae', 'hrlname', 'hr', 'hr@email.com', 'uiyyuiuyi', NULL, NULL, 'taguig', 0, 4, 2, 'active', 'single', NULL);
 
 -- --------------------------------------------------------
 
@@ -784,7 +707,7 @@ ALTER TABLE `msr_client`
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `FK_order_msr_client` FOREIGN KEY (`msr_client_id`) REFERENCES `msr_client` (`msr_client_id`);
+  ADD CONSTRAINT `FK_order_msr_client` FOREIGN KEY (`msr_client_id`) REFERENCES `msr_client` (`msr_client_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `order_item`
@@ -800,17 +723,18 @@ ALTER TABLE `order_return`
   ADD CONSTRAINT `FK_order_return_order_item` FOREIGN KEY (`order_item_id`) REFERENCES `order_item` (`order_item_id`);
 
 --
--- Constraints for table `payment`
---
-ALTER TABLE `payment`
-  ADD CONSTRAINT `FK_payment_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`);
-
---
 -- Constraints for table `payment_item`
 --
 ALTER TABLE `payment_item`
   ADD CONSTRAINT `FK_payment_item_order_item` FOREIGN KEY (`order_item_id`) REFERENCES `order_item` (`order_item_id`),
   ADD CONSTRAINT `FK_payment_item_payment` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`payment_id`);
+
+--
+-- Constraints for table `payment_orders`
+--
+ALTER TABLE `payment_orders`
+  ADD CONSTRAINT `FK_payment_orders_orders` FOREIGN KEY (`orderid`) REFERENCES `orders` (`order_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_payment_orders_payment` FOREIGN KEY (`paymentid`) REFERENCES `payment` (`payment_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `permission`

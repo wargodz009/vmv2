@@ -57,6 +57,10 @@ class Setting extends MX_Controller{
 				$this->db->truncate($key);
 			}
 			$this->db->query('SET FOREIGN_KEY_CHECKS=1');
+			$this->db->where('role_id',5);
+			$this->db->delete('user');
+			$this->db->where('role_id',6);
+			$this->db->delete('user');
 			$this->session->set_flashdata('success','Database Emptied!');
 			redirect('setting/maintenance');
 		} else {
