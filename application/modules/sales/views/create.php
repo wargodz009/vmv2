@@ -5,7 +5,7 @@
 			<form action="<?=base_url();?>sales/save" class="form" method="post">
 			<div class="form-group">
 				<label for="">Order Type</label>
-				<select name="" id="sales_type" class="form-control">
+				<select name="sales_type" id="sales_type" class="form-control">
 					<option value="1">Client Orders</option>
 					<option value="2">Samples/Donation/Buffer stocks</option>
 					<option value="3">Personal Use</option>
