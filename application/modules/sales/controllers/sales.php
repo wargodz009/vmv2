@@ -134,6 +134,7 @@ class Sales extends MX_Controller{
 		$crud->columns('msr_client_id','discount','discount_type','form_number'); 
 		$crud->set_relation('msr_client_id','msr_client','msr_id'); 
 		$crud->callback_field('msr_client_id',array($this,'add_field_callback_1'));
+		$crud->callback_column('form_number',array($this,'_callback_form_number'));
 		$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_name'));
 		$crud->callback_after_insert(array($this, '_log_user_after_insert'));
 		$crud->callback_after_update(array($this, '_log_user_after_update'));
@@ -309,16 +310,23 @@ class Sales extends MX_Controller{
 	function _log_user_after_update2($post_array,$primary_key){
 		logs('edit_order_details','success',$primary_key);
 	}
-	function item(){
-		$crud = new grocery_CRUD();
-		$crud->set_table('order_item'); 
-		$crud->unset_add();
-		$crud->set_relation('order_id','orders','form_number'); 
-		$crud->set_relation('batch_id','batch','batch_readable_id'); 
-		$crud->callback_after_insert(array($this, '_log_user_after_insert2'));
-		$crud->callback_after_update(array($this, '_log_user_after_update2'));
-		$output = $crud->render();
-		$this->template->load('index','grocery_crud',$output);
+	function item($order_id = ''){
+		if($order_id == '') {
+			$crud = new grocery_CRUD();
+			$crud->set_table('order_item'); 
+			$crud->unset_add();
+			$crud->set_relation('order_id','orders','form_number'); 
+			$crud->set_relation('batch_id','batch','batch_readable_id'); 
+			$crud->callback_after_insert(array($this, '_log_user_after_insert2'));
+			$crud->callback_after_update(array($this, '_log_user_after_update2'));
+			$output = $crud->render();
+			$this->template->load('index','grocery_crud',$output);
+		} else {
+			$data['order_info'] = $this->crud_model->read('orders',array(array('where','order_id',$order_id)));
+			$data['paid_items'] = $this->crud_model->read('order_item',array(array('where','order_id',$order_id),array('where','add_type','paid')));
+			$data['free_items'] = $this->crud_model->read('order_item',array(array('where','order_id',$order_id),array('where','add_type','free')));
+			$this->template->load('index','show_items',$data);
+		}
 	}
 	function add_field_callback_1($value, $primary_key) {
 	    $return_str =  '<select id="field-user" name="msr_client_id" size="8" class="chosen-multiple-select" data-placeholder="Select User" style="width:512px">';
@@ -330,6 +338,9 @@ class Sales extends MX_Controller{
 	}
 	function _callback_msr_name($value, $row){
 		return get_name($value);
+	}
+	function _callback_form_number($value, $row){
+		return '<a target="_new" href="'.base_url().'sales/item/'.$row->order_id.'">'.$value.'</a>';
 	}
 	function set_returned($order_id) {
 		if($this->input->post('submit') != '') {

@@ -112,7 +112,7 @@ class Collection extends MX_Controller{
 			$this->template->load('index','manage_paid_items',$data);
 		}
 	}
-	function reciept($order_id,$payment_id) {
+	function reciept($order_id,$payment_id = '') {
 		$data['order_info'] = $this->crud_model->read('orders',array(array('where','order_id',$order_id)));
 		$data['paid_items'] = $this->crud_model->read('order_item',array(array('where','order_id',$order_id),array('where','add_type','paid')));
 		$data['free_items'] = $this->crud_model->read('order_item',array(array('where','order_id',$order_id),array('where','add_type','free')));
