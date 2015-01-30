@@ -136,6 +136,13 @@ function get_address($user_id){
 function unique_field_name($field_name){
     return 's'.substr(md5($field_name),0,8);
 }
+function is_valid_item($item_id){
+	$CI =& get_instance();
+	$CI->db->where('item_id',$item_id);
+	$Q = $CI->db->get('item');
+	if($Q->row()) { return true; }
+	else { return false;}	
+}
 function get_item_name($item_id,$include_desc = false){
 	$CI =& get_instance();
 	$CI->db->where('item_id',$item_id);
@@ -146,12 +153,17 @@ function get_item_name($item_id,$include_desc = false){
 		return $Q->row()->name.' ('.$Q->row()->description.')';
 	}
 }
-function is_valid_item($item_id){
+function get_item_info($item_id,$what = 'name'){
 	$CI =& get_instance();
 	$CI->db->where('item_id',$item_id);
 	$Q = $CI->db->get('item');
-	if($Q->row()) { return true; }
-	else { return false;}	
+	return $Q->row()->$what;
+}
+function get_item_type($item_type_id){
+	$CI =& get_instance();
+	$CI->db->where('item_type_id',$item_type_id);
+	$Q = $CI->db->get('item_type');
+	return $Q->row()->name;
 }
 function get_item_desc($item_id){
 	$CI =& get_instance();

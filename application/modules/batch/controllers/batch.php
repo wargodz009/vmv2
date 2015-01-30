@@ -18,7 +18,7 @@ class Batch extends MX_Controller{
 		$crud->display_as('sell', 'Catalog Price');
 		$crud->field_type('recieve_date', 'date');
 		$crud->field_type('expire_date', 'date');
-		$crud->field_type('user_id', 'hidden', 1);
+		$crud->field_type('user_id', 'hidden', $this->session->userdata('user_id'));
 		$crud->field_type('sold_count', 'hidden');
 		$crud->field_type('expire_count', 'hidden');
 		$crud->field_type('return_count', 'hidden');
@@ -28,7 +28,7 @@ class Batch extends MX_Controller{
 		}
 		$crud->display_as('item_id', 'Product Name');
 		$crud->required_fields('batch_readable_id','access_type','item_id','supplier_id','count','recieve_date','expire_date','lot_number');
-		$crud->fields('item_id','batch_readable_id','supplier_id','count','access_type','buy','sell','recieve_date','expire_date','lot_number');
+		$crud->fields('item_id','batch_readable_id','supplier_id','count','access_type','buy','sell','recieve_date','expire_date','lot_number','user_id');
 		$crud->columns('batch_readable_id','access_type','item_id','supplier_id','count','sold_count','return_count','recieve_date','expire_date','lot_number','buy','sell','status');
 
 		$crud->callback_column('status',array($this,'_callback_to_status'));
@@ -43,10 +43,10 @@ class Batch extends MX_Controller{
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}
-	function dashboard(){
+	function dashboard($item_type_id = '1'){
 		$crud = new grocery_CRUD();
 		$crud->set_table('batch'); 
-		$crud->set_subject('PRODUCT INVENTORY'); 
+		$crud->set_subject('PRODUCT INVENTORY -' . get_item_type($item_type_id)); 
 		$crud->unset_operations();
 		$crud->set_relation('item_id','item','name');
 		$crud->set_relation('supplier_id','supplier','name');
@@ -62,6 +62,7 @@ class Batch extends MX_Controller{
 		$crud->field_type('expire_count', 'hidden');
 		$crud->field_type('return_count', 'hidden');
 		$crud->field_type('status', 'hidden');
+		$crud->where('item_type_id', $item_type_id);
 		$crud->required_fields('batch_readable_id','access_type','item_id','supplier_id','count','recieve_date','expire_date','lot_number');
 		$crud->columns('batch_readable_id','access_type','item_id','supplier_id','count','sold_count','return_count','recieve_date','expire_date','lot_number','buy','sell','status');
 
