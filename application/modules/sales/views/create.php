@@ -13,7 +13,7 @@
 			</div>
 			<div class="form-group">
 				<label for="">MSR CODE</label>
-				<select name="" id="msr_client_id" class="form-control">
+				<select id="msr_client_id" name="msr_client_id" class="form-control :required">
 					<option value="">--Select --</option>
 					<?php
 					if(!empty($msr_client)) {
@@ -26,7 +26,7 @@
 			</div>
 			<div class="form-group">
 				<label for="">S.O. #</label>
-				<input type="text" class="form-control" name="form_number"/>
+				<input type="text" class="form-control :required" name="form_number"/>
 			</div>
 			<div class="form-group">
 				<label for="">DR/SI #</label>
@@ -34,15 +34,15 @@
 			</div>
 			<div class="form-group">
 				<label for="">Client's Name</label>
-				<input type="text" class="form-control" name="client_name" id="client_name" />
+				<input type="text" class="form-control :required" name="client_name" id="client_name" />
 			</div>
 			<div class="form-group">
 				<label for="">Address</label>
-				<input type="text" class="form-control" name="client_address" id="client_address" />
+				<input type="text" class="form-control :required" name="client_address" id="client_address" />
 			</div>
 			<div class="form-group">
 				<label for="">Product</label>
-				<select name="product_id" id="product_id" class="form-control">
+				<select name="product_id" id="product_id" class="form-control :required">
 					<option value="">--Select --</option>
 					<?php
 					if(!empty($items)) {
@@ -55,29 +55,29 @@
 			</div>
 			<div class="form-group">
 				<label for="">Generic Name</label>
-				<input type="text" class="form-control" name="generic_name" id="generic_name"/>
+				<input type="text" class="form-control :required" name="generic_name" id="generic_name"/>
 			</div>
 			<div class="form-group">
 				<label for="">Batch ID</label>
-				<select name="product_batch" id="product_batch" class="form-control">
+				<select name="product_batch" id="product_batch" class="form-control :required">
 					<option value="">--Select --</option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="">QTY</label>
-				<input type="text" class="form-control" name="quantity" id="quantity"/>
+				<input type="text" class="form-control :required :number" name="quantity" id="quantity"/>
 			</div>
 			<div class="form-group">
 				<label for="">PRICE</label>
-				<input type="text" class="form-control" name="price" id="price"/>
+				<input type="text" class="form-control :required :number" name="price" id="price"/>
 			</div>
 			<div class="form-group">
 				<label for="">Sub-Total</label>
-				<input type="text" class="form-control" name="subtotal" id="subtotal" readonly />
+				<input type="text" class="form-control :required" name="subtotal" id="subtotal" readonly />
 			</div>
 			<div class="form-group">
 				<label for="">Discount</label>
-				<input type="text" class="form-control" name="discount" id="discount"/>
+				<input type="text" class="form-control :number" name="discount" id="discount"/>
 			</div>
 			<div class="form-group">
 				<label for="">Discount Type</label>
@@ -96,7 +96,7 @@
 			</div>
 			<div class="form-group">
 				<label for="">Total Amount</label>
-				<input type="text" class="form-control" name="total_amount" id="total_amount" readonly />
+				<input type="text" class="form-control :required" name="total_amount" id="total_amount" readonly />
 			</div>
 			<div class="form-group">
 				<label for=""></label>

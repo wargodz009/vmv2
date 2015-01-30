@@ -1,9 +1,9 @@
 input.vanadium-valid {
-    border-color: greenyellow;
+    border-color: #ccc;
 }
 
 input.vanadium-invalid {
-    border-color: pink;
+    border-color: rgb(255, 0, 45);
 }
 .vanadium-advice {
 	display:none;

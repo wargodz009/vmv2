@@ -325,7 +325,8 @@ class Sales extends MX_Controller{
 		}
 	}
 	function save(){
-		var_dump($this->input->post());
+		$this->db->insert('orders',$this->input->post());
+		echo $this->db->insert_id();
 	}
 }
 
