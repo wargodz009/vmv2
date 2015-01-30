@@ -19,10 +19,12 @@ class Sales_model extends CI_Model{
 		return true;
 	}
 	function get_new(){
+		$this->db->where('cancel_date',null);
 		$this->db->where('approved_pre',0);
 		return $this->db->count_all_results($this->table);
 	}
 	function get_done(){
+		$this->db->where('cancel_date',null);
 		$this->db->where('approved_pre',1);
 		$this->db->where('approved_post',0);
 		return $this->db->count_all_results($this->table);

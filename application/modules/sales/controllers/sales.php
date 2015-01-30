@@ -9,6 +9,22 @@ class Sales extends MX_Controller{
 		$this->load->model('sales/sales_model');
 	}
 	function index($month = '00',$year ='00',$district = '00'){
+		if($this->session->userdata('role_id') == 1) {
+			$info = '';
+			$new = $this->sales_model->get_new();
+			if($new > 0) $info = 'You have <b><a href="'.base_url().'sales/for_approval">'.$new.'</a></b> new order(s) to approve.<br />';
+			$done = $this->sales_model->get_done();
+			if($done > 0 && $new > 0) {
+				$info .= 'You have <b><a href="'.base_url().'sales/for_completion">'.$done.'</a></b> new order(s) to complete. ';
+			} else {
+				if($done > 0) {
+					$info = 'You have <b><a href="'.base_url().'sales/for_completion">'.$done.'</a></b> new order(s) to complete. ';	
+				}
+			}
+			if($info) {
+				$this->session->set_userdata('info',$info);
+			} 
+		}
 		$data['month'] = ($month != '00'?$month:date('m'));
 		$data['year'] = ($year != '00'?$year:date('Y'));
 		$data['district'] = ($district != ''?$district:'00');
@@ -32,17 +48,79 @@ class Sales extends MX_Controller{
 		$data['items'] = $this->crud_model->read('item');
 		$this->template->load('index','create',$data);
 	}
+	function for_approval(){
+		if($this->session->userdata('role_id') == 1) {
+			$crud = new grocery_CRUD();
+			$crud->set_table('orders'); 
+			$crud->unset_add();
+			$crud->fields('form_number','msr_client_id','discount','discount_type'); 
+			$crud->columns('msr_client_id','discount','discount_type','form_number'); 
+			$crud->set_relation('msr_client_id','msr_client','msr_id'); 
+			$crud->callback_field('msr_client_id',array($this,'add_field_callback_1'));
+			$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_name'));
+			$crud->callback_after_insert(array($this, '_log_user_after_insert'));
+			$crud->callback_after_update(array($this, '_log_user_after_update'));
+			$crud->add_action('Set Returned', base_url().'assets/images/returned.png','','',array($this,'_callback_filter_order'));
+			$crud->add_action('Cancel Order', base_url().'assets/images/cancel.png','','',array($this,'_callback_filter_cancel'));
+			$crud->add_action('Print SO Form', base_url().'assets/images/print.png','','',array($this,'_callback_print_paid'));
+			$crud->where('cancel_date',null);
+			$crud->where('approved_pre',0);
+			$crud->where('approved_post',0);
+			if($this->session->userdata('role_id') == 1) {
+				$crud->add_action('Approve Order', base_url().'assets/images/approve.gif','','',array($this,'_callback_filter_approve'));
+				$crud->add_action('Set as Completed', base_url().'assets/images/complete.gif','','',array($this,'_callback_complete_order'));
+			}
+			$crud->order_by('approved_pre','asc');
+			$crud->order_by('approved_post','asc');
+			$output = $crud->render();
+			$this->template->load('index','grocery_crud',$output);
+		} else {
+			$this->session->set_userdata('error','NO_PERMISSION');
+			redirect('/');
+		}
+	}
+	function for_completion(){
+		if($this->session->userdata('role_id') == 1) {
+			$crud = new grocery_CRUD();
+			$crud->set_table('orders'); 
+			$crud->unset_add();
+			$crud->fields('form_number','msr_client_id','discount','discount_type'); 
+			$crud->columns('msr_client_id','discount','discount_type','form_number'); 
+			$crud->set_relation('msr_client_id','msr_client','msr_id'); 
+			$crud->callback_field('msr_client_id',array($this,'add_field_callback_1'));
+			$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_name'));
+			$crud->callback_after_insert(array($this, '_log_user_after_insert'));
+			$crud->callback_after_update(array($this, '_log_user_after_update'));
+			$crud->add_action('Set Returned', base_url().'assets/images/returned.png','','',array($this,'_callback_filter_order'));
+			$crud->add_action('Cancel Order', base_url().'assets/images/cancel.png','','',array($this,'_callback_filter_cancel'));
+			$crud->add_action('Print SO Form', base_url().'assets/images/print.png','','',array($this,'_callback_print_paid'));
+			$crud->where('cancel_date',null);
+			$crud->where('approved_pre',1);
+			$crud->where('approved_post',0);
+			if($this->session->userdata('role_id') == 1) {
+				$crud->add_action('Approve Order', base_url().'assets/images/approve.gif','','',array($this,'_callback_filter_approve'));
+				$crud->add_action('Set as Completed', base_url().'assets/images/complete.gif','','',array($this,'_callback_complete_order'));
+			}
+			$crud->order_by('approved_pre','asc');
+			$crud->order_by('approved_post','asc');
+			$output = $crud->render();
+			$this->template->load('index','grocery_crud',$output);
+		} else {
+			$this->session->set_userdata('error','NO_PERMISSION');
+			redirect('/');
+		}
+	}
 	function all(){
 		if($this->session->userdata('role_id') == 1) {
 			$info = '';
 			$new = $this->sales_model->get_new();
-			if($new > 0) $info = 'You have <b>'.$new.'</b> new order(s) to approve.<br />';
+			if($new > 0) $info = 'You have <b><a href="'.base_url().'sales/for_approval">'.$new.'</a></b> new order(s) to approve.<br />';
 			$done = $this->sales_model->get_done();
 			if($done > 0 && $new > 0) {
-				$info .= 'You have <b>'.$done.'</b> new order(s) to complete. ';
+				$info .= 'You have <b><a href="'.base_url().'sales/for_completion">'.$done.'</a></b> new order(s) to complete. ';
 			} else {
 				if($done > 0) {
-					$info = 'You have <b>'.$done.'</b> new order(s) to complete. ';	
+					$info = 'You have <b><a href="'.base_url().'sales/for_completion">'.$done.'</a></b> new order(s) to complete. ';	
 				}
 			}
 			if($info) {
@@ -51,6 +129,7 @@ class Sales extends MX_Controller{
 		}
 		$crud = new grocery_CRUD();
 		$crud->set_table('orders'); 
+		$crud->unset_add();
 		$crud->fields('form_number','msr_client_id','discount','discount_type'); 
 		$crud->columns('msr_client_id','discount','discount_type','form_number'); 
 		$crud->set_relation('msr_client_id','msr_client','msr_id'); 
@@ -233,6 +312,7 @@ class Sales extends MX_Controller{
 	function item(){
 		$crud = new grocery_CRUD();
 		$crud->set_table('order_item'); 
+		$crud->unset_add();
 		$crud->set_relation('order_id','orders','form_number'); 
 		$crud->set_relation('batch_id','batch','batch_readable_id'); 
 		$crud->callback_after_insert(array($this, '_log_user_after_insert2'));
@@ -326,7 +406,24 @@ class Sales extends MX_Controller{
 	}
 	function save(){
 		$this->db->insert('orders',$this->input->post());
-		echo $this->db->insert_id();
+		$id = $this->db->insert_id();
+		if($id) {
+			if($this->input->post('sales_type') == 1) {
+				$add_type = 'paid';
+			} else {
+				$add_type = 'free';
+			}
+			$data = array(
+				'batch_id'=>$this->input->post('product_batch'),
+				'order_id'=>$id,
+				'quantity'=>$this->input->post('quantity'),
+				'custom_price'=>$this->input->post('price'),
+				'add_type'=>$add_type
+			);
+			$this->db->insert('order_item',$data);
+		}
+		$this->session->set_flashdata('success','Order Added!');
+		redirect('sales');
 	}
 }
 
