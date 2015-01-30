@@ -15,6 +15,23 @@ class Sales extends MX_Controller{
 		$data['area_list'] = $this->crud_model->read('district');
 		$this->template->load('index','index',$data);
 	}
+	function create($get_what = '',$get_val = '') {
+		if($get_what == 'client_info') {
+			$get_client_id = $this->crud_model->read('msr_client',array(array('where','msr_client_id',$get_val)));
+			$data = $this->crud_model->read('user',array(array('where','user_id',$get_client_id[0]->client_id)));
+			echo json_encode($data[0]);exit;
+		}
+		if($get_what == 'product_info') {
+			$item['items'] = $this->crud_model->read('item',array(array('where','item_id',$get_val)));
+			$item['batches'] = $this->crud_model->read('batch',array(array('where','item_id',$get_val)));
+			
+			echo json_encode($item);exit;
+		}
+		$data['msr_client'] = $this->crud_model->read('msr_client');
+		$data['batch'] = $this->crud_model->read('batch');
+		$data['items'] = $this->crud_model->read('item');
+		$this->template->load('index','create',$data);
+	}
 	function all(){
 		if($this->session->userdata('role_id') == 1) {
 			$info = '';
@@ -306,6 +323,9 @@ class Sales extends MX_Controller{
 			$this->session->set_flashdata('danger','not a valid order!');
 			redirect('/');
 		}
+	}
+	function save(){
+		var_dump($this->input->post());
 	}
 }
 
