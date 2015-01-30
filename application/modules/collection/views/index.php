@@ -45,6 +45,7 @@ $this->load->model('collection/collection_model');
 				<option value="<?=$x;?>"  <?=($year == $x?'selected':'');?>><?=$x;?></option>
 			<?php $x--; endwhile; ?>
 		</select>
+		<a href="<?=base_url();?>collection/"><button class='btn btn-info'>RESET</button></a>
 	</div>	
 </nav>
 <table class="table table-hover">
