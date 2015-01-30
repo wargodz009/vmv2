@@ -91,7 +91,7 @@ class Batch extends MX_Controller{
 		return number_format($value);
 	}
 	function _callback_to_status($value, $row){
-		$percent = $row->sold_count / $row->count;
+		$percent = str_replace(",","",$row->sold_count) / str_replace(",","",$row->count);
 		$percentage = number_format( $percent * 100 );
 		if($percentage < $this->setting_model->get_setting('critical_limit')) {
 			return '<img src="'.base_url().'assets/images/warning-icon-green.png" alt="">';
