@@ -46,7 +46,7 @@ if(!empty($orders)) {
 				echo '<td>'.get_name(get_msr_client($order->msr_client_id,'client_id')).'</td>';
 				echo '<td>'.$order->form_number.'</td>';
 				echo '<td>'.($item->quantity * $item->custom_price).'</td>';
-				echo '<td>'.get_item_name(get_item_id_from_batch(get_batch_id_from_order($item->batch_id))).'</td>';
+				echo '<td>'.get_item_name($order->product_id).'</td>';
 				echo '<td>'.$item->quantity.'</td>';
 				echo '<td>'.$item->custom_price.'</td>';
 				echo '<td>'.($item->add_type == 'paid'?'No':'Yes').'</td>';
