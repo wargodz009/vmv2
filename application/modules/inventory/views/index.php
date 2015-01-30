@@ -68,7 +68,7 @@
 				if(!empty($all_batches)) {
 					foreach($all_batches as $batch) {
 						echo '<tr>
-							<td>'.get_item_info($batch->item_id).'</td>
+							<td><a href="'.base_url().'item/history/'.$batch->item_id.'">'.get_item_info($batch->item_id).'</a></td>
 							<td>'.get_item_info($batch->item_id,'generic_name').'</td>
 							<td>'.get_item_info($batch->item_id,'description').'</td>
 							<td>'.$batch->batch_readable_id.'</td>

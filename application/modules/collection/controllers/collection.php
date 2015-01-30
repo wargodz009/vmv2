@@ -59,7 +59,7 @@ class Collection extends MX_Controller{
 		$crud->set_table('payment'); 
 		$crud->unset_delete(); 
 		$crud->set_relation_n_n('orders', 'payment_orders', 'orders', 'paymentid', 'orderid', 'form_number');
-		$crud->unset_add_fields('status');
+		$crud->display_as('orders','PR/OR #'); 
 		//$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);

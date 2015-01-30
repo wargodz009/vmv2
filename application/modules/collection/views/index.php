@@ -137,7 +137,7 @@ $this->load->model('collection/collection_model');
 				<td><a href="'.base_url()."collection/per_msr/".$msr->user_id.'">'.get_name($msr->user_id).'</a></td>
 				<td>'.$total.'</td>
 				<td>'.$total_all.'</td>
-				<td>'.number_format((($total * 100) / $balance),2) . '%</td>		
+				<td>'.@number_format((($total * 100) / $balance),2) . '%</td>		
 				<td>'.($balance - $total).'</td>		
 				<td>'.$pdc_total.'</td>		
 				<td>'.@number_format((($total * 100) / ($pdc_total + $total_all)),2) . '%</td>		
