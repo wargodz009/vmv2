@@ -12,6 +12,13 @@
 				</select>
 			</div>
 			<div class="form-group">
+				<label for="">DR/SI</label>
+				<select name="" id="transaction_type" class="form-control">
+					<option value="DR">DR</option>
+					<option value="SI">SI</option>
+				</select>
+			</div>
+			<div class="form-group">
 				<label for="">MSR CODE</label>
 				<select id="msr_client_id" name="msr_client_id" class="form-control :required">
 					<option value="">--Select --</option>
@@ -31,6 +38,10 @@
 			<div class="form-group">
 				<label for="">DR/SI #</label>
 				<input type="text" class="form-control" name="si_no"/>
+			</div>
+			<div class="form-group">
+				<label for="">DR date</label>
+				<input type="text" class="form-control" name="dr_date" class="datepick"/>
 			</div>
 			<div class="form-group">
 				<label for="">Client's Name</label>
@@ -72,6 +83,10 @@
 				<input type="text" class="form-control :required :number" name="price" id="price"/>
 			</div>
 			<div class="form-group">
+				<label for="">EXPIRE DATE</label>
+				<input type="text" class="form-control :required" name="expire_date" id="expire_date"/>
+			</div>
+			<div class="form-group">
 				<label for="">Sub-Total</label>
 				<input type="text" class="form-control :required" name="subtotal" id="subtotal" readonly />
 			</div>
@@ -87,10 +102,14 @@
 				</select>
 			</div>
 			<div class="form-group">
+				<label for="">Discount Amount</label>
+				<input type="text" class="form-control" name="discount_amount" id="discount_amount"/>
+			</div>
+			<div class="form-group si">
 				<label for="">Vat Sales</label>
 				<input type="text" class="form-control" name="vat_sales" id="vat_sales" readonly />
 			</div>
-			<div class="form-group">
+			<div class="form-group si">
 				<label for="">12% Vat</label>
 				<input type="text" class="form-control" name="12_vat" id="vat" readonly />
 			</div>
@@ -129,6 +148,7 @@ $(document).ready(function(){
 					$(o).html(this.batch_readable_id);
 					$('#product_batch').append(o);
 					$('#price').val(this.sell);
+					$('#expire_date').val(this.expire_date);
 				});
 			});
 		} else {
@@ -148,6 +168,7 @@ $(document).ready(function(){
 			total = calculate_total($('#subtotal').val(),$('#discount').val(),$('#discount_type :selected').val());
 		}
 		$('#total_amount').val($('#subtotal').val() - total);
+		$('#discount_amount').val(calculate_total_amount($('#subtotal').val(),$('#discount').val(),$('#discount_type :selected').val()));
 		calculate_vat();
 	});
 	$('#discount, #discount_type').change(function(){
@@ -160,6 +181,7 @@ $(document).ready(function(){
 		} else {
 			$('#total_amount').val(total);
 		}
+		$('#discount_amount').val(calculate_total_amount($('#subtotal').val(),$('#discount').val(),$('#discount_type :selected').val()));
 	});
 	function calculate_subtotal(qty,price) {
 		calculate_vat();
@@ -170,6 +192,13 @@ $(document).ready(function(){
 			return  total * (discount / 100);
 		} else {
 			return total - discount;
+		}
+	}
+	function calculate_total_amount(total,discount,type) {
+		if(type == 'percentage') {
+			return  (total * (discount / 100));
+		} else {
+			return discount;
 		}
 	}
 	function calculate_vat() {
@@ -184,5 +213,8 @@ $(document).ready(function(){
 			$('#vat').val('');
 		}
 	}
+	$('#transaction_type').change(function(){
+		$('.si').toggle();
+	});
 });
 </script>

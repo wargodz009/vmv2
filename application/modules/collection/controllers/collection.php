@@ -1,7 +1,7 @@
 <?php
 
 class Collection extends MX_Controller{
-	
+
 	function __construct(){
 		parent::__construct();
 		$this->load->library('grocery_CRUD');
@@ -55,16 +55,17 @@ class Collection extends MX_Controller{
 	}
 	function all(){
 		$crud = new grocery_CRUD();
-		$crud->set_subject('COLLECTION'); 
-		$crud->set_table('payment'); 
-		$crud->unset_delete(); 
+		$crud->set_subject('COLLECTION');
+		$crud->set_table('payment');
+		$crud->display_as('datetime','Check Date');
+		$crud->unset_delete();
 		$crud->set_relation_n_n('orders', 'payment_orders', 'orders', 'paymentid', 'orderid', 'form_number');
-		$crud->display_as('orders','PR/OR #'); 
+		$crud->display_as('orders','PR/OR #');
 		//$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}
-	
+
 	function _callback_to_php($var,$row){
 		if($var != '' || !empty($var)) {
 			return 'P '.number_format($var);
@@ -76,10 +77,10 @@ class Collection extends MX_Controller{
 		$crud = new grocery_CRUD();
 		$crud->unset_operations();
 		$crud->columns('bank','check_number','amount','orders');
-		$crud->display_as('orders','DR/SI applied'); 
-		$crud->set_subject('COLLECTION'); 
-		$crud->set_table('payment'); 
-		$crud->unset_delete(); 
+		$crud->display_as('orders','DR/SI applied');
+		$crud->set_subject('COLLECTION');
+		$crud->set_table('payment');
+		$crud->unset_delete();
 		$crud->set_relation_n_n('orders', 'payment_orders', 'orders', 'paymentid', 'orderid', 'form_number');
 		//$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
 		$output = $crud->render();
