@@ -123,6 +123,19 @@ class Collection extends MX_Controller{
 		//$this->load->helper(array('dompdf', 'file'));
 		//pdf_create($data, 'reciept'.date('dmY_his').'pdf');
 	}
+	function add_new(){
+		if(isset($_POST) && !empty($_POST)) {
+			if($this->crud_model->create('payment',$_POST)) {
+				$this->session->set_flashdata('success','Payment Details Saved!');
+			} else {
+				$this->session->set_flashdata('info','Payment Details Not Saved!');
+			}
+			redirect('collection');
+		} else {
+			$data['msr_client'] = $this->crud_model->read('msr_client');
+			$this->template->load('index','add_new_collection',$data);
+		}
+	}
 }
 
 ?>

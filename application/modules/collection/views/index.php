@@ -71,6 +71,7 @@ $this->load->model('collection/collection_model');
 			$pdc_total = 0;
 			$total_all = 0;
 			$balance = 0;
+			$aid = array();
 			$filtered_order_ids = array();
 			
 			$all_msr_client_id = get_all_msr_client_id($msr->user_id);
