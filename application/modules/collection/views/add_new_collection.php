@@ -76,6 +76,15 @@ $(document).ready(function(){
 	$('#payment_type').change(function(){
 		$('.cheque').toggle();
 	});
+	$('#msr_client_id').change(function(){
+		$.getJSON('<?=base_url()?>collection/get_dr/' + $('#msr_client_id').val(),function(data) {
+			$('#select1').empty();
+			$('#select2').empty();
+			$.each(data, function(index) {
+				$('<option>').val(data[index].form_number).text(data[index].form_number).appendTo('#select1');
+			})
+		});
+	});
 	$('#add').click(function() {  
 		return !$('#select1 option:selected').remove().appendTo('#select2');  
 	});  

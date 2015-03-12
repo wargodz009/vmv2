@@ -136,6 +136,10 @@ class Collection extends MX_Controller{
 			$this->template->load('index','add_new_collection',$data);
 		}
 	}
+	function get_dr($id) {
+		$this->output->enable_profiler(false);
+		echo json_encode($this->crud_model->read('orders',array(array('where','msr_client_id',$id),array('where','approved_pre',1),array('where','approved_post',1))));
+	}
 }
 
 ?>
