@@ -29,15 +29,27 @@
 			</div>
 			<div class="form-group">
 				<label for="">Date of PR/OR</label>
-				<input type="text" name="date_of_pr_or" id="date_of_pr_or" class="form-control :required" />
+				<input type="text" name="date_of_pr_or" id="date_of_pr_or" class="datepicker form-control :required" />
 			</div>
 			<div class="form-group">
 				<label for="">Amount</label>
-				<input type="text" name="amount" id="amount" class="form-control :required" />
+				<input type="text" name="amount" id="amount" class="form-control :required :number" />
 			</div>
-			<div class="form-group">
-				<label for="">DR Applied</label>
-				<input type="text" name="dr_applied" id="dr_applied" class="form-control :required" />
+			<div class="form-group container">
+				<label for="" class="pull-left col-xs-12 col-sm-12 col-md-12">DR Applied</label>
+				<div class="col-md-3 col-xs-4">
+					<select multiple id="select1" class="multiselect col-md-12">  
+						<option value="1">Option 1</option>  
+						<option value="2">Option 2</option>  
+						<option value="3">Option 3</option>  
+						<option value="4">Option 4</option>  
+					</select>  
+					<a href="#" id="add" class="add">add &gt;&gt;</a>  
+				</div>				
+				<div class="col-md-3 col-xs-4">
+					<select multiple id="select2" class="multiselect col-md-12" name="dr_applied"></select>  
+					<a href="#" id="remove" class="add">&lt;&lt; remove</a>  
+				</div>
 			</div>
 			<div class="form-group cheque">
 				<label for="">Bank Name</label>
@@ -49,7 +61,7 @@
 			</div>
 			<div class="form-group cheque">
 				<label for="">Date of Cheque</label>
-				<input type="text" name="date_of_cheque" id="date_of_cheque" class="form-control" />
+				<input type="text" name="date_of_cheque" id="date_of_cheque" class="datepicker form-control" />
 			</div>
 			<div class="form-group">
 				<label for=""></label>
@@ -63,6 +75,12 @@
 $(document).ready(function(){
 	$('#payment_type').change(function(){
 		$('.cheque').toggle();
+	});
+	$('#add').click(function() {  
+		return !$('#select1 option:selected').remove().appendTo('#select2');  
+	});  
+	$('#remove').click(function() {  
+		return !$('#select2 option:selected').remove().appendTo('#select1');  
 	});
 });
 </script>

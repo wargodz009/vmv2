@@ -19,3 +19,12 @@ thead tr >td {
 .cheque {
 	display:none;
 }
+
+a.add {  
+	display: block;
+	border: 1px solid #aaa;
+	text-decoration: none;
+	background-color: #fafafa;
+	color: #123456;
+	clear:both;  
+}  

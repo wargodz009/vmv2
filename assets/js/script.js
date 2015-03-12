@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	$( ".datepicker" ).datepicker();
 	$("a.crud-action[href='#']").remove();
 	$("a.open_new_popup").click(function(e){
 		e.preventDefault();

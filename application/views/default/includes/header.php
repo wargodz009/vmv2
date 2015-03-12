@@ -19,6 +19,7 @@
     <![endif]-->
 
     <link href="<?php echo base_url(); ?>theme/css/style.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/jquery-ui-1.10.3.custom/css/custom-theme/jquery-ui-1.10.3.custom.min.css" rel="stylesheet">
     <!-- Validation plugin -->
     <link href="<?php echo base_url(); ?>theme/css/vanadium.css" rel="stylesheet">
     <script src="<?php echo base_url(); ?>theme/js/vanadium.js"></script>  
