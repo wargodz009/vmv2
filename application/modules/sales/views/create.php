@@ -41,7 +41,7 @@
 			</div>
 			<div class="form-group">
 				<label for="">DR date</label>
-				<input type="text" class="form-control" name="dr_date" class="datepick"/>
+				<input type="text" class="form-control datepicker" name="dr_date" />
 			</div>
 			<div class="form-group">
 				<label for="">Client's Name</label>

@@ -50,7 +50,7 @@
 		<tr>
 			<td><a href="<?=base_url();?>sales/area/<?=$msr->district_id;?>"><?=$this->crud_model->read('district',array(array('where','district_id',$msr->district_id)),'name');?></a></td>
 			<td><a href="<?=base_url();?>sales/all_sales/<?=$msr->user_id;?>"><?=$msr->last_name.', '.$msr->first_name;?></a></td>
-			<td>P <?php $amount = number_format(modules::run('sales/get_sales',$msr->user_id,$month,$year)); echo $amount; $total = $total + $amount; ?></td>
+			<td>P <?php $amount = modules::run('sales/get_sales',$msr->user_id,$month,$year); echo number_format($amount); $total = $total + $amount; ?></td>
 			<td>P <?=number_format($msr->quota);?></td>
 			<!--td><?php //echo modules::run('sales/get_sales',get_msr_client_id($msr->user_id),$month,$year); ?></td-->
 		</tr>
@@ -71,7 +71,7 @@
 	<thead><tr>
 		<td></td>
 		<td></td>
-		<td>Total: P <?=$total;?></td>
+		<td>Total: P <?=number_format($total);?></td>
 		<td></td>
 	</tr></thead>
 </tbody>

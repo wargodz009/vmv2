@@ -181,21 +181,9 @@ class Sales extends MX_Controller{
 			if(!empty($orders)) {
 				$total = 0;
 				foreach ($orders as $order) {
-					//items
-					$order_item = $this->sales_model->get_items($order->order_id);
-					if(!empty($order_item)) {
-						foreach ($order_item as $item) {
-							if($item->add_type == 'paid') {
-								$total += $item->quantity * $item->custom_price;
-							}
-						}
-					}
+					$total += $order->total_amount;
 				}
-				if($order->discount_type == 'percentage') {
-					return $total - ($total * ($order->discount / 100));
-				} else {
-					return $total - $order->discount;
-				}
+				return $total;
 			} else {
 				return 0;
 			}
