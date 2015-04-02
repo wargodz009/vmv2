@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title><?=$this->setting_model->get_setting('site_header');?></title>
+    <title>Vintel Med Enterprises</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
     <!-- Javascript -->
     <script src="<?php echo base_url(); ?>assets/js/jquery.js"></script>

@@ -14,6 +14,7 @@
 | path to your installation.
 |
 */
+//$config['base_url']	= 'http://vmephilmedica.com/vmv2';
 $config['base_url']	= 'http://localhost/vmv2';
 
 /*

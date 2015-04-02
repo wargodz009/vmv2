@@ -48,7 +48,7 @@
 if (ENVIRONMENT == 'development') {
     $active_group = 'development';
 }
-elseif (ENVIRONMENT == 'testing') {
+elseif (ENVIRONMENT == 'production') {
     $active_group = 'staging';
 }
 else {
