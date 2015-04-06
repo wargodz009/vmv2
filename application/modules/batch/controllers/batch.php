@@ -50,9 +50,9 @@ class Batch extends MX_Controller{
 		$crud->unset_operations();
 		$crud->set_relation('item_id','item','name');
 		$crud->set_relation('supplier_id','supplier','name');
-		$crud->display_as('batch_readable_id', 'Batch #');
-		$crud->display_as('supplier_id', 'Supplier');
 		$crud->display_as('item_id', 'Item');
+		$crud->display_as('supplier_id', 'Supplier');
+		$crud->display_as('batch_readable_id', 'Batch #');	
 		$crud->display_as('buy', 'Cost');
 		$crud->display_as('sell', 'Catalog Price');
 		$crud->field_type('recieve_date', 'date');
@@ -64,7 +64,7 @@ class Batch extends MX_Controller{
 		$crud->field_type('status', 'hidden');
 		$crud->where('item_type_id', $item_type_id);
 		$crud->required_fields('batch_readable_id','access_type','item_id','supplier_id','count','recieve_date','expire_date','lot_number');
-		$crud->columns('batch_readable_id','access_type','item_id','supplier_id','count','sold_count','return_count','recieve_date','expire_date','lot_number','buy','sell','status');
+		$crud->columns('item_id','access_type','batch_readable_id','supplier_id','count','sold_count','return_count','recieve_date','expire_date','lot_number','buy','sell','status');
 
 		$crud->callback_column('status',array($this,'_callback_to_status'));
 		$crud->callback_column('count',array($this,'_callback_to_number'));
@@ -73,8 +73,8 @@ class Batch extends MX_Controller{
 		$crud->callback_column('buy',array($this,'_callback_to_money'));
 		$crud->callback_column('sell',array($this,'_callback_to_money'));
 		$crud->callback_after_insert(array($this, 'log_user_after_insert'));
-    		$crud->callback_after_update(array($this, 'log_user_after_update'));
-    		$crud->order_by('batch_id','desc');
+		$crud->callback_after_update(array($this, 'log_user_after_update'));
+		$crud->order_by('batch_id','desc');
 		$output = $crud->render();
 		return $this->load->view('grocery_crud',$output,true);
 	}

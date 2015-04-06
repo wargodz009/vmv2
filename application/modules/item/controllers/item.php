@@ -70,8 +70,8 @@ class Item extends MX_Controller{
 						'ref'=>'',
 						'batch'=>$batch->batch_readable_id,
 						'date'=>pretty_date($batch->recieve_date),
-						'qty'=>$batch->count,
 						'transtype'=>'in',
+						'qty'=>$batch->count,
 						'inventory_count'=>$batch->count
 					);
 					//get all order items
@@ -83,8 +83,8 @@ class Item extends MX_Controller{
 								'ref'=>$this->crud_model->read('orders',array(array('where','order_id',$item->order_id)),'form_number'),
 								'batch'=>$batch->batch_readable_id,
 								'date'=>pretty_date($this->crud_model->read('orders',array(array('where','order_id',$item->order_id)),'order_date')),
-								'qty'=>$item->quantity,
 								'transtype'=>'out',
+								'qty'=>$item->quantity,
 								'inventory_count'=>$batch->count - $item->quantity
 							);
 						}
