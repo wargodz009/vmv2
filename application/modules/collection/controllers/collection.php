@@ -73,7 +73,7 @@ class Collection extends MX_Controller{
 			return 'P 0.00';
 		}
 	}
-	function dashboard(){
+	function dashboard($grocery_crud = 'grocery_crud'){
 		$crud = new grocery_CRUD();
 		$crud->unset_operations();
 		$crud->columns('bank','check_number','amount','orders');
@@ -84,7 +84,7 @@ class Collection extends MX_Controller{
 		$crud->set_relation_n_n('orders', 'payment_orders', 'orders', 'paymentid', 'orderid', 'form_number');
 		//$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
 		$output = $crud->render();
-		return $this->load->view('grocery_crud',$output,true);
+		return $this->load->view($grocery_crud,$output,true);
 	}
 	function _callback_manage_paid($primary_key,$row){
 		$items = $this->crud_model->read('payment_orders',array(array('where','paymentid',$row->payment_id)));

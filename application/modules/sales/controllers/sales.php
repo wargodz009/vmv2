@@ -150,7 +150,7 @@ class Sales extends MX_Controller{
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}
-	function dashboard(){
+	function dashboard($grocery_crud = 'grocery_crud'){
 		$crud = new grocery_CRUD();
 		$crud->set_table('orders'); 
 		$crud->set_subject('SALES'); 
@@ -161,7 +161,7 @@ class Sales extends MX_Controller{
 		$crud->set_relation('msr_client_id','msr_client','msr_id'); 
 		$crud->order_by('order_date','desc');
 		$output = $crud->render();
-		$this->load->view('grocery_crud',$output);
+		$this->load->view($grocery_crud,$output);
 	}
 	function dashboard_advance($month = '00',$year ='00',$district = '00'){
 		$data['sales'] = $this->user_model->get_all_msr();

@@ -43,7 +43,7 @@ class Batch extends MX_Controller{
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}
-	function dashboard($item_type_id = '1'){
+	function dashboard($item_type_id = '1',$grocery_crud = 'grocery_crud'){
 		$crud = new grocery_CRUD();
 		$crud->set_table('batch'); 
 		$crud->set_subject('PRODUCT INVENTORY -' . get_item_type($item_type_id)); 
@@ -76,7 +76,7 @@ class Batch extends MX_Controller{
 		$crud->callback_after_update(array($this, 'log_user_after_update'));
 		$crud->order_by('batch_id','desc');
 		$output = $crud->render();
-		return $this->load->view('grocery_crud',$output,true);
+		return $this->load->view($grocery_crud,$output,true);
 	}
 	function log_user_after_insert($post_array,$primary_key){
 		logs('add_batch','success',$primary_key);
