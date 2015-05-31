@@ -59,6 +59,7 @@ class Collection extends MX_Controller{
 		$crud->set_table('payment');
 		$crud->display_as('datetime','Check Date');
 		$crud->unset_delete();
+		$crud->fields('amount','bank','check_number','check_full_amount','pr_or_number');
 		$crud->set_relation_n_n('orders', 'payment_orders', 'orders', 'paymentid', 'orderid', 'form_number');
 		$crud->display_as('orders','PR/OR #');
 		//$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
