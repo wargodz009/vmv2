@@ -130,7 +130,7 @@ class Sales extends MX_Controller{
 		$crud = new grocery_CRUD();
 		$crud->set_table('orders'); 
 		$crud->unset_add();
-		$crud->fields('form_number','msr_client_id','discount','discount_type'); 
+		$crud->fields('form_number','msr_client_id','discount','discount_type','subtotal','vat_sales','vat_12','total_amount'); 
 		$crud->columns('msr_client_id','discount','discount_type','form_number'); 
 		$crud->set_relation('msr_client_id','msr_client','msr_id'); 
 		$crud->callback_field('msr_client_id',array($this,'add_field_callback_1'));
