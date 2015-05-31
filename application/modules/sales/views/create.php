@@ -98,7 +98,7 @@
 				<label for="">Discount Type</label>
 				<select class="form-control" name="discount_type" id="discount_type">
 					<option value="percentage">percentage</option>
-					<option value="fix amount">fix amount</option>
+					<option value="php">fix amount</option>
 				</select>
 			</div>
 			<div class="form-group">
@@ -111,7 +111,7 @@
 			</div>
 			<div class="form-group si">
 				<label for="">12% Vat</label>
-				<input type="text" class="form-control" name="12_vat" id="vat" readonly />
+				<input type="text" class="form-control" name="vat_12" id="vat" readonly />
 			</div>
 			<div class="form-group">
 				<label for="">Total Amount</label>

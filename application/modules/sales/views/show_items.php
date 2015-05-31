@@ -26,12 +26,13 @@ $this->load->model('batch/batch_model');
 #items_p1 { width:100%;height:15px;}
 #items_p2 { width:100%;height:18px;}
 #items_end { width:100%;height:22px;}
+#items_vat { width:100%;height:22px;}
 .description { width:270px;display:inline-block;margin-left:60px; }
 .spacer_1 { width:49px;display:inline-block;}
 .lot_num { width:60px;display:inline-block;}
 .expiry { width:69px;display:inline-block;}
 .qty { width:55px;display:inline-block;}
-.price { width:64px;display:inline-block;}
+.price { width:100px;display:inline-block;}
 .total { width:110px;display:inline-block;}
 .end_text { width:260px;display:inline-block;}
 #discount { width:100%;height:22px;}
@@ -136,6 +137,44 @@ $this->load->model('batch/batch_model');
 			<div class="description">&nbsp;</div>
 			<div class="spacer_1">&nbsp;</div>
 			<div class="end_text strong center">*****nothing follows*****</div>
+		</div>
+		<?php if(isset($order_info[0]->discount_amount)) { ?>
+		<div id="items_vat">
+			<div class="description center">&nbsp;</div>
+			<div class="spacer_1">&nbsp;</div>
+			<div class="lot_num">&nbsp;</div>
+			<div class="expiry">&nbsp;</div>
+			<div class="qty">&nbsp;</div>
+			<div class="price">Discount:</div>
+			<div class="total"><?=($order_info[0]->discount_type == 'percentage'?'%':'P')?> (<?=$order_info[0]->discount_amount?>)</div>
+		</div>
+		<?php } ?>
+		<div id="items_vat">
+			<div class="description center">&nbsp;</div>
+			<div class="spacer_1">&nbsp;</div>
+			<div class="lot_num">&nbsp;</div>
+			<div class="expiry">&nbsp;</div>
+			<div class="qty">&nbsp;</div>
+			<div class="price">VAT Sales: </div>
+			<div class="total"><?=$order_info[0]->vat_sales;?></div>
+		</div>
+		<div id="items_vat">
+			<div class="description center">&nbsp;</div>
+			<div class="spacer_1">&nbsp;</div>
+			<div class="lot_num">&nbsp;</div>
+			<div class="expiry">&nbsp;</div>
+			<div class="qty">&nbsp;</div>
+			<div class="price">12% VAT:</div>
+			<div class="total"><?=$order_info[0]->vat_12;?></div>
+		</div>
+		<div id="items_vat">
+			<div class="description center">&nbsp;</div>
+			<div class="spacer_1">&nbsp;</div>
+			<div class="lot_num">&nbsp;</div>
+			<div class="expiry">&nbsp;</div>
+			<div class="qty">&nbsp;</div>
+			<div class="price">Total: </div>
+			<div class="total"><strong><?=$order_info[0]->total_amount;?></strong></div>
 		</div>
 	</div>
 </body>

@@ -1,5 +1,5 @@
 body { background:#e2bb91 url(http://vmephilmedica.com/vme/assets/images/bg.png) repeat; }
-
+#contaner-handle { background-color: #fff; padding: 10px; }
 
 /*TOP*/
 .navbar-default .navbar-toggle { border-color:#89ccff; }
