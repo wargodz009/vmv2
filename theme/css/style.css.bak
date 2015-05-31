@@ -1,0 +1,60 @@
+body { background:#e2bb91 url(http://vmephilmedica.com/vme/assets/images/bg.png) repeat; }
+
+
+/*TOP*/
+.navbar-default .navbar-toggle { border-color:#89ccff; }
+.icon-bar { border:1px solid #89ccff; }
+.navbar-default .navbar-collapse, .navbar-default .navbar-form { border-color:#0069c1; }
+
+.btn-group { width:100%; max-width:100%; margin:10px 10px 0 0; }
+.btn { -webkit-border-radius:1px; -moz-border-radius:1px; border-radius:1px; margin-top:-5px; }
+.form-control { border:1px solid #dddddd; margin-bottom:5px; -webkit-border-radius:1px; -moz-border-radius:1px; border-radius:1px; font-size:12px; }
+
+.navbar-default { background:#026ec9; border:1px solid #004d92; font-size:12px; text-shadow:none; color:#FFFFFF; -webkit-border-radius: 1px; -webkit-border-bottom-right-radius: 7px; -webkit-border-bottom-left-radius: 7px; -moz-border-radius: 1px; -moz-border-radius-bottomright: 7px; -moz-border-radius-bottomleft: 7px; border-radius: 1px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; text-shadow:none!important; }
+.navbar-default .navbar-brand { color:#FFFFFF; text-shadow:none; }
+.navbar-default .navbar-brand:hover { color:#ffcd47; }
+.navbar-default .navbar-nav>li>a { color:#89ccff; }
+.navbar-default .navbar-nav>li>a:hover { color:#ffcd47; }
+
+
+
+/*Content Holder*/
+#cntnt-hldr { background-color:#ffffff; border:1px solid #c3a07a; padding:15px; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; overflow-x:scroll; }
+#cntnt-hldr table { width:100%; max-width:100%; border-collapse:collapse; border:1px solid #cccccc; }
+
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 { padding-left: -5px!important; padding-right:-5px!important; }
+.col-md-6 { padding-left:5px; padding-right:5px; }
+
+.row { padding:4px; }
+
+.clear { clear:both; }
+.clear1 { clear:both; height:10px; }
+.clear2 { clear:both; height:20px; }
+
+/*Footer*/
+.ftrhldr { width:260px; height:auto; margin:0 auto; text-align:center; font-size:10px; color:#5c4328; text-transform:uppercase; }
+.ftrhldr img { width:100%; max-width:100%; height:auto; }
+
+.soph { width:80px; height:auto; margin:0 auto; text-align:center; font-size:10px; color:#5c4328; text-transform:uppercase; }
+.soph img { width:100%; max-width:100%; height:auto; }
+
+@media (max-width: 767px) { 
+    .nav-tabs > li { float:none; border:1px solid #dddddd; }
+    .nav-tabs > li.active > a { border:none; }
+    .nav > li > a:hover, .nav > li > a:focus,
+    .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus
+     { background:none; border:none; }
+}
+
+@media only screen and (max-width: 767px) {
+	.btn { margin-top:5px; }
+	
+}
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+	.btn { margin-top:5px; }
+}
+
+thead tr >td { font-weight: bold; }
+.cheque { display:none; }
+a.add { display: block; border: 1px solid #aaa; text-decoration: none; background-color: #fafafa; color: #123456; clear:both; }  
