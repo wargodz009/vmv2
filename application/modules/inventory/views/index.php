@@ -45,6 +45,7 @@
 			<a href="<?=base_url();?>inventory/"><button class='btn btn-info'>RESET</button></a>
 		</div>	
 	</nav>
+	<div class="clearfix"></div>
 	<div class="content">
 		<table class='table table-hover'>
 			<thead>
