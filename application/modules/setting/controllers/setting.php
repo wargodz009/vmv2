@@ -23,8 +23,22 @@ class Setting extends MX_Controller{
 		$output = $crud->render();
 		$this->template->load('index','grocery_crud',$output);
 	}
-	function maintenance(){
-		$this->template->load('index','maintenance_page');
+	function maintenance($do = ''){
+		if($do == 'migrate') {
+				$data = array(
+			   'name' => 'critical_expire',
+			   'readable_name' => 'Near Expire',
+			   'value' => '36',
+			   'default_value' => '6',
+			   'type' => 'text'
+			);
+			$res = $this->db->insert('setting', $data); 
+			if($res){
+				echo 'setting added!<br />';
+			}
+		} else {
+			$this->template->load('index','maintenance_page');
+		}
 	}
 	function backup(){
 		if($this->session->userdata('role_id') == 1) {
@@ -68,35 +82,7 @@ class Setting extends MX_Controller{
 		}
 	}
 	function migrate(){
-		$data = array(
-		   'name' => 'supervisor'
-		);
-		$res = $this->db->insert('role', $data); 
-		if($res){
-			echo 'Role Added!<br />';
-		}
 		
-		$res2 = $this->db->query("ALTER TABLE orders CHANGE 12_vat vat_12 VARCHAR(50)");
-		if($res2){
-			echo '12_vat -> vat_12 rename!<br />';
-		}
-		
-		$res3 = $this->db->query("ALTER TABLE user CHANGE COLUMN address address VARCHAR(250)");
-		if($res3){
-			echo 'address (50) -> address (250) max lenght increased!<br />';
-		}
-		
-		$data2 = array(
-		   'name' => 'Near Expire'
-		   'module' => 'inventory'
-		   'function' => 'near_expire'
-		   'show_on_menu' => '2'
-		   'parent' => '2'
-		);
-		$res = $this->db->insert('action', $data2); 
-		if($res3){
-			echo 'new action added!<br />';
-		}
 	}
 }
 
