@@ -38,11 +38,7 @@
 			<div class="form-group container">
 				<label for="" class="pull-left col-xs-12 col-sm-12 col-md-12">DR Applied</label>
 				<div class="col-md-3 col-xs-4">
-					<select multiple id="select1" class="multiselect col-md-12">  
-						<option value="1">Option 1</option>  
-						<option value="2">Option 2</option>  
-						<option value="3">Option 3</option>  
-						<option value="4">Option 4</option>  
+					<select multiple id="select1" class="multiselect col-md-12"> 
 					</select>  
 					<a href="#" id="add" class="add">add &gt;&gt;</a>  
 				</div>				

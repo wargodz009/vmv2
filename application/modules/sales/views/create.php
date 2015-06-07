@@ -13,7 +13,7 @@
 			</div>
 			<div class="form-group">
 				<label for="">DR/SI</label>
-				<select name="" id="transaction_type" class="form-control">
+				<select name="transaction_type" id="transaction_type" class="form-control">
 					<option value="DR">DR</option>
 					<option value="SI">SI</option>
 				</select>
