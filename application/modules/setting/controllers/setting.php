@@ -67,6 +67,37 @@ class Setting extends MX_Controller{
 			show_404();
 		}
 	}
+	function migrate(){
+		$data = array(
+		   'name' => 'supervisor'
+		);
+		$res = $this->db->insert('role', $data); 
+		if($res){
+			echo 'Role Added!<br />';
+		}
+		
+		$res2 = $this->db->query("ALTER TABLE orders CHANGE 12_vat vat_12 VARCHAR(50)");
+		if($res2){
+			echo '12_vat -> vat_12 rename!<br />';
+		}
+		
+		$res3 = $this->db->query("ALTER TABLE user CHANGE COLUMN address address VARCHAR(250)");
+		if($res3){
+			echo 'address (50) -> address (250) max lenght increased!<br />';
+		}
+		
+		$data2 = array(
+		   'name' => 'Near Expire'
+		   'module' => 'inventory'
+		   'function' => 'near_expire'
+		   'show_on_menu' => '2'
+		   'parent' => '2'
+		);
+		$res = $this->db->insert('action', $data2); 
+		if($res3){
+			echo 'new action added!<br />';
+		}
+	}
 }
 
 ?>
