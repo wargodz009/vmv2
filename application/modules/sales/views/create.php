@@ -21,7 +21,7 @@
 			<div class="form-group">
 				<label for="">MSR CODE</label>
 				<select id="msr_client_id" name="msr_client_id" class="form-control :required">
-					<option value="">--Select --</option>
+					<option value="0">OFFICE ACCOUNT</option>
 					<?php
 					if(!empty($msr_client)) {
 						foreach($msr_client as $msr) {
