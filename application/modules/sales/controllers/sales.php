@@ -155,15 +155,17 @@ class Sales extends MX_Controller{
 		$crud->set_table('orders'); 
 		$crud->set_subject('SALES'); 
 		$crud->display_as('si_no','DR/SI #'); 
-		$crud->display_as('discount_type','CLient\'s Name'); 
+		$crud->display_as('sales_type','CLient\'s Name'); 
+		$crud->display_as('discount_type','%'); 
 		$crud->unset_operations();
 		$crud->fields('form_number','msr_client_id','discount','discount_type'); 
-		$crud->columns('order_date','msr_client_id','discount_type','si_no','product_id','quantity','free_goods','price','%','total_amount');
+		$crud->columns('order_date','msr_client_id','sales_type','si_no','product_id','quantity','free_goods','price','discount_type','total_amount');
 		//$crud->columns('msr_client_id','discount','discount_type','form_number'); 
 		$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_name'));
-		$crud->callback_column('discount_type',array($this,'_callback_msr_client_name'));
+		$crud->callback_column('sales_type',array($this,'_callback_msr_client_name'));
 		$crud->callback_column('order_date',array($this,'_callback_order_date'));
 		$crud->callback_column('product_id',array($this,'_callback_product_id'));
+		$crud->callback_column('discount_type',array($this,'_callback_discount_amount'));
 		$crud->set_relation('msr_client_id','msr_client','msr_id'); 
 		$crud->order_by('order_date','desc');
 		$output = $crud->render();
@@ -331,7 +333,10 @@ class Sales extends MX_Controller{
 	    return $return_str.'</select><div class="clear"></div>';
 	}
 	function _callback_msr_name($value, $row){
-		return get_name(get_id_from_msr_id($value));
+		return get_name($value);
+	}
+	function _callback_discount_amount($value, $row){
+		return (($value == 'percentage')?$row->discount_amount:'0');
 	}
 	function _callback_msr_client_name($value, $row){
 		return get_name(get_msr_client($row->msr_client_id,'client_id'));
