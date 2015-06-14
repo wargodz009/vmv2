@@ -83,6 +83,10 @@
 				<input type="text" class="form-control :required :number" name="quantity" id="quantity"/>
 			</div>
 			<div class="form-group">
+				<label for="">QTY FREE</label>
+				<input type="text" class="form-control :required :number" name="free_goods" id="free_goods"/>
+			</div>
+			<div class="form-group">
 				<label for="">PRICE</label>
 				<input type="text" class="form-control :required :number" name="price" id="price"/>
 			</div>
@@ -118,8 +122,10 @@
 				<input type="text" class="form-control :required" name="total_amount" id="total_amount" readonly />
 			</div>
 			<div class="form-group">
-				<label for=""></label>
+				<label class="" for="">&nbsp;</label>
 				<input type="submit" class="btn btn-info pull-right" value="SAVE ORDER"/>
+				<div class="pull-right">&nbsp;</div>
+				<a href="<?=base_url();?>sales"><input type="button" class="btn btn-warning pull-right" value="CANCEL"/></a>
 			</div>
 			</form>
 		</div>

@@ -78,15 +78,33 @@ class Collection extends MX_Controller{
 	function dashboard($grocery_crud = 'grocery_crud'){
 		$crud = new grocery_CRUD();
 		$crud->unset_operations();
-		$crud->columns('bank','check_number','amount','orders');
-		$crud->display_as('orders','DR/SI applied');
+		$crud->columns('datetime','msr_client_id','pr_or_number','date_of_cheque','check_full_amount','pdc','check_number','dr_applied');
+		//$crud->fields('amount','bank','check_number','check_full_amount','pr_or_number');
+		$crud->display_as('datetime','DATE');
+		$crud->display_as('msr_client_id','NAME OF CLIENT');
+		$crud->display_as('pr_or_number','PR/OR #');
+		$crud->display_as('date_of_cheque','CHECK DATE');
+		$crud->display_as('check_full_amount','DATED/CASH');
+		$crud->display_as('pdc','PDC');
+		$crud->display_as('check_number','BANK/CHECK');
+		$crud->display_as('dr_applied','APPLIED DR/SI');
 		$crud->set_subject('COLLECTION');
 		$crud->set_table('payment');
+		$crud->callback_column('msr_client_id',array($this,'_callback_msr_client_id'));
+		$crud->callback_column('datetime',array($this,'_callback_datetime'));
 		$crud->unset_delete();
-		$crud->set_relation_n_n('orders', 'payment_orders', 'orders', 'paymentid', 'orderid', 'form_number');
+		//$crud->set_relation_n_n('orders', 'payment_orders', 'orders', 'paymentid', 'orderid', 'form_number');
 		//$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
 		$output = $crud->render();
 		return $this->load->view($grocery_crud,$output,true);
+	}
+	public function _callback_msr_client_id($value, $row)
+	{
+	  return get_name(get_id_from_msr_id($value));
+	}
+	public function _callback_datetime($value, $row)
+	{
+	  return pretty_date($value);
 	}
 	function _callback_manage_paid($primary_key,$row){
 		$items = $this->crud_model->read('payment_orders',array(array('where','paymentid',$row->payment_id)));
