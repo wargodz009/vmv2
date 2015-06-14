@@ -61,6 +61,15 @@ class Collection extends MX_Controller{
 		$crud->unset_delete();
 		$crud->unset_add();
 		$crud->fields('amount','bank','check_number','check_full_amount','pr_or_number');
+		$crud->columns('datetime','msr_client_id','pr_or_number','date_of_cheque','check_full_amount','pdc','check_number','dr_applied');
+		$crud->display_as('datetime','DATE');
+		$crud->display_as('msr_client_id','NAME OF CLIENT');
+		$crud->display_as('pr_or_number','PR/OR #');
+		$crud->display_as('date_of_cheque','CHECK DATE');
+		$crud->display_as('check_full_amount','DATED/CASH');
+		$crud->display_as('pdc','PDC');
+		$crud->display_as('check_number','BANK/CHECK');
+		$crud->display_as('dr_applied','APPLIED DR/SI');
 		$crud->set_relation_n_n('orders', 'payment_orders', 'orders', 'paymentid', 'orderid', 'form_number');
 		$crud->display_as('orders','PR/OR #');
 		//$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));
@@ -77,6 +86,7 @@ class Collection extends MX_Controller{
 	}
 	function dashboard($grocery_crud = 'grocery_crud'){
 		$crud = new grocery_CRUD();
+		$crud->set_theme('flexigrid_mini'); 
 		$crud->unset_operations();
 		$crud->columns('datetime','msr_client_id','pr_or_number','date_of_cheque','check_full_amount','pdc','check_number','dr_applied');
 		//$crud->fields('amount','bank','check_number','check_full_amount','pr_or_number');

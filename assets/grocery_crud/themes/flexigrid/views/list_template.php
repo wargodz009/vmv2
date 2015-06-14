@@ -97,6 +97,8 @@ if($success_message !== null){?>
 	<div id='ajax_list' class="ajax_list">
 		<?php echo $list_view?>
 	</div>
+	
+	<?php if($this->theme_config['show_controlls'] === true) { ?>
 	<?php echo form_open( $ajax_list_url, 'method="post" id="filtering_form" class="filtering_form" autocomplete = "off" data-ajax-list-info-url="'.$ajax_list_info_url.'"'); ?>
 	<div class="sDiv quickSearchBox" id='quickSearchBox'>
 		<div class="sDiv2">
@@ -183,5 +185,6 @@ if($success_message !== null){?>
 		</div>
 	</div>
 	<?php echo form_close(); ?>
+	<?php } ?>
 	</div>
 </div>

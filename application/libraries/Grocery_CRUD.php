@@ -2752,7 +2752,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		return $this->get_edit_input_fields($field_values);
 	}
 
-	protected function setThemeBasics()
+	public function setThemeBasics()
 	{
 		$this->theme_path = $this->default_theme_path;
 		if(substr($this->theme_path,-1) != '/')

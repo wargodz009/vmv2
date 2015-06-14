@@ -46,6 +46,7 @@ class Batch extends MX_Controller{
 	function dashboard($item_type_id = '1',$grocery_crud = 'grocery_crud'){
 		$crud = new grocery_CRUD();
 		$crud->set_table('batch'); 
+		$crud->set_theme('flexigrid_mini'); 
 		$crud->set_subject('PRODUCT INVENTORY -' . get_item_type($item_type_id)); 
 		$crud->unset_operations();
 		$crud->set_relation('item_id','item','name');

@@ -130,8 +130,17 @@ class Sales extends MX_Controller{
 		$crud = new grocery_CRUD();
 		$crud->set_table('orders'); 
 		$crud->unset_add();
+		$crud->display_as('si_no','DR/SI #'); 
+		$crud->display_as('sales_type','CLient\'s Name'); 
+		$crud->display_as('discount_type','%'); 
 		$crud->fields('form_number','msr_client_id','discount','discount_type','subtotal','vat_sales','vat_12','total_amount'); 
-		$crud->columns('msr_client_id','discount','discount_type','form_number'); 
+		//$crud->columns('msr_client_id','discount','discount_type','form_number'); 
+		$crud->columns('order_date','msr_client_id','sales_type','si_no','product_id','quantity','free_goods','price','discount_type','total_amount');
+		$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_name'));
+		$crud->callback_column('sales_type',array($this,'_callback_msr_client_name'));
+		$crud->callback_column('order_date',array($this,'_callback_order_date'));
+		$crud->callback_column('product_id',array($this,'_callback_product_id'));
+		$crud->callback_column('discount_type',array($this,'_callback_discount_amount'));
 		$crud->set_relation('msr_client_id','msr_client','msr_id'); 
 		$crud->callback_field('msr_client_id',array($this,'add_field_callback_1'));
 		$crud->callback_column('form_number',array($this,'_callback_form_number'));
@@ -153,6 +162,7 @@ class Sales extends MX_Controller{
 	function dashboard($grocery_crud = 'grocery_crud'){
 		$crud = new grocery_CRUD();
 		$crud->set_table('orders'); 
+		$crud->set_theme('flexigrid_mini'); 
 		$crud->set_subject('SALES'); 
 		$crud->display_as('si_no','DR/SI #'); 
 		$crud->display_as('sales_type','CLient\'s Name'); 
