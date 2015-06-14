@@ -16,8 +16,5 @@ $(document).ready(function(){
 			window.location.assign($(this).prop('href'));
 		}
 	});
-	$('#inner-content-div').slimScroll({
-		alwaysVisible : true,
-		height: '250px'
-	});
+	$('.flexigrid').removeAttr('style');
 });
