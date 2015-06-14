@@ -9,8 +9,13 @@ class Inventory extends MX_Controller{
 	function index($item_type_id = 'all',$year = '00',$month ='00',$day_from = '1',$day_to='31') {
 		$data['expire_critical'] = $this->get_notif_critical();
 		if(count($data['expire_critical'] > 0)) {
+			$this->load->helper('cookie');
+			set_cookie('expire_critical_shown','yes');
 			$this->session->set_flashdata('success','<a href="'.base_url().'inventory/near_expire">'.count($data['expire_critical']).'</a> Items is Expiring Near!');
+			redirect('inventory/all/'.$item_type_id.'/'.$year.'/'.$month.'/'.$day_from.'/'.$day_to);
 		}
+	}
+	function all($item_type_id = 'all',$year = '00',$month ='00',$day_from = '1',$day_to='31') {
 		$data['month'] = $month;
 		$data['year'] = $year;
 		$data['day_from'] = $day_from;

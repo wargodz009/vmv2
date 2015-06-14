@@ -164,6 +164,12 @@ class Sales extends MX_Controller{
 		$crud->set_table('orders'); 
 		$crud->set_theme('flexigrid_mini'); 
 		$crud->set_subject('SALES'); 
+		$crud->display_as('order_date','Order'); 
+		$crud->display_as('product_id','Products'); 
+		$crud->display_as('msr_client_id','MSR'); 
+		$crud->display_as('quantity','QTY'); 
+		$crud->display_as('free_goods','FG'); 
+		$crud->display_as('total_amount','AMOUNT'); 
 		$crud->display_as('si_no','DR/SI #'); 
 		$crud->display_as('sales_type','CLient\'s Name'); 
 		$crud->display_as('discount_type','%'); 
