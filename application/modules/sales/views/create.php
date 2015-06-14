@@ -31,9 +31,9 @@
 					?>
 				</select>
 			</div>
-			<div class="form-group">
+			<div class="form-group so">
 				<label for="">S.O. #</label>
-				<input type="text" class="form-control :required" name="form_number"/>
+				<input type="text" class="form-control" name="form_number"/>
 			</div>
 			<div class="form-group">
 				<label for="">DR/SI #</label>
@@ -215,6 +215,9 @@ $(document).ready(function(){
 	}
 	$('#transaction_type').change(function(){
 		$('.si').toggle();
+	});
+	$('#sales_type').change(function(){
+		$('.so').toggle();
 	});
 });
 </script>
