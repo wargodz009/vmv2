@@ -7,7 +7,7 @@
 				<label for="">Order Type</label>
 				<select name="sales_type" id="sales_type" class="form-control">
 					<option value="1">Client Orders</option>
-					<option value="2">Samples/Donation/Buffer stocks</option>
+					<option value="2">Samples/Donation/Buffer stocks/replacement</option>
 					<option value="3">Personal Use</option>
 				</select>
 			</div>
