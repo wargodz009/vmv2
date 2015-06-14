@@ -75,16 +75,16 @@
 				</select>
 			</div>
 			<div class="form-group">
+				<label for="">EXPIRE DATE</label>
+				<input type="text" class="form-control :required" name="expire_date" id="expire_date"/>
+			</div>
+			<div class="form-group">
 				<label for="">QTY</label>
 				<input type="text" class="form-control :required :number" name="quantity" id="quantity"/>
 			</div>
 			<div class="form-group">
 				<label for="">PRICE</label>
 				<input type="text" class="form-control :required :number" name="price" id="price"/>
-			</div>
-			<div class="form-group">
-				<label for="">EXPIRE DATE</label>
-				<input type="text" class="form-control :required" name="expire_date" id="expire_date"/>
 			</div>
 			<div class="form-group">
 				<label for="">Sub-Total</label>
