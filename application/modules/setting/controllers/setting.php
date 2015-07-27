@@ -83,7 +83,7 @@ class Setting extends MX_Controller{
 	}
 	function migrate(){
 		$data = array();
-		if(isset($_POST['submit'])) {
+		if(isset($_POST['submit']) && !empty(($_POST['migrate']))) {
 			$res = $this->db->query($_POST['migrate']);
 		}
 		$this->load->view('migrate_form',$data);

@@ -58,7 +58,7 @@ class Collection extends MX_Controller{
 		$crud->set_subject('COLLECTION');
 		$crud->set_table('payment');
 		$crud->display_as('datetime','Check Date');
-		$crud->unset_delete();
+		//$crud->unset_delete();
 		$crud->unset_add();
 		$crud->fields('amount','bank','check_number','check_full_amount','pr_or_number');
 		$crud->columns('datetime','msr_client_id','pr_or_number','date_of_cheque','check_full_amount','pdc','check_number','dr_applied');

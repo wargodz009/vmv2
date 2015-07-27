@@ -22,6 +22,7 @@ class Msr_client extends MX_Controller{
 		$crud->callback_edit_field('user',array($this,'edit_field_callback_1'));
 		$crud->unset_delete(); 
 		$crud->unset_add(); 
+		$crud->unset_read(); 
 		$crud->set_relation('district_id', 'district', 'name');
 		$crud->set_relation('role_id', 'role', 'name');
 		$crud->set_relation_n_n('user', 'msr_client', 'user', 'msr_id', 'client_id', 'user_id',NULL,array('role_id'=>5));
