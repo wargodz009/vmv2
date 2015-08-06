@@ -7,8 +7,11 @@
 				<label for="">Order Type</label>
 				<select name="sales_type" id="sales_type" class="form-control">
 					<option value="1">Client Orders</option>
-					<option value="2">Samples/Donation/Buffer stocks/replacement</option>
+					<option value="2">Samples</option>
 					<option value="3">Personal Use</option>
+					<option value="4">Donation</option>
+					<option value="5">Buffer stocks</option>
+					<option value="6">replacement</option>
 				</select>
 			</div>
 			<div class="form-group">
@@ -234,7 +237,7 @@ $(document).ready(function(){
 		} else {
 			$('.so').show();
 		}
-		if($('#sales_type').val() == 2) {
+		if($('#sales_type').val() == 2 || $('#sales_type').val() == 4 || $('#sales_type').val() == 5 || $('#sales_type').val() == 6) {
 			$('.price').hide();
 		} else {
 			$('.price').show();
