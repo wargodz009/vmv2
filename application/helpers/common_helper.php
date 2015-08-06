@@ -201,6 +201,12 @@ function get_order_item_id($order_id,$batch_id){
 	$Q = $CI->db->get('order_item')->row();
 	return $Q->order_item_id;
 }
+function get_order_id_from_order_item_id($order_item_id){
+	$CI =& get_instance();
+	$CI->db->where('order_item_id',$order_item_id);
+	$Q = $CI->db->get('order_item')->row();
+	return $Q->order_id;
+}
 function get_payment_id_from_payment_orders($order_id){
 	$CI =& get_instance();
 	if(is_array($order_id)) {

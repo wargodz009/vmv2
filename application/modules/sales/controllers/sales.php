@@ -171,7 +171,7 @@ class Sales extends MX_Controller{
 		$crud->display_as('free_goods','FG'); 
 		$crud->display_as('total_amount','AMOUNT'); 
 		$crud->display_as('si_no','DR/SI #'); 
-		$crud->display_as('sales_type','CLient\'s Name'); 
+		$crud->display_as('sales_type','Client\'s Name'); 
 		$crud->display_as('discount_type','%'); 
 		$crud->unset_operations();
 		$crud->fields('form_number','msr_client_id','discount','discount_type'); 
@@ -352,7 +352,14 @@ class Sales extends MX_Controller{
 		return get_name($value);
 	}
 	function _callback_discount_amount($value, $row){
-		return (($value == 'percentage')?$row->discount_amount:'0');
+		//return (($value == 'percentage')?$row->discount_amount:'0');
+		if($value == 'percentage') {
+			return isset($row->discount_amount)?$row->discount_amount. '%':0 . '%';
+		} else {
+			if(isset($row->discount_amount)) {
+				return '-'. $row->discount_amount;
+			}
+		}
 	}
 	function _callback_msr_client_name($value, $row){
 		return get_name(get_msr_client($row->msr_client_id,'client_id'));
