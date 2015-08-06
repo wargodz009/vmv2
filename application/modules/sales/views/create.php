@@ -86,26 +86,26 @@
 				<label for="">QTY FREE</label>
 				<input type="text" class="form-control :required :number" name="free_goods" id="free_goods"/>
 			</div>
-			<div class="form-group">
+			<div class="form-group price">
 				<label for="">PRICE</label>
 				<input type="text" class="form-control :required :number" name="price" id="price"/>
 			</div>
-			<div class="form-group">
+			<div class="form-group price">
 				<label for="">Sub-Total</label>
 				<input type="text" class="form-control :required" name="subtotal" id="subtotal" readonly />
 			</div>
-			<div class="form-group">
+			<div class="form-group price">
 				<label for="">Discount</label>
 				<input type="text" class="form-control :number" name="discount" id="discount"/>
 			</div>
-			<div class="form-group">
+			<div class="form-group price">
 				<label for="">Discount Type</label>
 				<select class="form-control" name="discount_type" id="discount_type">
 					<option value="percentage">percentage</option>
 					<option value="php">fix amount</option>
 				</select>
 			</div>
-			<div class="form-group">
+			<div class="form-group price">
 				<label for="">Discount Amount</label>
 				<input type="text" class="form-control" name="discount_amount" id="discount_amount"/>
 			</div>
@@ -223,7 +223,16 @@ $(document).ready(function(){
 		$('.si').toggle();
 	});
 	$('#sales_type').change(function(){
-		$('.so').toggle();
+		if($('#sales_type').val() > 1) {
+			$('.so').hide();
+		} else {
+			$('.so').show();
+		}
+		if($('#sales_type').val() == 2) {
+			$('.price').hide();
+		} else {
+			$('.price').show();
+		}
 	});
 });
 </script>

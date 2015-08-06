@@ -27,8 +27,8 @@ class User extends MX_Controller{
 		$crud->set_table('user'); 
 		$crud->where('user.role_id !=','5'); 
 		$crud->where('user.role_id !=','1'); 
-		$crud->display_as('district_id','District');
-		$crud->display_as('role_id','Role');
+		$crud->display_as('district_id','district area');
+		$crud->display_as('role_id','Position');
 		$crud->set_relation('district_id','district','name');
 		$crud->set_relation('role_id','role','name');
 		$crud->required_fields('first_name','email','password','area','role_id','district_id');
