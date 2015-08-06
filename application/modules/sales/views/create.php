@@ -209,11 +209,17 @@ $(document).ready(function(){
 	}
 	function calculate_vat() {
 		if($('#subtotal').val() != '') {
-			var total = $('#subtotal').val();
+			/*var total = $('#subtotal').val();
 			var vat = total * 0.12;
 			var new_total = total - vat;
 			$('#vat_sales').val(new_total);
-			$('#vat').val(vat);
+			$('#vat').val(vat);*/
+			var total = $('#subtotal').val();
+			var answer1 = total / 1.12;
+			var answer2 = answer1 * 0.12;
+			var vat_sales = answer1 - total;
+			$('#vat_sales').val(answer1.toFixed(2));
+			$('#vat').val(answer2.toFixed(2));
 		} else {
 			$('#vat_sales').val('');
 			$('#vat').val('');
