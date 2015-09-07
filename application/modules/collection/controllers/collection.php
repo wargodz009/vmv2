@@ -100,6 +100,7 @@ class Collection extends MX_Controller{
 		$crud->display_as('dr_applied','APPLIED DR/SI');
 		$crud->set_subject('COLLECTION');
 		$crud->set_table('payment');
+		$crud->callback_column('check_number',array($this,'_callback_check_number'));
 		$crud->callback_column('msr_client_id',array($this,'_callback_msr_client_id'));
 		$crud->callback_column('datetime',array($this,'_callback_datetime'));
 		$crud->unset_delete();
@@ -111,6 +112,10 @@ class Collection extends MX_Controller{
 	public function _callback_msr_client_id($value, $row)
 	{
 	  return get_name(get_id_from_msr_id($value));
+	}
+	public function _callback_check_number($value, $row)
+	{
+	  return (isset($row->bank)?$row->bank:'') . '#' .$value;
 	}
 	public function _callback_datetime($value, $row)
 	{
