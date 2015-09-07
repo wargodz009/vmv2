@@ -160,6 +160,9 @@ class Collection extends MX_Controller{
 	}
 	function add_new(){
 		if(isset($_POST) && !empty($_POST)) {
+			if(isset($_POST['dr_applied']) && !empty($_POST['dr_applied'])) {
+				$_POST['dr_applied'] = implode(',',$_POST['dr_applied']);
+			}
 			if($this->crud_model->create('payment',$_POST)) {
 				$this->session->set_flashdata('success','Payment Details Saved!');
 			} else {
@@ -171,9 +174,24 @@ class Collection extends MX_Controller{
 			$this->template->load('index','add_new_collection',$data);
 		}
 	}
-	function get_dr($id) {
+	function get_dr($id,$val = '',$val2 = '') {
 		$this->output->enable_profiler(false);
-		echo json_encode($this->crud_model->read('orders',array(array('where','msr_client_id',$id),array('where','approved_pre',1),array('where','approved_post',1))));
+		if($id == 'msr') {
+			echo json_encode($this->crud_model->read('user',array(array('where','district_id',$val),array('where','role_id',6))));
+		} else if($id == 'client'){
+			$client_ids = $this->crud_model->read('msr_client',array(array('where','msr_id',$val)));
+			if(!empty($client_ids)) {
+				$arr = array();
+				foreach($client_ids as $ci) {
+					$arr[] = $ci->client_id;
+				}
+				echo json_encode($this->crud_model->read('user',array(array('where_in','user_id',$arr))));
+			}
+		} else if($id == 'msrclient'){
+			echo json_encode($this->crud_model->read('msr_client',array(array('where','msr_id',$val),array('where','client_id',$val2)),'msr_client_id'));
+		} else {
+			echo json_encode($this->crud_model->read('orders',array(array('where','msr_client_id',$id),array('where','approved_pre',1),array('where','approved_post',1))));
+		}
 	}
 }
 
