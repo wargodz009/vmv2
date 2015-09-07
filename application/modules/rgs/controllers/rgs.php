@@ -5,6 +5,7 @@ class Rgs extends MX_Controller{
 	function __construct(){
 		parent::__construct();
 		$this->load->library('grocery_CRUD');
+		$this->load->model('rgs_model');
 	}
 	function index(){
 		$crud = new grocery_CRUD();
@@ -60,6 +61,18 @@ class Rgs extends MX_Controller{
 	function _callback_order_item_id($value, $row)
 	{
 		return get_order_info(get_order_id_from_order_item_id($value),'form_number');
+	}
+	function get_rgs($msr_id,$month,$year){
+		$all_order_item_ids = $this->rgs_model->get_rgs($msr_id,$month,$year);
+		$total = 0;
+		if(!empty($all_order_item_ids)) {
+			foreach($all_order_item_ids as $ids) {
+				$order_item = $this->crud_model->read('order_item',array(array('where','order_item_id',$ids->order_item_id)));
+				$total += $order_item[0]->quantity * $order_item[0]->custom_price;
+			}
+		}
+		echo $total;
+
 	}
 }
 

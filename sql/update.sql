@@ -1,5 +1,6 @@
 --latest
 ALTER TABLE `order_return` ADD COLUMN `item_id` INT(255) NULL DEFAULT NULL AFTER `order_item_id`;
+INSERT INTO `vmv2`.`action` (`name`, `module`, `function`,`show_on_menu`) VALUES ('get_rgs', 'rgs', 'get_rgs',2);
 
 
 

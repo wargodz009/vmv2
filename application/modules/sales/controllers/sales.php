@@ -147,7 +147,7 @@ class Sales extends MX_Controller{
 		$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_name'));
 		$crud->callback_after_insert(array($this, '_log_user_after_insert'));
 		$crud->callback_after_update(array($this, '_log_user_after_update'));
-		$crud->add_action('Set Returned', base_url().'assets/images/returned.png','','',array($this,'_callback_filter_order'));
+		//$crud->add_action('Set Returned', base_url().'assets/images/returned.png','','',array($this,'_callback_filter_order'));
 		$crud->add_action('Cancel Order', base_url().'assets/images/cancel.png','','',array($this,'_callback_filter_cancel'));
 		$crud->add_action('Print SO Form', base_url().'assets/images/print.png','','',array($this,'_callback_print_paid'));
 		if($this->session->userdata('role_id') == 1) {
