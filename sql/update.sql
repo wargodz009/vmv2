@@ -1,3 +1,13 @@
+--latest
+ALTER TABLE `order_return` ADD COLUMN `item_id` INT(255) NULL DEFAULT NULL AFTER `order_item_id`;
+
+
+
+
+
+
+
+--old
 ALTER TABLE `ar_old` ADD COLUMN `msr_client_id`;
 ALTER TABLE `ar_old` DROP COLUMN `client_id`, DROP FOREIGN KEY `FK_ar_old_user`, DROP FOREIGN KEY `FK_ar_old_msr_client`;
 ALTER TABLE `order_return` DROP FOREIGN KEY `FK_ar_old_user_2`;

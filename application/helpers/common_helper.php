@@ -68,7 +68,11 @@ function get_name($user_id){
 					return $uname;
 				}
 			}
-			return $lname.', '.$fname;
+			if($fname == 'vacant') {
+				return 'vacant';
+			} else {
+				return $lname.', '.$fname;
+			}
 		} else {
 			return $fname;
 		}

@@ -9,7 +9,8 @@ class Rgs extends MX_Controller{
 	function index(){
 		$crud = new grocery_CRUD();
 		$crud->set_table('order_return'); 
-		$crud->fields('order_item_id','quantity','reason','msr_id','replacement','remarks');
+		$crud->fields('order_item_id','item_id','quantity','reason','msr_id','replacement','remarks');
+		$crud->set_relation('item_id','item','name');
 		$crud->callback_add_field('msr_id',array($this,'msr_id_field_add_callback'));
 		$crud->callback_edit_field('msr_id',array($this,'msr_id_field_add_callback'));
 		$crud->callback_add_field('order_item_id',array($this,'order_item_id_field_add_callback'));
