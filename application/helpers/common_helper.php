@@ -86,6 +86,16 @@ function get_district_id($user_id){
 		return 1;
 	}
 }
+function get_area($user_id){
+	$CI =& get_instance();
+	$CI->load->model('user/user_model');
+	$user = $CI->user_model->get_single($user_id);
+	if($user) {
+		return $user->area;
+	} else {
+		return 'unknown';
+	}
+}
 function get_supplier_name($id) {
 	$CI =& get_instance();
 	$CI->db->where('supplier_id',$id);
@@ -104,7 +114,11 @@ function get_id_from_msr_id($msr_client_id){
 		if($q->row()) {
 			return $q->row()->user_id;
 		} else {
-			return 'Unknown id: '.$msr_client_id;
+			if($msr_client_id == 0) {
+				return 'OFFICE ACCOUNT';
+			} else {
+				return 'Unknown id: '.$msr_client_id;
+			}
 		}
 	}
 }
