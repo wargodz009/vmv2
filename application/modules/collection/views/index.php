@@ -61,6 +61,12 @@ $this->load->model('collection/collection_model');
 </thead>
 <tbody>
 	<?php 
+	$sum_total_col = 0;
+	$sum_aging = 0;
+	$sum_col = 0;
+	$sum_short = 0;
+	$sum_pdc = 0;
+	$sum_col_pdc = 0;	
 	if(!empty($all_msr)) {
 		foreach($all_msr as $msr) {
 			$mid = array();
@@ -137,16 +143,25 @@ $this->load->model('collection/collection_model');
 					$total_collections = 0;
 					
 					$balance = $total_all - $total;
+					$col = @number_format((($total * 100) / $balance),2);
+					$bal = ($balance - $total);
+					$col_pdc = @number_format((($total * 100) / ($pdc_total + $total_all)),2);
 					echo '<tr>
 						<td>'.get_district_name($msr->district_id).'</td>
 						<td><a href="'.base_url()."collection/per_msr/".$msr->user_id.'">'.get_name($msr->user_id).'</a></td>
 						<td>'.$total.'</td>
 						<td>'.$total_all.'</td>
-						<td>'.@number_format((($total * 100) / $balance),2) . '%</td>		
-						<td>'.($balance - $total).'</td>		
+						<td>'.$col . '%</td>		
+						<td>'.$bal.'</td>		
 						<td>'.$pdc_total.'</td>		
-						<td>'.@number_format((($total * 100) / ($pdc_total + $total_all)),2) . '%</td>		
+						<td>'.$col_pdc. '%</td>		
 					</tr>';
+					$sum_total_col += $total;
+					$sum_aging += $total_all;
+					$sum_col += $col;
+					$sum_short += $bal;
+					$sum_pdc += $pdc_total;
+					$sum_col_pdc += $col_pdc;
 				}
 			}
 		}
@@ -164,6 +179,18 @@ $this->load->model('collection/collection_model');
 	</tr>
 	<?php 
 	} ?>
+	<thead>
+	<tr>
+		<td></td>
+		<td>TOTAL: </td>
+		<td><?=$sum_total_col;?></td>
+		<td><?=$sum_aging;?></td>
+		<td><?=$sum_col;?></td>		
+		<td><?=$sum_short;?></td>		
+		<td><?=$sum_pdc;?></td>		
+		<td><?=$sum_col_pdc;?></td>		
+	</tr>
+	</thead>
 </tbody>
 </table>
 <script>
