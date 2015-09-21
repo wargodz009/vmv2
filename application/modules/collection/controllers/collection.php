@@ -71,6 +71,7 @@ class Collection extends MX_Controller{
 		$crud->display_as('check_number','CHECK #');
 		$crud->display_as('dr_applied','APPLIED DR/SI');
 		$crud->callback_column('msr_client_id',array($this,'_callback_msr_client_id'));
+		$crud->callback_column('datetime',array($this,'_callback_datetime'));
 		$crud->set_relation_n_n('orders', 'payment_orders', 'orders', 'paymentid', 'orderid', 'form_number');
 		$crud->display_as('orders','PR/OR #');
 		//$crud->add_action('Manage Paid Items', base_url().'assets/images/manage.png','','',array($this,'_callback_manage_paid'));

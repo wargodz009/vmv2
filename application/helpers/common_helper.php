@@ -302,3 +302,14 @@ function get_district_name($district_id){
 function pretty_date($datetime){
 	return date("M d, Y",strtotime($datetime));
 }
+function get_order_total($pr_number){
+	$CI =& get_instance();
+	$CI->db->where('form_number',$pr_number);
+	$CI->db->or_where('si_no',$pr_number);
+	$Q = $CI->db->get('orders');
+	if($Q) {
+		return $Q->row()->total_amount;
+	} else {
+		return 0;
+	}
+}
