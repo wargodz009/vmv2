@@ -100,9 +100,13 @@ function get_area($user_id){
 		return 'unknown';
 	}
 }
-function get_all_area(){
+function get_all_area($district = ''){
 	$CI =& get_instance();
-	$area = $CI->db->query('SELECT DISTINCT TRIM(area) as area FROM user');
+	if($district == '') {
+		$area = $CI->db->query('SELECT DISTINCT TRIM(area) as area FROM user');
+	} else {
+		$area = $CI->db->query('SELECT DISTINCT TRIM(area) as area FROM user WHERE district_id = '.$district);
+	}
 	return $area->result();
 }
 function get_supplier_name($id) {

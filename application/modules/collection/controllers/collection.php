@@ -170,6 +170,7 @@ class Collection extends MX_Controller{
 			}
 			redirect('collection');
 		} else {
+			$data['all_area'] = get_all_area();
 			$data['msr_client'] = $this->crud_model->read('msr_client');
 			$this->template->load('index','add_new_collection',$data);
 		}
@@ -188,7 +189,7 @@ class Collection extends MX_Controller{
 				echo json_encode($this->crud_model->read('user',array(array('where_in','user_id',$arr))));
 			}
 		} else if($id == 'msrclient'){
-			echo json_encode($this->crud_model->read('msr_client',array(array('where','msr_id',$val),array('where','client_id',$val2)),'msr_client_id'));
+			echo json_encode($this->crud_model->read('msr_client',array(array('where','msr_client_id',$val))));
 		} else {
 			echo json_encode($this->crud_model->read('orders',array(array('where','msr_client_id',$id),array('where','approved_pre',1),array('where','approved_post',1))));
 		}

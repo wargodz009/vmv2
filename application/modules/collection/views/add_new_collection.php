@@ -12,34 +12,20 @@
 			</div>
 			<div class="form-group">
 				<label for="">Area</label>
-				<?php 
-				$district = $this->crud_model->read('district');
-				if(!empty($district)) {
-					echo '<select id="district_id" class="form-control :required"><option value="0">--SELECT ONE--</option>';
-					foreach($district as $d) {
-						echo '<option value="'.$d->district_id.'">'.$d->name.'</option>';
+				<select id="area" class="form-control :required">
+					<option value="0">--SELECT AREA--</option>
+					<?php
+					if(!empty($all_area)) {
+						foreach($all_area as $area) {
+							echo '<option value="'.$area->area.'">'.$area->area.'</option>';
+						}
 					}
-					echo '</select>';
-				}
-				?>
-				<input type="hidden" value="" id="msr_client_id" name="msr_client_id" />
-			</div>
-			<div class="form-group">
-				<label for="">Msr</label>
-				<?php 
-				$user = $this->crud_model->read('user',array(array('where','role_id','6'),array('where','district_id','1')));
-				if(!empty($user)) {
-					echo '<select id="msr_id" class="form-control :required"><option value="0">--SELECT ONE--</option>';
-					foreach($user as $u) {
-						echo '<option value="'.$u->user_id.'">'.$u->first_name. ' ' . $u->last_name .'</option>';
-					}
-					echo '</select>';
-				}
-				?>
+					?>
+				</select>
 			</div>
 			<div class="form-group">
 				<label for="">Client</label>
-				<select id="client_id" class="form-control :required"><option value="0">--SELECT ONE--</option></select>
+				<select id="msr_client_id" class="form-control :required"><option value="0">--SELECT ONE--</option></select>
 			</div>
 			<div class="form-group">
 				<label for="">PR/OR #</label>
@@ -90,34 +76,24 @@ $(document).ready(function(){
 	$('#payment_type').change(function(){
 		$('.cheque').toggle();
 	});
-	$('#district_id').change(function(){
-		$.getJSON('<?=base_url()?>collection/get_dr/msr/' + $('#district_id').val(),function(data) {
+	$('#area').change(function(){
+		if($('#area :selected').val() != '0') {
 			$('#select1').empty();
 			$('#select2').empty();
 			$('#msr_id').empty();
-			$('#client_id').empty();
-			$('<option>').val(0).text('--SELECT ONE--').appendTo('#msr_id');
-			$.each(data, function(index) {
-				$('<option>').val(data[index].user_id).text(data[index].first_name + ' ' + data[index].last_name).appendTo('#msr_id');
-			})
-		});
+			$('#msr_client_id').empty();
+			$.getJSON('<?=base_url()?>sales/create/area_clients/' + encodeURIComponent($('#area :selected').val()),function(data) {
+				$.each(data, function(){
+					$('<option/>', {
+						'value': this.id,
+						'text': this.msr_client_id + ' -> ' + this.client_id
+					}).appendTo('#msr_client_id');
+				});
+			});
+		} else {
+			$('#msr_client_id').empty();
+		}
 	});
-	$('#msr_id').change(function(){
-		$.getJSON('<?=base_url()?>collection/get_dr/client/' + $('#msr_id').val(),function(data) {
-			$('#select1').empty();
-			$('#select2').empty();
-			$('#client_id').empty();
-			$('<option>').val(0).text('--SELECT ONE--').appendTo('#client_id');
-			$.each(data, function(index) {
-				$('<option>').val(data[index].user_id).text(data[index].first_name + ' ' + data[index].last_name).appendTo('#client_id');
-			})
-		});
-	});
-	$('#client_id').change(function(){
-		$.getJSON('<?=base_url()?>collection/get_dr/msrclient/' + $('#msr_id').val() + '/'+ $('#client_id').val(),function(data) {
-			$('#msr_client_id').val(data).trigger('change');
-		});
-	})
 	$('#add').click(function() {  
 		return !$('#select1 option:selected').remove().appendTo('#select2');  
 	});  
