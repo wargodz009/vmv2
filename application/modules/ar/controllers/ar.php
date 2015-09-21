@@ -13,7 +13,7 @@ class Ar extends MX_Controller{
 		$crud->display_as('dr_num','DR #'); 
 		$crud->display_as('dr_date','DR date'); 
 		$crud->display_as('amount','Amt'); 
-		$crud->columns('dr_date','dr_num','amount','client_name','area','msr');
+		$crud->columns('area','client_name','dr_date','dr_num','amount');
 		$crud->fields('dr_date','dr_num','amount','msr_client_id');
 		$crud->required_fields('dr_date','dr_num','msr_client_id','amount');
 		$crud->callback_column('client_name',array($this,'_client_name_callback'));
