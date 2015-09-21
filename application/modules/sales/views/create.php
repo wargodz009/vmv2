@@ -21,7 +21,7 @@
 					<option value="SI">SI</option>
 				</select>
 			</div>
-			<div class="form-group">
+			<!--div class="form-group">
 				<label for="">MSR CODE</label>
 				<select id="msr_client_id" name="msr_client_id" class="form-control :required">
 					<option value="0">OFFICE ACCOUNT</option>
@@ -29,6 +29,19 @@
 					if(!empty($msr_client)) {
 						foreach($msr_client as $msr) {
 							echo '<option value="'.$msr->msr_client_id.'">'.get_name($msr->msr_id).' -> '.get_name($msr->client_id).'</option>';
+						}
+					}
+					?>
+				</select>
+			</div-->
+			<div class="form-group">
+				<label for="">Area</label>
+				<select id="area" class="form-control :required">
+					<option value="0">--SELECT AREA--</option>
+					<?php
+					if(!empty($all_area)) {
+						foreach($all_area as $area) {
+							echo '<option value="'.$area->area.'">'.$area->area.'</option>';
 						}
 					}
 					?>
@@ -47,12 +60,9 @@
 				<input type="text" class="form-control datepicker" name="dr_date" />
 			</div>
 			<div class="form-group">
-				<label for="">Client's Name</label>
-				<input type="text" class="form-control :required" name="client_name" id="client_name" />
-			</div>
-			<div class="form-group">
-				<label for="">Address</label>
-				<input type="text" class="form-control :required" name="client_address" id="client_address" />
+				<label for="">Clients Name</label>
+				<select id="client_name" name="msr_client_id" class="form-control :required">
+				</select>
 			</div>
 			<div class="form-group">
 				<label for="">Product</label>
@@ -136,7 +146,7 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
-	$('#msr_client_id').change(function(){
+	/*$('#msr_client_id').change(function(){
 		if($('#msr_client_id :selected').val() != '') {
 			$.getJSON('create/client_info/' + $('#msr_client_id :selected').val(),function(data) {
 				$('#client_name').val(data.first_name);
@@ -145,6 +155,21 @@ $(document).ready(function(){
 		} else {
 			$('#client_name').val('');
 			$('#client_address').val('');
+		}
+	});*/
+	$('#area').change(function(){
+		if($('#area :selected').val() != '0') {
+			$('#client_name').empty();
+			$.getJSON('create/area_clients/' + encodeURIComponent($('#area :selected').val()),function(data) {
+				$.each(data, function(){
+					$('<option/>', {
+						'value': this.id,
+						'text': this.msr_client_id + ' -> ' + this.client_id
+					}).appendTo('#client_name');
+				});
+			});
+		} else {
+			$('#client_name').empty();
 		}
 	});
 	$('#product_id').change(function(){

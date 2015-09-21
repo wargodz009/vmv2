@@ -100,6 +100,11 @@ function get_area($user_id){
 		return 'unknown';
 	}
 }
+function get_all_area(){
+	$CI =& get_instance();
+	$area = $CI->db->query('SELECT DISTINCT TRIM(area) as area FROM user');
+	return $area->result();
+}
 function get_supplier_name($id) {
 	$CI =& get_instance();
 	$CI->db->where('supplier_id',$id);
@@ -171,10 +176,10 @@ function get_item_name($item_id,$include_desc = false){
 		return $Q->row()->name.' ('.$Q->row()->description.')';
 	}
 }
-function get_item_info($item_id,$what = 'name'){
+function get_batch_info($item_id,$what = 'name'){
 	$CI =& get_instance();
-	$CI->db->where('item_id',$item_id);
-	$Q = $CI->db->get('item');
+	$CI->db->where('batch_id',$item_id);
+	$Q = $CI->db->get('batch');
 	return $Q->row()->$what;
 }
 function get_item_type($item_type_id){

@@ -43,6 +43,27 @@ class Sales extends MX_Controller{
 			
 			echo json_encode($item);exit;
 		}
+		if($get_what == 'area_clients') {
+			$get_client_id = array();
+			$get_area_msr = $this->crud_model->read('user',array(array('where','area',urldecode($get_val)),array('where','role_id',6)));
+			if(!empty($get_area_msr)) {
+				foreach($get_area_msr as $area_msr) {
+					$msr_client_info = $this->crud_model->read('msr_client',array(array('where','msr_id',$area_msr->user_id)));
+					if(!empty($msr_client_info)) {
+						foreach($msr_client_info as $info) {
+							$get_client_id[] = array(
+								'id' => $info->msr_client_id,
+								'msr_client_id' => get_name($info->msr_id),
+								'client_id' => get_name($info->client_id)
+							);
+						}
+					}
+				}
+				echo json_encode($get_client_id);exit;
+			}
+			return false;
+		}
+		$data['all_area'] = get_all_area();
 		$data['msr_client'] = $this->crud_model->read('msr_client');
 		$data['batch'] = $this->crud_model->read('batch');
 		$data['items'] = $this->crud_model->read('item');
@@ -53,11 +74,13 @@ class Sales extends MX_Controller{
 			$crud = new grocery_CRUD();
 			$crud->set_table('orders'); 
 			$crud->unset_add();
+			$crud->display_as('product_id','Product');
+			$crud->display_as('msr_client_id','Area');
 			$crud->fields('form_number','msr_client_id','discount','discount_type'); 
 			$crud->columns('msr_client_id','discount','discount_type','form_number'); 
 			$crud->set_relation('msr_client_id','msr_client','msr_id'); 
 			$crud->callback_field('msr_client_id',array($this,'add_field_callback_1'));
-			$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_name'));
+			$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_area'));
 			$crud->callback_after_insert(array($this, '_log_user_after_insert'));
 			$crud->callback_after_update(array($this, '_log_user_after_update'));
 			$crud->add_action('Set Returned', base_url().'assets/images/returned.png','','',array($this,'_callback_filter_order'));
@@ -84,11 +107,13 @@ class Sales extends MX_Controller{
 			$crud = new grocery_CRUD();
 			$crud->set_table('orders'); 
 			$crud->unset_add();
+			$crud->display_as('product_id','Product');
+			$crud->display_as('msr_client_id','Area');
 			$crud->fields('form_number','msr_client_id','discount','discount_type'); 
 			$crud->columns('msr_client_id','discount','discount_type','form_number'); 
 			$crud->set_relation('msr_client_id','msr_client','msr_id'); 
 			$crud->callback_field('msr_client_id',array($this,'add_field_callback_1'));
-			$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_name'));
+			$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_area'));
 			$crud->callback_after_insert(array($this, '_log_user_after_insert'));
 			$crud->callback_after_update(array($this, '_log_user_after_update'));
 			$crud->add_action('Set Returned', base_url().'assets/images/returned.png','','',array($this,'_callback_filter_order'));
@@ -133,18 +158,22 @@ class Sales extends MX_Controller{
 		$crud->display_as('si_no','DR/SI #'); 
 		$crud->display_as('sales_type','CLient\'s Name'); 
 		$crud->display_as('discount_type','%'); 
+		$crud->display_as('msr_client_id','Area');
+		$crud->display_as('product_id','Product');
 		$crud->fields('form_number','msr_client_id','discount','discount_type','subtotal','vat_sales','vat_12','total_amount'); 
 		//$crud->columns('msr_client_id','discount','discount_type','form_number'); 
-		$crud->columns('order_date','msr_client_id','sales_type','si_no','product_id','quantity','free_goods','price','discount_type','total_amount');
-		$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_name'));
+		$crud->columns('order_date','msr_client_id','sales_type','si_no','product_id','batch','expiry','quantity','free_goods','price','discount_type','total_amount');
+		$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_area'));
 		$crud->callback_column('sales_type',array($this,'_callback_msr_client_name'));
 		$crud->callback_column('order_date',array($this,'_callback_order_date'));
+		$crud->callback_column('batch',array($this,'_callback_batch'));
+		$crud->callback_column('expiry',array($this,'_callback_expiry'));
 		$crud->callback_column('product_id',array($this,'_callback_product_id'));
 		$crud->callback_column('discount_type',array($this,'_callback_discount_amount'));
 		$crud->set_relation('msr_client_id','msr_client','msr_id'); 
 		$crud->callback_field('msr_client_id',array($this,'add_field_callback_1'));
 		$crud->callback_column('form_number',array($this,'_callback_form_number'));
-		$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_name'));
+		$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_area'));
 		$crud->callback_after_insert(array($this, '_log_user_after_insert'));
 		$crud->callback_after_update(array($this, '_log_user_after_update'));
 		//$crud->add_action('Set Returned', base_url().'assets/images/returned.png','','',array($this,'_callback_filter_order'));
@@ -166,20 +195,23 @@ class Sales extends MX_Controller{
 		$crud->set_subject('SALES'); 
 		$crud->display_as('order_date','Order'); 
 		$crud->display_as('product_id','Products'); 
-		$crud->display_as('msr_client_id','MSR'); 
+		$crud->display_as('msr_client_id','Area'); 
 		$crud->display_as('quantity','QTY'); 
 		$crud->display_as('free_goods','FG'); 
 		$crud->display_as('total_amount','AMOUNT'); 
 		$crud->display_as('si_no','DR/SI #'); 
 		$crud->display_as('sales_type','Client\'s Name'); 
 		$crud->display_as('discount_type','%'); 
+		$crud->display_as('product_id','Product');
 		$crud->unset_operations();
 		$crud->fields('form_number','msr_client_id','discount','discount_type'); 
-		$crud->columns('order_date','msr_client_id','sales_type','si_no','product_id','quantity','free_goods','price','discount_type','total_amount');
+		$crud->columns('order_date','msr_client_id','sales_type','si_no','product_id','batch','expiry','quantity','free_goods','price','discount_type','total_amount');
 		//$crud->columns('msr_client_id','discount','discount_type','form_number'); 
-		$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_name'));
+		$crud->callback_column(unique_field_name('msr_client_id'),array($this,'_callback_msr_area'));
 		$crud->callback_column('sales_type',array($this,'_callback_msr_client_name'));
 		$crud->callback_column('order_date',array($this,'_callback_order_date'));
+		$crud->callback_column('batch',array($this,'_callback_batch'));
+		$crud->callback_column('expiry',array($this,'_callback_expiry'));
 		$crud->callback_column('product_id',array($this,'_callback_product_id'));
 		$crud->callback_column('discount_type',array($this,'_callback_discount_amount'));
 		$crud->set_relation('msr_client_id','msr_client','msr_id'); 
@@ -348,8 +380,8 @@ class Sales extends MX_Controller{
     	}
 	    return $return_str.'</select><div class="clear"></div>';
 	}
-	function _callback_msr_name($value, $row){
-		return get_name($value);
+	function _callback_msr_area($value, $row){
+		return get_area($value);
 	}
 	function _callback_discount_amount($value, $row){
 		//return (($value == 'percentage')?$row->discount_amount:'0');
@@ -363,6 +395,12 @@ class Sales extends MX_Controller{
 	}
 	function _callback_msr_client_name($value, $row){
 		return get_name(get_msr_client($row->msr_client_id,'client_id'));
+	}
+	function _callback_batch($value, $row){
+		return get_batch_info($row->product_batch,'batch_readable_id');
+	}
+	function _callback_expiry($value, $row){
+		return pretty_date(get_batch_info($row->product_batch,'expire_date'));
 	}
 	function _callback_product_id($value, $row){
 		return get_item_name($value);

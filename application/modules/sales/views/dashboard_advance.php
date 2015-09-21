@@ -4,7 +4,9 @@
 			<option value="00">District</option>
 			<?php 
 			foreach($area_list as $x) {
-				echo '<option value="'.$x->district_id.'" '.($district == $x->district_id?"selected":'').'>'.$x->name.'</option>';
+				if($x->district_id != 4) {
+					echo '<option value="'.$x->district_id.'" '.($district == $x->district_id?"selected":'').'>'.$x->name.'</option>';
+				}
 			}
 			?>
 		</select>
