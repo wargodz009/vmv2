@@ -96,7 +96,7 @@
 				<input type="text" class="form-control :required :number" name="quantity" id="quantity"/>
 			</div>
 			<div class="form-group">
-				<label for="">QTY FREE</label>
+				<label for="">FREE GOODS (count)</label>
 				<input type="text" class="form-control :required :number" name="free_goods" id="free_goods"/>
 			</div>
 			<div class="form-group price">
