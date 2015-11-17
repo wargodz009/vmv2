@@ -24,13 +24,19 @@ class Permission_model extends CI_Model{
 		return $this->db->get($this->permission)->result();
 	}
 	function check($role_id,$module,$function) {
-		$action_id = $this->get_action($module,$function,'action_id');
-		if( $action_id ) {
-			if($this->get_permission($role_id,$action_id)) {
-				return true;
+		$action = $this->get_action($module,$function);
+		$action_id = $action[0]->action_id;
+		$active = $action[0]->show_on_menu;
+		if($active == 0 && !empty($action)) {
+			return true;
+		} else {
+			if( $action_id ) {
+				if($this->get_permission($role_id,$action_id)) {
+					return true;
+				}
 			}
+			return false;
 		}
-		return false;
 	}
 	
 }

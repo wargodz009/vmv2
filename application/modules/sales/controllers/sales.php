@@ -74,6 +74,7 @@ class Sales extends MX_Controller{
 			$crud = new grocery_CRUD();
 			$crud->set_table('orders'); 
 			$crud->unset_add();
+			$crud->unset_delete();
 			$crud->display_as('si_no','DR/SI #'); 
 			$crud->display_as('sales_type','CLient\'s Name'); 
 			$crud->display_as('discount_type','%'); 
@@ -119,6 +120,7 @@ class Sales extends MX_Controller{
 			$crud = new grocery_CRUD();
 			$crud->set_table('orders'); 
 			$crud->unset_add();
+			$crud->unset_delete();
 			$crud->display_as('si_no','DR/SI #'); 
 			$crud->display_as('sales_type','CLient\'s Name'); 
 			$crud->display_as('discount_type','%'); 
@@ -179,6 +181,7 @@ class Sales extends MX_Controller{
 		$crud = new grocery_CRUD();
 		$crud->set_table('orders'); 
 		$crud->unset_add();
+		$crud->unset_delete();
 		$crud->display_as('si_no','DR/SI #'); 
 		$crud->display_as('sales_type','CLient\'s Name'); 
 		$crud->display_as('discount_type','%'); 

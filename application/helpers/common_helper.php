@@ -186,6 +186,12 @@ function get_batch_info($item_id,$what = 'name'){
 	$Q = $CI->db->get('batch');
 	return $Q->row()->$what;
 }
+function get_item_info($item_id,$what = 'name'){
+	$CI =& get_instance();
+	$CI->db->where('item_id',$item_id);
+	$Q = $CI->db->get('item');
+	return $Q->row()->$what;
+}
 function get_item_type($item_type_id){
 	$CI =& get_instance();
 	$CI->db->where('item_type_id',$item_type_id);
