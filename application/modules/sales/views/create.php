@@ -41,7 +41,7 @@
 					<?php
 					if(!empty($all_area)) {
 						foreach($all_area as $area) {
-							echo '<option value="'.$area->area.'">'.$area->area.'</option>';
+							echo '<option value="'.$area->area_id.'">'.$area->area_code.'</option>';
 						}
 					}
 					?>

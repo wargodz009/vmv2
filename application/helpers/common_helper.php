@@ -115,9 +115,9 @@ function get_area_code($area_id){
 function get_all_area($district = ''){
 	$CI =& get_instance();
 	if($district == '') {
-		$area = $CI->db->query('SELECT DISTINCT TRIM(area) as area FROM user');
+		$area = $CI->db->query('SELECT * FROM area');
 	} else {
-		$area = $CI->db->query('SELECT DISTINCT TRIM(area) as area FROM user WHERE district_id = '.$district);
+		$area = $CI->db->query('SELECT * FROM area WHERE district_id = '.$district);
 	}
 	return $area->result();
 }
