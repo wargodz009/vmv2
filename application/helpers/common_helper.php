@@ -95,10 +95,22 @@ function get_area($user_id){
 	$CI->load->model('user/user_model');
 	$user = $CI->user_model->get_single($user_id);
 	if($user) {
-		return $user->area;
+		return get_area_name($user->area_id);
 	} else {
 		return 'unknown';
 	}
+}
+function get_area_name($area_id){
+	$CI =& get_instance();
+	$CI->db->where('area_id',$area_id);
+	$q = $CI->db->get('area');
+	return $q->row()->area_name;
+}
+function get_area_code($area_id){
+	$CI =& get_instance();
+	$CI->db->where('area_id',$area_id);
+	$q = $CI->db->get('area');
+	return $q->row()->area_code;
 }
 function get_all_area($district = ''){
 	$CI =& get_instance();

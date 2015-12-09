@@ -59,7 +59,7 @@
 		<tr>
 			<?php $quota = ($msr->quota > 0)?$msr->quota:1000000; ?>
 			<td><a href="<?=base_url();?>sales/area/<?=$msr->district_id;?>"><?=$this->crud_model->read('district',array(array('where','district_id',$msr->district_id)),'name');?></a></td>
-			<td><a href="<?=base_url();?>sales/all_sales/<?=$msr->user_id;?>"><?=strtoupper($msr->area) .' '. $msr->last_name.', '.$msr->first_name;?></a></td>
+			<td><a href="<?=base_url();?>sales/all_sales/<?=$msr->user_id;?>"><?=get_area_code($msr->area_id) .' '. $msr->last_name.', '.$msr->first_name;?></a></td>
 			<td>P <?php $amount = modules::run('sales/get_sales',$msr->user_id,$month,$year); echo number_format($amount); $total = $total + $amount; ?></td>
 			<td>P <?php $rgs_amount = modules::run('rgs/get_rgs',$msr->user_id,$month,$year); echo number_format($rgs_amount); $rgs_net = $amount - $rgs_amount; $rgs_total += $rgs_amount; ?></td>
 			<td>P <?=$rgs_net; $net_rgs_total += $rgs_net; ?></td>
