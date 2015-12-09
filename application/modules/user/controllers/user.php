@@ -31,13 +31,14 @@ class User extends MX_Controller{
 		$crud->display_as('role_id','Position');
 		$crud->set_relation('district_id','district','name');
 		$crud->set_relation('role_id','role','name');
-		$crud->required_fields('first_name','email','password','area','role_id','district_id');
-		$crud->columns('first_name','middle_name','last_name','email','password','area','role_id','district_id','quota');
+		$crud->set_relation('area_id','area','area_code');
+		$crud->required_fields('first_name','email','password','area_id','role_id','district_id');
+		$crud->columns('first_name','middle_name','last_name','email','password','area_id','role_id','district_id','quota');
 		if(get_role() != 'administrator') {
 			$crud->unset_delete();
 		}
-		$crud->add_fields('first_name','middle_name','last_name','email','password','area','role_id','district_id','quota');
-		$crud->edit_fields('first_name','middle_name','last_name','email','password','area','role_id','district_id','quota','status');
+		$crud->add_fields('first_name','middle_name','last_name','email','password','area_id','role_id','district_id','quota');
+		$crud->edit_fields('first_name','middle_name','last_name','email','password','area_id','role_id','district_id','quota','status');
 		$crud->callback_column('quota',array($this,'_callback_to_number'));
 		$crud->callback_after_insert(array($this, '_log_user_after_insert'));
 		$crud->callback_after_update(array($this, '_log_user_after_update'));
@@ -64,10 +65,11 @@ class User extends MX_Controller{
 		$crud->display_as('district_id','District');
 		$crud->display_as('first_name','Name/Hospital');
 		$crud->columns('first_name','middle_name','last_name','address','district_id','contact_person','contact_number','area','note');
-		$crud->add_fields('first_name','middle_name','last_name','email','address','area','contact_person','contact_number','quota','role_id','district_id');
-		$crud->edit_fields('first_name','middle_name','last_name','email','address','area','quota','contact_person','contact_number','role_id','district_id','note');
+		$crud->add_fields('first_name','middle_name','last_name','email','address','area_id','contact_person','contact_number','quota','role_id','district_id');
+		$crud->edit_fields('first_name','middle_name','last_name','email','address','area_id','quota','contact_person','contact_number','role_id','district_id','note');
 		$crud->set_relation('district_id','district','name');
 		$crud->set_relation('role_id','role','name');
+		$crud->set_relation('area_id','area','area_code');
 		$crud->required_fields('first_name','role_id','district_id','address');
 		if(get_role() != 'administrator') {
 			$crud->unset_delete();

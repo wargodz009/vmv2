@@ -25,6 +25,7 @@ class Msr_client extends MX_Controller{
 		$crud->unset_read(); 
 		$crud->set_relation('district_id', 'district', 'name');
 		$crud->set_relation('role_id', 'role', 'name');
+		$crud->set_relation('area','area','area_code');
 		$crud->set_relation_n_n('user', 'msr_client', 'user', 'msr_id', 'client_id', 'user_id',NULL,array('role_id'=>5));
 		$crud->callback_after_update(array($this, '_log_user_after_update'));
 		$output = $crud->render();
