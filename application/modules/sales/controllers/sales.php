@@ -45,7 +45,7 @@ class Sales extends MX_Controller{
 		}
 		if($get_what == 'area_clients') {
 			$get_client_id = array();
-			$get_area_msr = $this->crud_model->read('user',array(array('where','area',urldecode($get_val)),array('where','role_id',6)));
+			$get_area_msr = $this->crud_model->read('user',array(array('where','area_id',urldecode($get_val)),array('where','role_id',6)));
 			if(!empty($get_area_msr)) {
 				foreach($get_area_msr as $area_msr) {
 					$msr_client_info = $this->crud_model->read('msr_client',array(array('where','msr_id',$area_msr->user_id)));
