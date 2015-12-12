@@ -328,7 +328,7 @@ class Sales extends MX_Controller{
 		$data['msr_district'] = get_district_name(get_district_id($msr_id)); 
 		$this->template->load('index','sales_history_per_person',$data);
 	}
-	function area($district_id){
+	function district($district_id){
 		$data['district_id'] = $district_id;
 		$data['orders'] = array();
 		$all_msr_ids = array();
@@ -353,7 +353,35 @@ class Sales extends MX_Controller{
 				$data['orders'] =  $orders;
 			}
 		}
-		$data['area'] = get_district_name($district_id); 
+		$data['district'] = get_district_name($district_id); 
+		$this->template->load('index','sales_history_per_district',$data);
+	}
+	function area($area_id){
+		$data['area_id'] = $area_id;
+		$data['orders'] = array();
+		$all_msr_ids = array();
+		$msrs = $this->crud_model->read('user',array(array('where','area_id',$area_id),array('where','role_id',6)));
+		if(!empty($msrs)) {
+			foreach($msrs as $msr) {
+				$id = $this->crud_model->read('msr_client',array(array('where','msr_id',$msr->user_id)));
+				if(!empty($id)) {
+					$all_msr_ids = $id;
+				}
+			}
+		}
+		//all orders	
+		if(!empty($all_msr_ids)) {
+			$ids = array();
+			foreach ($all_msr_ids as $key) {
+				$ids[] = $key->msr_client_id;
+			}
+			$orders = $this->sales_model->get_sales($ids);
+			//orders
+			if(!empty($orders)) {
+				$data['orders'] =  $orders;
+			}
+		}
+		$data['area'] = get_area_name($area_id); 
 		$this->template->load('index','sales_history_per_area',$data);
 	}
 	function _callback_print_paid($primary_key,$row){

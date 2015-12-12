@@ -13,7 +13,7 @@ class Collection extends MX_Controller{
 		$data['day_from'] = $day_from;
 		$data['day_to'] = $day_to;
 		$data['district'] = ($district != ''?$district:'00');
-		$data['area_list'] = $this->crud_model->read('district');
+		$data['district_list'] = $this->crud_model->read('district');
 		if($district == '00') {
 			$data['all_msr'] = $this->crud_model->read('user',array(array('where','role_id',6)));
 		} else {

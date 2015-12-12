@@ -7,7 +7,7 @@ $this->load->model('collection/collection_model');
 		<select id="district"  name="district" class="form-control reload_button">
 			<option value="00">District</option>
 			<?php 
-			foreach($area_list as $x) {
+			foreach($district_list as $x) {
 				echo '<option value="'.$x->district_id.'" '.($district == $x->district_id?"selected":'').'>'.$x->name.'</option>';
 			}
 			?>
