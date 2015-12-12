@@ -247,9 +247,43 @@ class Sales extends MX_Controller{
 		$this->load->view($grocery_crud,$output);
 	}
 	function dashboard_advance($month = '00',$year ='00',$district = '00'){
-		$data['sales'] = $this->user_model->get_all_msr();
+		//$data['sales'] = $this->user_model->get_all_msr();
+		//$this->load->view('dashboard_advance',$data);
+		$data['sales'] = array();
+		if($district != '00') {
+			$data['all_district'] = $this->crud_model->read('district',array(array('where','district_id',$district)));
+		} else {
+			$data['all_district'] = $this->crud_model->read('district');
+		}
+		if(!empty($data['all_district'])) {
+			foreach($data['all_district'] as $d) {
+				//echo $d->district_id.'<br />';
+				$areas = $this->crud_model->read('area',array(array('where','district_id',$d->district_id)));
+				if(!empty($areas)) {
+					foreach($areas as $a ) {
+						//echo '----'.$a->area_id.'<br />';
+						$total_msr_sales = 0;
+						$total_msr_rgs = 0;
+						$msr = $this->crud_model->read('user',array(array('where','area_id',$a->area_id),array('where','role_id',6)));
+						if(!empty($msr)) {
+							foreach($msr as $m) {
+								$msr_sales = $this->get_sales($m->user_id,$month,$year);
+								$total_msr_sales += $msr_sales;
+								$rgs = modules::run('rgs/get_rgs',$m->user_id,$month,$year);
+								$total_msr_rgs += $rgs;
+							}
+						}
+						$data['sales'][$d->district_id . $a->area_id] = array(
+							'district_id'=>$d->district_id,
+							'area_id'=>$a->area_id,
+							'msr_sales'=>$total_msr_sales,
+							'msr_rgs'=>$total_msr_rgs,
+						); 
+					}
+				}
+			}
+		}
 		$this->load->view('dashboard_advance',$data);
-
 	}
 	function get_sales($msr_id,$month,$year){
 		$all_msr_ids = $this->crud_model->read('msr_client',array(array('where','msr_id',$msr_id)));

@@ -36,8 +36,8 @@
 </nav>
 <table class="table table-hover">
 <thead>
+	<td>District</td>
 	<td>Area</td>
-	<td>Msr Name</td>
 	<td>Sales</td>
 	<td>RGS</td>
 	<td>Net Sales of RGS</td>
@@ -53,15 +53,16 @@
 	$q_total = 0;
 	$sp_total = 0;
 	if(isset($sales) && !empty($sales)) {
-		foreach ($sales->result() as $msr) {
-			if($district == '00' || $district == $msr->district_id) {
+		foreach ($sales as $k) {
+			if($district == '00' || $district == $k['district_id']) {
 ?>
 		<tr>
-			<?php $quota = ($msr->quota > 0)?$msr->quota:1000000; ?>
-			<td><a href="<?=base_url();?>sales/area/<?=$msr->district_id;?>"><?=$this->crud_model->read('district',array(array('where','district_id',$msr->district_id)),'name');?></a></td>
-			<td><a href="<?=base_url();?>sales/all_sales/<?=$msr->user_id;?>"><?=get_area_code($msr->area_id) .' '. $msr->last_name.', '.$msr->first_name;?></a></td>
-			<td>P <?php $amount = modules::run('sales/get_sales',$msr->user_id,$month,$year); echo number_format($amount); $total = $total + $amount; ?></td>
-			<td>P <?php $rgs_amount = modules::run('rgs/get_rgs',$msr->user_id,$month,$year); echo number_format($rgs_amount); $rgs_net = $amount - $rgs_amount; $rgs_total += $rgs_amount; ?></td>
+			<?php //var_dump($k); ?>
+			<?php $quota = 1000000; ?>
+			<td><a href="<?=base_url();?>sales/district/<?=$k['district_id'];?>"><?=$this->crud_model->read('district',array(array('where','district_id',$k['district_id'])),'name');?></a></td>
+			<td><a href="<?=base_url();?>sales/area/<?=$k['area_id'];?>"><?=get_area_code($k['area_id']);?></a></td>
+			<td>P <?php $amount = $k['msr_sales']; echo number_format($amount); $total = $total + $amount; ?></td>
+			<td>P <?php $rgs_amount = $k['msr_rgs']; echo number_format($rgs_amount); $rgs_net = $amount - $rgs_amount; $rgs_total += $rgs_amount; ?></td>
 			<td>P <?=$rgs_net; $net_rgs_total += $rgs_net; ?></td>
 			<td>P <?=number_format($quota); $q_total += $quota; ?></td>
 			<td><?php $s_percent = number_format(($amount / $quota) * 100,2); echo $s_percent; $sp_total +=$s_percent; ?></td>
