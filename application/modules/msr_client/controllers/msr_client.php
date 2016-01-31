@@ -15,7 +15,7 @@ class Msr_client extends MX_Controller{
 		$crud->display_as('district_id','District');
 		$crud->display_as('user','Clients');
 		$crud->field_type('civil_status','invisible');
-		$crud->columns('first_name','role_id','district_id','email','area','quota','district_id','user');
+		$crud->columns('first_name','role_id','district_id','area','quota','user');
 		$crud->edit_fields('district_id','user');
 		$crud->callback_column('user',array($this,'_callback_get_username'));
 		$crud->callback_column('quota',array($this,'_callback_to_number'));

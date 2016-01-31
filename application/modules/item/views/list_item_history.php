@@ -8,7 +8,7 @@
 <button id="btnExport" class="btn btn-default pull-right">btnExport</button>
 <?php
 $this->load->library('table');
-$this->table->set_heading('Reference','Reference Document','Reference batch #','Transaction date','Transaction Type','Qty','Inventory');
+$this->table->set_heading('Reference','Client Document','Reference batch #','Transaction date','Transaction Type','Qty','Inventory');
 $tmpl = array ( 'table_open'  => '<table id="tblExport" class="table table-hover table-striped">
 <thead><tr>
 	<td colspan=7>'.$info.'</td>

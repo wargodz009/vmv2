@@ -1,0 +1,1 @@
+ALTER TABLE `order_item` CHANGE COLUMN `add_type` `add_type` ENUM('order','free goods') NOT NULL DEFAULT 'order' AFTER `custom_price`;
